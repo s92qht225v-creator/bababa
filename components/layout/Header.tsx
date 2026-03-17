@@ -163,6 +163,14 @@ export function Header() {
                   </a>
                 </>
               )}
+              {isWorker && (
+                <a
+                  href={`/${locale}/worker/profile`}
+                  className="hidden text-gray-500 hover:text-gray-700 md:inline"
+                >
+                  {t('my_profile')}
+                </a>
+              )}
               <button
                 onClick={signOut}
                 className="text-gray-500 hover:text-gray-700"

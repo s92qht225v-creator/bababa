@@ -7,7 +7,8 @@
     "login": "Kirish",
     "register": "Ro'yxatdan o'tish",
     "logout": "Chiqish",
-    "company_profile": "Kompaniya profili"
+    "company_profile": "Kompaniya profili",
+    "my_profile": "Mening profilim"
   },
   "home": {
     "hero_title": "O'zbekistondagi xitoy kompaniyalarida ish toping",
