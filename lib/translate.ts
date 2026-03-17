@@ -1,9 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
-import Anthropic from '@anthropic-ai/sdk'
+import OpenAI from 'openai'
 import type { Locale, TranslatedJob, TranslatedBio } from '@/types'
 import crypto from 'crypto'
-
-const GOOGLE_API_KEY = process.env.GOOGLE_TRANSLATE_API_KEY
 
 const LANG_NAMES: Record<Locale, string> = {
   uz: 'Uzbek',
@@ -11,8 +9,25 @@ const LANG_NAMES: Record<Locale, string> = {
   ru: 'Russian',
 }
 
+function getOpenAI() {
+  return new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
+}
+
+async function chatTranslate(system: string, text: string, maxTokens = 1024): Promise<string> {
+  const openai = getOpenAI()
+  const response = await openai.chat.completions.create({
+    model: 'gpt-4o-mini',
+    max_tokens: maxTokens,
+    messages: [
+      { role: 'system', content: system },
+      { role: 'user', content: text },
+    ],
+  })
+  return response.choices[0]?.message?.content?.trim() ?? text
+}
+
 /**
- * Translate a chat message using Claude Haiku.
+ * Translate a chat message using GPT-4o-mini.
  * Handles informal language, slang, and regional Uzbek dialects.
  * Results are cached in translation_cache to avoid repeat API calls.
  */
@@ -44,19 +59,10 @@ export async function translateMessage(
   if (cached) return cached.translated_text
 
   try {
-    const anthropic = new Anthropic()
-
-    const response = await anthropic.messages.create({
-      model: 'claude-haiku-4-5-20251001',
-      max_tokens: 1024,
-      system: `You are a translation assistant for a job marketplace in Uzbekistan. Translate the following message from ${LANG_NAMES[sourceLang]} to ${LANG_NAMES[targetLang]}. The message is between a Chinese employer and an Uzbek worker. Preserve the tone and meaning exactly. Handle informal language, slang, and regional Uzbek dialects naturally. Return only the translated text — no explanations, no quotes.`,
-      messages: [{ role: 'user', content: text }],
-    })
-
-    const translatedText =
-      response.content[0].type === 'text'
-        ? response.content[0].text
-        : text
+    const translatedText = await chatTranslate(
+      `You are a translation assistant for a job marketplace in Uzbekistan. Translate the following message from ${LANG_NAMES[sourceLang]} to ${LANG_NAMES[targetLang]}. The message is between a Chinese employer and an Uzbek worker. Preserve the tone and meaning exactly. Handle informal language, slang, and regional Uzbek dialects naturally. Return only the translated text — no explanations, no quotes.`,
+      text
+    )
 
     // Cache the result
     await supabase.from('translation_cache').insert({
@@ -68,7 +74,7 @@ export async function translateMessage(
 
     return translatedText
   } catch (error) {
-    console.error('Claude translation failed:', error)
+    console.error('Translation failed:', error)
     return text
   }
 }
@@ -117,37 +123,18 @@ export async function translateText(
 
   if (cached) return cached.translated_text
 
-  // Call Google Cloud Translation API
+  // Translate using GPT-4o-mini
   try {
-    const url = `https://translation.googleapis.com/language/translate/v2?key=${GOOGLE_API_KEY}`
-
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        q: text,
-        target: targetLang === 'uz' ? 'uz' : targetLang === 'zh' ? 'zh-CN' : 'ru',
-        ...(sourceLang ? { source: sourceLang } : {}),
-        format: 'text',
-      }),
-    })
-
-    if (!response.ok) {
-      console.error(`Translation API error: ${response.status}`)
-      return text
-    }
-
-    const result = await response.json()
-    const translatedText =
-      result.data?.translations?.[0]?.translatedText ?? text
-
-    // Cache the result
-    const detectedSource =
-      sourceLang ?? result.data?.translations?.[0]?.detectedSourceLanguage ?? 'unknown'
+    const srcLabel = sourceLang ? LANG_NAMES[sourceLang as Locale] ?? sourceLang : 'auto-detect the source language'
+    const translatedText = await chatTranslate(
+      `You are a professional translator. Translate the following text from ${srcLabel} to ${LANG_NAMES[targetLang]}. Preserve the tone, meaning, and formatting. Return only the translated text — no explanations, no quotes.`,
+      text,
+      2048
+    )
 
     await supabase.from('translation_cache').insert({
       source_hash: sourceHash,
-      source_lang: detectedSource,
+      source_lang: sourceLang ?? 'unknown',
       target_lang: targetLang,
       translated_text: translatedText,
     })
@@ -160,7 +147,7 @@ export async function translateText(
 }
 
 /**
- * Translate a single job field using Claude Haiku.
+ * Translate a single job field using GPT-4o-mini.
  * Uses a professional job posting prompt.
  */
 async function translateJobField(
@@ -190,19 +177,11 @@ async function translateJobField(
   if (cached) return cached.translated_text
 
   try {
-    const anthropic = new Anthropic()
-
-    const response = await anthropic.messages.create({
-      model: 'claude-haiku-4-5-20251001',
-      max_tokens: 2048,
-      system: `You are a professional translator for a job marketplace in Uzbekistan. Translate the following job posting field from ${LANG_NAMES[sourceLang]} to ${LANG_NAMES[targetLang]}. This is a formal job listing at a Chinese company operating in Uzbekistan. Use professional, clear language appropriate for a job posting. Preserve all numbers, salaries, and proper nouns exactly as written. Return only the translated text — no explanations, no quotes, no markdown.`,
-      messages: [{ role: 'user', content: text }],
-    })
-
-    const translatedText =
-      response.content[0].type === 'text'
-        ? response.content[0].text
-        : text
+    const translatedText = await chatTranslate(
+      `You are a professional translator for a job marketplace in Uzbekistan. Translate the following job posting field from ${LANG_NAMES[sourceLang]} to ${LANG_NAMES[targetLang]}. This is a formal job listing at a Chinese company operating in Uzbekistan. Use professional, clear language appropriate for a job posting. Preserve all numbers, salaries, and proper nouns exactly as written. Return only the translated text — no explanations, no quotes, no markdown.`,
+      text,
+      2048
+    )
 
     await supabase.from('translation_cache').insert({
       source_hash: sourceHash,
@@ -213,13 +192,13 @@ async function translateJobField(
 
     return translatedText
   } catch (error) {
-    console.error('Claude job translation failed:', error)
+    console.error('Job translation failed:', error)
     return text
   }
 }
 
 /**
- * Translate a job post into all 3 languages using Claude Haiku.
+ * Translate a job post into all 3 languages using GPT-4o-mini.
  * Returns translated fields. If any translation fails, the original text is used.
  */
 export async function translateJob(
@@ -270,18 +249,11 @@ export async function translateToEnglish(
   if (!text) return ''
 
   try {
-    const anthropic = new Anthropic()
-
-    const response = await anthropic.messages.create({
-      model: 'claude-haiku-4-5-20251001',
-      max_tokens: 100,
-      system: `Translate the following text from ${LANG_NAMES[sourceLang]} to English. Return only the translated text — no explanations, no quotes.`,
-      messages: [{ role: 'user', content: text }],
-    })
-
-    return response.content[0].type === 'text'
-      ? response.content[0].text
-      : text
+    return await chatTranslate(
+      `Translate the following text from ${LANG_NAMES[sourceLang]} to English. Return only the translated text — no explanations, no quotes.`,
+      text,
+      100
+    )
   } catch {
     return text
   }
