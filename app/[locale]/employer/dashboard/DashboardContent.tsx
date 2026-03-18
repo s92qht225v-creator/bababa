@@ -163,6 +163,12 @@ export function EmployerDashboardContent({ locale }: { locale: string }) {
       </div>
       <div className="flex flex-shrink-0 gap-2">
         <a
+          href={`/${locale}/jobs/${job.slug}`}
+          className="rounded border border-gray-300 px-3 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-50"
+        >
+          {t('view')}
+        </a>
+        <a
           href={`/${locale}/employer/post-job?edit=${job.id}`}
           className="rounded border border-gray-300 px-3 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-50"
         >

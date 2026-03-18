@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { setRequestLocale } from 'next-intl/server'
 import { getTranslations } from 'next-intl/server'
 import { notFound } from 'next/navigation'
-import { createPublicClient } from '@/lib/supabase/server'
+import { createClient } from '@/lib/supabase/server'
 import { buildJobMetadata } from '@/lib/seo'
 import { JsonLd } from '@/components/seo/JsonLd'
 import { BreadcrumbSchema } from '@/components/seo/BreadcrumbSchema'
@@ -20,7 +20,7 @@ export async function generateMetadata({
   params: Promise<{ locale: string; slug: string }>
 }): Promise<Metadata> {
   const { locale, slug } = await params
-  const supabase = createPublicClient()
+  const supabase = await createClient()
 
   const { data: job } = await supabase
     .from('jobs')
@@ -43,7 +43,7 @@ export default async function JobDetailPage({
 
   const l = locale as Locale
   const t = await getTranslations('jobs')
-  const supabase = createPublicClient()
+  const supabase = await createClient()
 
   const { data: job } = await supabase
     .from('jobs')
@@ -61,10 +61,13 @@ export default async function JobDetailPage({
     data: { user },
   } = await supabase.auth.getUser()
 
+  // Check if user is the job owner (employer)
+  const isOwner = user && job.company?.user_id === user.id
+
   // Check worker profile and existing application
   let hasProfile = false
   let alreadyApplied = false
-  if (user) {
+  if (user && !isOwner) {
     const { data: workerProfile } = await supabase
       .from('worker_profiles')
       .select('id')
@@ -255,6 +258,7 @@ export default async function JobDetailPage({
             hasProfile={hasProfile}
             alreadyApplied={alreadyApplied}
             isLoggedIn={!!user}
+            isOwner={!!isOwner}
           />
         </div>
       </main>

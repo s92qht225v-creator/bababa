@@ -147,6 +147,7 @@
   "jobs": {
     "title": "职位列表",
     "post_job": "发布职位",
+    "view": "查看",
     "edit_job": "编辑",
     "update_job": "更新",
     "job_title": "职位名称",
@@ -298,6 +299,7 @@
     "save_worker": "收藏",
     "saved": "已收藏",
     "login_to_contact": "登录后联系",
+    "your_listing": "这是您的职位",
     "apply_now": "立即申请",
     "already_applied": "已申请",
     "apply_for": "申请：{title}",

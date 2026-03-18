@@ -147,6 +147,7 @@
   "jobs": {
     "title": "Ish o'rinlari",
     "post_job": "Ish e'loni berish",
+    "view": "Ko'rish",
     "edit_job": "Tahrirlash",
     "update_job": "Yangilash",
     "job_title": "Lavozim nomi",
@@ -298,6 +299,7 @@
     "save_worker": "Saqlash",
     "saved": "Saqlangan",
     "login_to_contact": "Bog'lanish uchun kiring",
+    "your_listing": "Bu sizning e'loningiz",
     "apply_now": "Ariza topshirish",
     "already_applied": "Ariza topshirilgan",
     "apply_for": "Ariza topshirish: {title}",

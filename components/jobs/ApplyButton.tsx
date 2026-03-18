@@ -12,6 +12,7 @@ export function ApplyButton({
   hasProfile,
   alreadyApplied,
   isLoggedIn,
+  isOwner,
 }: {
   jobId: string
   jobTitle: string
@@ -19,6 +20,7 @@ export function ApplyButton({
   hasProfile: boolean
   alreadyApplied: boolean
   isLoggedIn: boolean
+  isOwner?: boolean
 }) {
   const t = useTranslations('worker')
   const { toast } = useToast()
@@ -26,6 +28,17 @@ export function ApplyButton({
   const [showModal, setShowModal] = useState(false)
   const [coverNote, setCoverNote] = useState('')
   const [submitting, setSubmitting] = useState(false)
+
+  if (isOwner) {
+    return (
+      <a
+        href={`/${locale}/employer/dashboard`}
+        className="block w-full rounded-lg border border-gray-300 px-4 py-3 text-center text-sm font-medium text-gray-500 hover:bg-gray-50"
+      >
+        {t('your_listing')}
+      </a>
+    )
+  }
 
   if (!isLoggedIn) {
     return (
