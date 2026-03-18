@@ -47,9 +47,11 @@ export async function sendMessage(
         translations[targetLang] = body
       } else {
         try {
-          translations[targetLang] = await translateMessage(body, senderLang, targetLang)
+          const translated = await translateMessage(body, senderLang, targetLang)
+          translations[targetLang] = translated
+          console.log(`[sendMessage] ${senderLang}→${targetLang}: "${body.substring(0, 30)}" → "${translated.substring(0, 30)}"`)
         } catch (err) {
-          console.error(`[sendMessage] Translation to ${targetLang} failed:`, err)
+          console.error(`[sendMessage] Translation ${senderLang}→${targetLang} FAILED:`, err instanceof Error ? err.message : err)
           translations[targetLang] = body
         }
       }
