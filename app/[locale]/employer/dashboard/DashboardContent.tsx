@@ -39,15 +39,21 @@ export function EmployerDashboardContent({ locale }: { locale: string }) {
 
   const fetchJobs = useCallback(async () => {
     if (!user) return
+    try {
     const supabase = createClient()
 
-    const { data: company } = await supabase
+    const { data: companies } = await supabase
       .from('companies')
       .select('id, name_original, logo_url, industry, description_uz')
       .eq('user_id', user.id)
-      .single()
+      .limit(1)
 
-    if (!company) return
+    const company = companies?.[0]
+    if (!company) {
+      setCompanyIncomplete(true)
+      setLoadingJobs(false)
+      return
+    }
     setCompanyName(company.name_original)
     setCompanyIncomplete(!company.logo_url || !company.industry || !company.description_uz)
 
@@ -77,7 +83,11 @@ export function EmployerDashboardContent({ locale }: { locale: string }) {
         _count: { applications: countMap[j.id] ?? 0 },
       }))
     )
-    setLoadingJobs(false)
+    } catch (err) {
+      console.error('Dashboard fetch error:', err)
+    } finally {
+      setLoadingJobs(false)
+    }
   }, [user])
 
   useEffect(() => {

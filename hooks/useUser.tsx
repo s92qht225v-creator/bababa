@@ -6,6 +6,7 @@ import {
   useEffect,
   useState,
   useCallback,
+  useRef,
   type ReactNode,
 } from 'react'
 import { createClient } from '@/lib/supabase/client'
@@ -34,16 +35,26 @@ export function UserProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<Profile | null>(null)
   const [loading, setLoading] = useState(true)
   const router = useRouter()
+  const fetchedRef = useRef(false)
 
   const fetchProfile = useCallback(async (userId: string) => {
-    const supabase = createClient()
-    const { data } = await supabase
-      .from('profiles')
-      .select('*')
-      .eq('id', userId)
-      .single()
-    setUser(data)
-    setLoading(false)
+    // Prevent duplicate fetches
+    if (fetchedRef.current) return
+    fetchedRef.current = true
+
+    try {
+      const supabase = createClient()
+      const { data } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', userId)
+        .single()
+      setUser(data)
+    } catch {
+      // Ignore errors
+    } finally {
+      setLoading(false)
+    }
   }, [])
 
   useEffect(() => {
@@ -61,9 +72,12 @@ export function UserProvider({ children }: { children: ReactNode }) {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
       if (session?.user) {
+        // Reset ref so auth changes can re-fetch
+        fetchedRef.current = false
         fetchProfile(session.user.id)
       } else {
         setUser(null)
+        fetchedRef.current = false
         setLoading(false)
       }
     })
@@ -75,6 +89,7 @@ export function UserProvider({ children }: { children: ReactNode }) {
     const supabase = createClient()
     await supabase.auth.signOut()
     setUser(null)
+    fetchedRef.current = false
     router.push('/')
     router.refresh()
   }, [router])

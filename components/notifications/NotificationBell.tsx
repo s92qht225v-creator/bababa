@@ -19,26 +19,29 @@ export function NotificationBell() {
 
   const fetchNotifications = useCallback(async () => {
     if (!user) return
-    const supabase = createClient()
+    try {
+      const supabase = createClient()
 
-    // Get unread count
-    const { count } = await supabase
-      .from('notifications')
-      .select('id', { count: 'exact', head: true })
-      .eq('user_id', user.id)
-      .eq('is_read', false)
+      // Single query: get recent 5 (we count unread from these + a count query in parallel)
+      const [{ data }, { count }] = await Promise.all([
+        supabase
+          .from('notifications')
+          .select('*')
+          .eq('user_id', user.id)
+          .order('created_at', { ascending: false })
+          .limit(5),
+        supabase
+          .from('notifications')
+          .select('id', { count: 'exact', head: true })
+          .eq('user_id', user.id)
+          .eq('is_read', false),
+      ])
 
-    setUnreadCount(count ?? 0)
-
-    // Get recent 5
-    const { data } = await supabase
-      .from('notifications')
-      .select('*')
-      .eq('user_id', user.id)
-      .order('created_at', { ascending: false })
-      .limit(5)
-
-    setRecent((data ?? []) as Notification[])
+      setRecent((data ?? []) as Notification[])
+      setUnreadCount(count ?? 0)
+    } catch {
+      // Ignore fetch errors (503 etc.)
+    }
   }, [user])
 
   useEffect(() => {

@@ -19,13 +19,17 @@ export function Header() {
 
   const fetchUnreadMessages = useCallback(async () => {
     if (!user) return
-    const supabase = createClient()
-    const { count } = await supabase
-      .from('messages')
-      .select('id', { count: 'exact', head: true })
-      .eq('receiver_id', user.id)
-      .eq('is_read', false)
-    setUnreadMessages(count ?? 0)
+    try {
+      const supabase = createClient()
+      const { count } = await supabase
+        .from('messages')
+        .select('id', { count: 'exact', head: true })
+        .eq('receiver_id', user.id)
+        .eq('is_read', false)
+      setUnreadMessages(count ?? 0)
+    } catch {
+      // Ignore 503 / network errors
+    }
   }, [user])
 
   useEffect(() => {
