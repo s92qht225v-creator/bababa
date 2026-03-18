@@ -38,7 +38,6 @@ export function UserProvider({ children }: { children: ReactNode }) {
   const fetchedRef = useRef(false)
 
   const fetchProfile = useCallback(async (userId: string) => {
-    // Prevent duplicate fetches
     if (fetchedRef.current) return
     fetchedRef.current = true
 
@@ -72,7 +71,6 @@ export function UserProvider({ children }: { children: ReactNode }) {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
       if (session?.user) {
-        // Reset ref so auth changes can re-fetch
         fetchedRef.current = false
         fetchProfile(session.user.id)
       } else {
