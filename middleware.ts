@@ -15,20 +15,18 @@ export default async function middleware(request: NextRequest) {
   const locale = getLocale(pathname)
   const path = pathname.replace(/^\/(uz|zh|ru)/, '')
 
-  // Auth pages: redirect away if already logged in
   const isAuthPage = path === '/auth/login' || path === '/auth/register'
-
-  // Protected route prefixes
   const isWorkerRoute = path.startsWith('/worker/') || path === '/worker'
   const isEmployerRoute = path.startsWith('/employer/') || path === '/employer'
   const isAdminRoute = path.startsWith('/admin')
   const isProtected = isWorkerRoute || isEmployerRoute || isAdminRoute
 
+  // Public pages: skip all auth checks entirely — fast path
   if (!isProtected && !isAuthPage) {
     return intlMiddleware(request)
   }
 
-  // Build Supabase client in middleware
+  // Only build Supabase client for auth/protected pages
   let response = NextResponse.next({ request })
 
   const supabase = createServerClient(
@@ -56,41 +54,20 @@ export default async function middleware(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser()
 
-  // Auth pages: redirect logged-in users to their dashboard
-  if (isAuthPage && user) {
-    const { data: profile } = await supabase
-      .from('profiles')
-      .select('role, is_active')
-      .eq('id', user.id)
-      .single()
-
-    if (profile) {
-      if (profile.is_active === false) {
-        const loginUrl = new URL(`/${locale}/auth/login`, request.url)
-        loginUrl.searchParams.set('suspended', 'true')
-        await supabase.auth.signOut()
-        return NextResponse.redirect(loginUrl)
-      }
-
-      const dashboards: Record<string, string> = {
-        worker: `/${locale}/worker/dashboard`,
-        employer: `/${locale}/employer/dashboard`,
-        admin: `/${locale}/admin/dashboard`,
-      }
-      const dest = dashboards[profile.role]
-      if (dest) return NextResponse.redirect(new URL(dest, request.url))
-    }
-  }
-
-  // Protected routes: must be logged in
+  // Not logged in on a protected route → redirect to login
   if (isProtected && !user) {
     const loginUrl = new URL(`/${locale}/auth/login`, request.url)
     loginUrl.searchParams.set('redirect', pathname)
     return NextResponse.redirect(loginUrl)
   }
 
-  // Role enforcement
-  if (isProtected && user) {
+  // Not logged in on auth page → just render the page (no profile query needed)
+  if (isAuthPage && !user) {
+    return intlMiddleware(request)
+  }
+
+  // Logged in → fetch profile ONCE for both auth page redirect and role enforcement
+  if (user) {
     const { data: profile } = await supabase
       .from('profiles')
       .select('role, is_active')
@@ -98,12 +75,26 @@ export default async function middleware(request: NextRequest) {
       .single()
 
     if (profile) {
+      // Suspended user
       if (profile.is_active === false) {
         const loginUrl = new URL(`/${locale}/auth/login`, request.url)
         loginUrl.searchParams.set('suspended', 'true')
         await supabase.auth.signOut()
         return NextResponse.redirect(loginUrl)
       }
+
+      // Auth page + logged in → redirect to dashboard
+      if (isAuthPage) {
+        const dashboards: Record<string, string> = {
+          worker: `/${locale}/worker/dashboard`,
+          employer: `/${locale}/employer/dashboard`,
+          admin: `/${locale}/admin/dashboard`,
+        }
+        const dest = dashboards[profile.role]
+        if (dest) return NextResponse.redirect(new URL(dest, request.url))
+      }
+
+      // Role enforcement on protected routes
       if (isEmployerRoute && profile.role === 'worker') {
         return NextResponse.redirect(
           new URL(`/${locale}/worker/dashboard`, request.url)

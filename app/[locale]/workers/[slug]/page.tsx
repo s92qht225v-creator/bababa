@@ -21,7 +21,7 @@ const LANG_KEY_MAP: Record<string, string> = {
   other: 'other',
 }
 
-export const dynamic = 'force-dynamic'
+export const revalidate = 60
 
 export async function generateMetadata({
   params,

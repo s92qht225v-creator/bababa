@@ -7,7 +7,7 @@ import Image from 'next/image'
 import { localizeCity, localizeRegion } from '@/lib/location-names'
 import type { Locale } from '@/types'
 
-export const dynamic = 'force-dynamic'
+export const revalidate = 60
 
 export async function generateMetadata({
   params,
