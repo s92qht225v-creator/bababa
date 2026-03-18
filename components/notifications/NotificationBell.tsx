@@ -22,8 +22,8 @@ export function NotificationBell() {
     try {
       const supabase = createClient()
 
-      // Single query: get recent 5 (we count unread from these + a count query in parallel)
-      const [{ data }, { count }] = await Promise.all([
+      // Fetch recent 5 + unread IDs in parallel (avoid HEAD requests that cause 503)
+      const [{ data }, { data: unreadData }] = await Promise.all([
         supabase
           .from('notifications')
           .select('*')
@@ -32,13 +32,14 @@ export function NotificationBell() {
           .limit(5),
         supabase
           .from('notifications')
-          .select('id', { count: 'exact', head: true })
+          .select('id')
           .eq('user_id', user.id)
-          .eq('is_read', false),
+          .eq('is_read', false)
+          .limit(100),
       ])
 
       setRecent((data ?? []) as Notification[])
-      setUnreadCount(count ?? 0)
+      setUnreadCount(unreadData?.length ?? 0)
     } catch {
       // Ignore fetch errors (503 etc.)
     }

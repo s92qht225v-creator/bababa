@@ -21,12 +21,13 @@ export function Header() {
     if (!user) return
     try {
       const supabase = createClient()
-      const { count } = await supabase
+      const { data } = await supabase
         .from('messages')
-        .select('id', { count: 'exact', head: true })
+        .select('id')
         .eq('receiver_id', user.id)
         .eq('is_read', false)
-      setUnreadMessages(count ?? 0)
+        .limit(100)
+      setUnreadMessages(data?.length ?? 0)
     } catch {
       // Ignore 503 / network errors
     }

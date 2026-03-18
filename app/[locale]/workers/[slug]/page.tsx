@@ -73,7 +73,9 @@ export default async function WorkerProfilePage({
   const isOwner = user?.id === worker?.user_id
   if (!worker || (!worker.is_public && !isOwner)) notFound()
 
-  const name = (worker.profile?.full_name ?? '') as string
+  const name = (worker.profile?.full_name
+    || worker.slug?.split('-').slice(0, 2).map((w: string) => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')
+    || '') as string
   const bio = (worker[`bio_${l}`] ?? worker.bio_original ?? '') as string
   const categoryName = (worker.category?.[`name_${l}`] ?? worker.category?.name_uz ?? '') as string
   const location = worker.location as { city: string; region: string } | null

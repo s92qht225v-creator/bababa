@@ -94,7 +94,9 @@ export function buildWorkerMetadata(
     ''
   ).substring(0, 155)
 
-  const name = worker.profile?.full_name ?? ''
+  const name = worker.profile?.full_name
+    || worker.slug?.split('-').slice(0, 2).map((w: string) => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')
+    || ''
   const profession = worker.profession
   const fullTitle = `${name} — ${profession} | bababa`
 
