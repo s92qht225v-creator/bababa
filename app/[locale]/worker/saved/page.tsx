@@ -60,7 +60,8 @@ export default async function SavedJobsPage({
       ) : (
         <div className="mt-6 space-y-4">
           {jobs.map((item) => {
-            const job = item.job as unknown as Record<string, unknown>
+            const rawJob = item.job as unknown
+            const job = (Array.isArray(rawJob) ? rawJob[0] : rawJob) as Record<string, unknown> | null
             if (!job) return null
             const loc = job.location as { city: string } | null
             return (
