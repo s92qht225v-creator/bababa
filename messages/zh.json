@@ -311,6 +311,7 @@
     "applied_jobs": "已申请",
     "shortlisted": "入围",
     "saved_jobs": "已收藏",
+    "no_saved_jobs": "暂无收藏的职位",
     "browse_jobs": "浏览职位",
     "days_ago": "{days}天前",
     "char_count": "{count} / {max} 字符",

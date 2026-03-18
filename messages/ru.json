@@ -311,6 +311,7 @@
     "applied_jobs": "Отклики",
     "shortlisted": "В избранном",
     "saved_jobs": "Сохранённые",
+    "no_saved_jobs": "Нет сохранённых вакансий",
     "browse_jobs": "Смотреть вакансии",
     "days_ago": "{days} дн. назад",
     "char_count": "{count} / {max} символов",

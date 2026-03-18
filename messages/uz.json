@@ -311,6 +311,7 @@
     "applied_jobs": "Topshirilgan arizalar",
     "shortlisted": "Tanlanganlar",
     "saved_jobs": "Saqlangan ishlar",
+    "no_saved_jobs": "Hali saqlangan ishlar yo'q",
     "browse_jobs": "Ishlarni ko'rish",
     "days_ago": "{days} kun oldin",
     "char_count": "{count} / {max} belgi",

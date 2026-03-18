@@ -4,6 +4,7 @@ import { getTranslations } from 'next-intl/server'
 import { createPublicClient } from '@/lib/supabase/server'
 import { siteConfig } from '@/lib/seo'
 import Image from 'next/image'
+import { SaveJobButton } from '@/components/jobs/SaveJobButton'
 import { localizeCity, localizeRegion } from '@/lib/location-names'
 import type { Locale } from '@/types'
 
@@ -65,7 +66,7 @@ export default async function JobsPage({
   // Build query
   let query = supabase
     .from('jobs')
-    .select('*, company:companies(*), location:locations(*), category:job_categories(*)', {
+    .select('*, company:companies(*), location:locations(*), category:job_categories(*), applications(count)', {
       count: 'exact',
     })
     .eq('status', 'active')
@@ -417,9 +418,12 @@ export default async function JobsPage({
                           )}
                         </div>
                       </div>
-                      <span className="text-xs text-gray-400">
-                        {daysAgo(job.created_at as string)}
-                      </span>
+                      <div className="flex items-center gap-1">
+                        <span className="text-xs text-gray-400">
+                          {daysAgo(job.created_at as string)}
+                        </span>
+                        <SaveJobButton jobId={job.id as string} initialSaved={false} />
+                      </div>
                     </div>
 
                     <h3 className="mt-3 text-lg font-semibold text-gray-900">
@@ -438,6 +442,11 @@ export default async function JobsPage({
                       {(job.workers_needed as number) > 1 && (
                         <span>👥 {t('positions', { count: job.workers_needed as number })}</span>
                       )}
+                      {(() => {
+                        const apps = job.applications as { count: number }[] | undefined
+                        const count = apps?.[0]?.count ?? 0
+                        return count > 0 ? <span>📋 {count} {t('applicants')}</span> : null
+                      })()}
                     </div>
                   </a>
                 )
