@@ -2,9 +2,8 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { useTranslations, useLocale } from 'next-intl'
-import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
-import { saveWorkerProfile, updateProfilePhoto, updateProfileVideo, toggleProfileVisibility } from '@/lib/actions/worker'
+import { saveWorkerProfile, updateProfilePhoto, updateProfileVideo } from '@/lib/actions/worker'
 import type { Locale, AvailabilityStatus, ExperienceEntry, JobCategory, Location, WorkerProfile, Profile } from '@/types'
 
 interface ProfileFormProps {
@@ -38,7 +37,6 @@ function calculateCompletion(wp: WorkerProfile | null, p: ProfileFormProps['prof
 export function ProfileForm({ locale, profile, workerProfile, categories, regions, currentLocation }: ProfileFormProps) {
   const t = useTranslations('worker')
   const currentLocale = useLocale() as Locale
-  const router = useRouter()
   const supabase = createClient()
 
   // Personal info
@@ -253,11 +251,9 @@ export function ProfileForm({ locale, profile, workerProfile, categories, region
     }
   }
 
-  // Visibility toggle
-  const handleVisibilityToggle = async () => {
-    const newVal = !isPublic
-    setIsPublic(newVal)
-    await toggleProfileVisibility(newVal)
+  // Visibility toggle (saved with the rest of the form on submit)
+  const handleVisibilityToggle = () => {
+    setIsPublic((prev) => !prev)
   }
 
   // Submit
@@ -295,7 +291,6 @@ export function ProfileForm({ locale, profile, workerProfile, categories, region
       if (result.success) {
         setSaved(true)
         setTimeout(() => setSaved(false), 3000)
-        router.refresh()
       } else {
         setError(result.error ?? 'Failed to save')
       }
