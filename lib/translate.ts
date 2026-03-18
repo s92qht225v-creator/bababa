@@ -53,8 +53,7 @@ export async function translateMessage(
     .eq('source_hash', sourceHash)
     .eq('source_lang', sourceLang)
     .eq('target_lang', targetLang)
-    .limit(1)
-    .single()
+    .maybeSingle()
 
   if (cached) return cached.translated_text
 
@@ -99,8 +98,7 @@ export async function translateText(
     .from('translation_overrides')
     .select('term_uz, term_zh, term_ru')
     .eq('term_en', text)
-    .limit(1)
-    .single()
+    .maybeSingle()
 
   if (override) {
     const val = (override as Record<string, string | null>)[termField]
@@ -118,8 +116,7 @@ export async function translateText(
     .select('translated_text')
     .eq('source_hash', sourceHash)
     .eq('target_lang', targetLang)
-    .limit(1)
-    .single()
+    .maybeSingle()
 
   if (cached) return cached.translated_text
 
@@ -171,8 +168,7 @@ async function translateJobField(
     .eq('source_hash', sourceHash)
     .eq('source_lang', sourceLang)
     .eq('target_lang', targetLang)
-    .limit(1)
-    .single()
+    .maybeSingle()
 
   if (cached) return cached.translated_text
 
