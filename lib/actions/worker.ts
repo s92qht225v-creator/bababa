@@ -65,13 +65,14 @@ export async function saveWorkerProfile(input: SaveProfileInput): Promise<Action
     }
   }
 
-  // Generate slug for new profiles
-  const slug = input.fullName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || 'worker'
-  const uniqueSlug = `${slug}-${Math.floor(1000 + Math.random() * 9000)}`
+  // Check if profile already exists
+  const { data: existing } = await supabase
+    .from('worker_profiles')
+    .select('id, slug')
+    .eq('user_id', user.id)
+    .single()
 
-  const profileData = {
-    user_id: user.id,
-    slug: uniqueSlug,
+  const updateData = {
     age: input.age,
     gender: input.gender,
     location_id: input.locationId || null,
@@ -97,12 +98,31 @@ export async function saveWorkerProfile(input: SaveProfileInput): Promise<Action
     last_active: new Date().toISOString(),
   }
 
-  // Upsert: insert if no row exists, update if it does (keyed on user_id unique constraint)
-  const { data: updated, error } = await supabase
-    .from('worker_profiles')
-    .upsert(profileData, { onConflict: 'user_id' })
-    .select('is_public')
-    .single()
+  let updated: { is_public: boolean } | null = null
+  let error: { message: string } | null = null
+
+  if (existing) {
+    // Update existing profile (don't change slug)
+    const result = await supabase
+      .from('worker_profiles')
+      .update(updateData)
+      .eq('user_id', user.id)
+      .select('is_public')
+      .single()
+    updated = result.data
+    error = result.error
+  } else {
+    // Create new profile with generated slug
+    const slug = input.fullName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || 'worker'
+    const uniqueSlug = `${slug}-${Math.floor(1000 + Math.random() * 9000)}`
+    const result = await supabase
+      .from('worker_profiles')
+      .insert({ user_id: user.id, slug: uniqueSlug, ...updateData })
+      .select('is_public')
+      .single()
+    updated = result.data
+    error = result.error
+  }
 
   if (error) {
     console.error('Profile save error:', error)
@@ -184,6 +204,9 @@ export async function toggleProfileVisibility(isPublic: boolean): Promise<Action
       .eq('user_id', user.id)
     if (error) return { success: false, error: 'Failed to toggle visibility' }
   }
+
+  revalidatePath('/[locale]/worker/profile', 'page')
+  revalidatePath('/[locale]/workers', 'page')
 
   return { success: true }
 }

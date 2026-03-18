@@ -145,6 +145,7 @@
     "account_suspended": "您的账户已被暂停。联系方式：support@bababa.uz"
   },
   "jobs": {
+    "title": "职位列表",
     "post_job": "发布职位",
     "edit_job": "编辑",
     "update_job": "更新",
@@ -265,6 +266,7 @@
     "beginner": "初学者",
     "other_languages": "其他语言",
     "uzbek": "乌兹别克语",
+    "chinese": "中文",
     "russian": "俄语",
     "english": "英语",
     "korean": "韩语",
@@ -312,6 +314,7 @@
     "browse_jobs": "浏览职位",
     "days_ago": "{days}天前",
     "char_count": "{count} / {max} 字符",
+    "filters": "筛选",
     "all_workers": "所有人才",
     "sort_active": "最近活跃",
     "sort_hsk": "HSK等级",
@@ -394,7 +397,9 @@
     "not_selected": "未入选",
     "search_name": "按姓名搜索",
     "cancel": "取消",
-    "confirm": "确认"
+    "confirm": "确认",
+    "today": "今天",
+    "days_ago": "{days}天前"
   },
   "notifications": {
     "title": "通知",
@@ -420,6 +425,8 @@
     "title": "关于bababa",
     "what_is": "bababa是连接乌兹别克斯坦中国企业与当地人才的招聘平台。",
     "who_for": "平台面向谁",
+    "who_for_workers": "求职者",
+    "who_for_employers": "雇主",
     "for_workers_desc": "面向在中国企业求职的乌兹别克工人 — 翻译、工程师、司机等。",
     "for_employers_desc": "面向在乌兹别克斯坦运营的中国企业 — 寻找合格的本地员工。",
     "how_translation": "翻译如何运作",

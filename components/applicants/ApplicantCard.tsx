@@ -32,7 +32,7 @@ export function ApplicantCard({
     const diff = Math.floor(
       (Date.now() - new Date(applicant.applied_at).getTime()) / (1000 * 60 * 60 * 24)
     )
-    return diff === 0 ? 'Today' : `${diff}d ago`
+    return diff === 0 ? t('today') : t('days_ago', { days: diff })
   }
 
   return (
@@ -47,7 +47,7 @@ export function ApplicantCard({
           />
         ) : (
           <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full bg-red-100 text-xs font-semibold text-red-600">
-            {applicant.workerProfile.full_name.charAt(0).toUpperCase()}
+            {(applicant.workerProfile.full_name || '?').charAt(0).toUpperCase()}
           </div>
         )}
         <div className="min-w-0 flex-1">

@@ -46,17 +46,23 @@ export default async function CompaniesPage({
   const t = await getTranslations('companies_page')
   const supabase = await createClient()
 
-  // Fetch all companies
-  const { data: companies } = await supabase
-    .from('companies')
-    .select('id, slug, name_original, name_uz, name_zh, name_ru, logo_url, industry, is_verified')
-    .order('is_verified', { ascending: false })
+  // Run all queries in parallel
+  const [
+    { data: companies },
+    { data: categories },
+    { data: jobCounts },
+  ] = await Promise.all([
+    supabase.from('companies')
+      .select('id, slug, name_original, name_uz, name_zh, name_ru, logo_url, industry, is_verified')
+      .order('is_verified', { ascending: false }),
+    supabase.from('job_categories').select('slug, name_uz, name_zh, name_ru'),
+    supabase.from('jobs').select('company_id').eq('status', 'active'),
+  ])
 
-  // Get job counts per company
-  const { data: jobCounts } = await supabase
-    .from('jobs')
-    .select('company_id')
-    .eq('status', 'active')
+  const industryLabels: Record<string, string> = {}
+  for (const cat of categories ?? []) {
+    industryLabels[cat.slug] = (cat[`name_${l}`] ?? cat.slug) as string
+  }
 
   const countMap: Record<string, number> = {}
   for (const j of jobCounts ?? []) {
@@ -67,7 +73,7 @@ export default async function CompaniesPage({
     id: c.id,
     slug: c.slug,
     name: (c[`name_${l}`] ?? c.name_original) as string,
-    industry: c.industry,
+    industry: c.industry ? (industryLabels[c.industry] ?? c.industry) : null,
     logo_url: c.logo_url,
     is_verified: c.is_verified,
     job_count: countMap[c.id] || 0,

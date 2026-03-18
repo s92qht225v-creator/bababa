@@ -8,6 +8,19 @@ import { StatsCounter } from '@/components/home/StatsCounter'
 import { HowItWorksTabs } from '@/components/home/HowItWorksTabs'
 import type { Locale } from '@/types'
 
+const CATEGORY_ICONS: Record<string, string> = {
+  'hard-hat': '🏗️',
+  'pickaxe': '⛏️',
+  'laptop': '💻',
+  'truck': '🚛',
+  'factory': '🏭',
+  'banknote': '💰',
+  'languages': '🌐',
+  'briefcase': '💼',
+  'wheat': '🌾',
+  'circle-dot': '⚙️',
+}
+
 export const revalidate = 3600
 
 const META_TITLES: Record<Locale, string> = {
@@ -63,33 +76,39 @@ export default async function HomePage({
 
   const supabase = await createClient()
 
-  // Fetch stats
+  // Run ALL independent queries in parallel
   const [
     { count: jobCount },
     { count: companyCount },
     { count: workerCount },
+    { data: categories },
+    { data: activeJobs },
+    { data: popularCats },
+    { data: featuredJobs },
+    { data: featuredCompanies },
+    { data: locations },
   ] = await Promise.all([
     supabase.from('jobs').select('id', { count: 'exact', head: true }).eq('status', 'active'),
     supabase.from('companies').select('id', { count: 'exact', head: true }).eq('is_verified', true),
     supabase.from('worker_profiles').select('id', { count: 'exact', head: true }).eq('is_public', true),
+    supabase.from('job_categories').select('id, name_zh, name_uz, name_ru, icon, slug').order('name_uz'),
+    supabase.from('jobs').select('category_id, company_id').eq('status', 'active'),
+    supabase.from('applications').select('job:jobs!applications_job_id_fkey(category_id)').limit(500),
+    supabase.from('jobs')
+      .select('id, slug, title_original, title_zh, title_uz, title_ru, salary_min, salary_max, salary_currency, hsk_required, employment_type, created_at, company:companies(name_original, name_zh, name_uz, name_ru, logo_url, is_verified), location:locations(city)')
+      .eq('status', 'active').order('created_at', { ascending: false }).limit(6),
+    supabase.from('companies')
+      .select('id, slug, name_original, name_zh, name_uz, name_ru, logo_url, industry, description_zh, description_uz, description_ru')
+      .eq('is_verified', true).limit(6),
+    supabase.from('locations').select('city').order('city'),
   ])
 
-  // Fetch categories with job counts
-  const { data: categories } = await supabase
-    .from('job_categories')
-    .select('id, name_zh, name_uz, name_ru, icon, slug')
-    .order('name_uz')
-
-  const categoryIds = (categories ?? []).map((c) => c.id)
-  const { data: catJobCounts } = await supabase
-    .from('jobs')
-    .select('category_id')
-    .eq('status', 'active')
-    .in('category_id', categoryIds.length > 0 ? categoryIds : ['none'])
-
+  // Build category job counts from activeJobs data
   const catCountMap: Record<string, number> = {}
-  ;(catJobCounts ?? []).forEach((j) => {
+  const compJobMap: Record<string, number> = {}
+  ;(activeJobs ?? []).forEach((j) => {
     if (j.category_id) catCountMap[j.category_id] = (catCountMap[j.category_id] ?? 0) + 1
+    if (j.company_id) compJobMap[j.company_id] = (compJobMap[j.company_id] ?? 0) + 1
   })
 
   const categoriesWithCounts = (categories ?? [])
@@ -97,12 +116,13 @@ export default async function HomePage({
     .sort((a, b) => b.jobCount - a.jobCount)
     .slice(0, 8)
 
-  // Popular search tags — top 5 categories by application count
-  const { data: popularCats } = await supabase
-    .from('applications')
-    .select('job:jobs!applications_job_id_fkey(category_id)')
-    .limit(500)
+  // Build industry slug → localized name map
+  const industryLabels: Record<string, string> = {}
+  for (const c of categories ?? []) {
+    industryLabels[c.slug] = (c[`name_${l}`] ?? c.slug) as string
+  }
 
+  // Popular search tags — top 5 categories by application count
   const popMap: Record<string, number> = {}
   ;(popularCats ?? []).forEach((a) => {
     const catId = (a.job as unknown as { category_id: string })?.category_id
@@ -114,41 +134,7 @@ export default async function HomePage({
     .map(([id]) => id)
   const popularTags = (categories ?? []).filter((c) => topCatIds.includes(c.id))
 
-  // Fetch 6 featured jobs
-  const { data: featuredJobs } = await supabase
-    .from('jobs')
-    .select('id, slug, title_original, title_zh, title_uz, title_ru, salary_min, salary_max, salary_currency, hsk_required, employment_type, created_at, company:companies(name_original, name_zh, name_uz, name_ru, logo_url, is_verified), location:locations(city)')
-    .eq('status', 'active')
-    .order('created_at', { ascending: false })
-    .limit(6)
-
-  // Fetch 6 verified companies
-  const { data: featuredCompanies } = await supabase
-    .from('companies')
-    .select('id, slug, name_original, name_zh, name_uz, name_ru, logo_url, industry, description_zh, description_uz, description_ru')
-    .eq('is_verified', true)
-    .limit(6)
-
-  // Company open positions count
-  const companyIds = (featuredCompanies ?? []).map((c) => c.id)
-  const { data: companyJobCounts } = await supabase
-    .from('jobs')
-    .select('company_id')
-    .eq('status', 'active')
-    .in('company_id', companyIds.length > 0 ? companyIds : ['none'])
-
-  const compJobMap: Record<string, number> = {}
-  ;(companyJobCounts ?? []).forEach((j) => {
-    compJobMap[j.company_id] = (compJobMap[j.company_id] ?? 0) + 1
-  })
-
-  // Fetch locations for search dropdown
-  const { data: locations } = await supabase
-    .from('locations')
-    .select('city')
-    .order('city')
-
-  const cities = [...new Set((locations ?? []).map((l) => l.city))]
+  const cities = [...new Set((locations ?? []).map((loc) => loc.city))]
 
   const getCatName = (cat: { name_zh: string; name_uz: string; name_ru: string }) =>
     cat[`name_${l}` as keyof typeof cat] ?? cat.name_uz
@@ -285,7 +271,7 @@ export default async function HomePage({
                     href={`/${locale}/jobs/category/${cat.slug}`}
                     className="flex flex-col items-center rounded-xl border border-gray-200 bg-white p-5 text-center transition hover:border-red-300 hover:shadow-sm"
                   >
-                    <span className="text-2xl">{cat.icon || '💼'}</span>
+                    <span className="text-2xl">{CATEGORY_ICONS[cat.icon] || '💼'}</span>
                     <span className="mt-2 text-sm font-semibold text-gray-900">
                       {getCatName(cat)}
                     </span>
@@ -396,7 +382,7 @@ export default async function HomePage({
                         {getCompanyName(company)}
                       </p>
                       <p className="text-xs text-gray-500">
-                        {company.industry ?? ''} · {compJobMap[company.id] ?? 0} {t('open_positions')}
+                        {company.industry ? (industryLabels[company.industry] ?? company.industry) : ''} · {compJobMap[company.id] ?? 0} {t('open_positions')}
                       </p>
                     </div>
                   </a>

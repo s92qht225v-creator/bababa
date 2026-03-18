@@ -110,18 +110,16 @@ export default async function JobsPage({
   const from = (page - 1) * PER_PAGE
   query = query.range(from, from + PER_PAGE - 1)
 
-  const { data: jobs, count } = await query
-
-  // Load filter data
-  const { data: categories } = await supabase
-    .from('job_categories')
-    .select('*')
-    .order('name_uz')
-
-  const { data: regionData } = await supabase
-    .from('locations')
-    .select('region')
-    .order('region')
+  // Run main query and filter data queries in parallel
+  const [
+    { data: jobs, count },
+    { data: categories },
+    { data: regionData },
+  ] = await Promise.all([
+    query,
+    supabase.from('job_categories').select('*').order('name_uz'),
+    supabase.from('locations').select('region').order('region'),
+  ])
 
   const regions = [...new Set((regionData ?? []).map((r) => r.region))]
 

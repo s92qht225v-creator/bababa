@@ -18,35 +18,22 @@ export default async function WorkerProfilePage({
     data: { user },
   } = await supabase.auth.getUser()
 
-  // Load worker profile
-  const { data: workerProfile } = await supabase
-    .from('worker_profiles')
-    .select('*')
-    .eq('user_id', user!.id)
-    .single()
-
-  // Load profile (name, phone)
-  const { data: profile } = await supabase
-    .from('profiles')
-    .select('full_name, phone, language_preference')
-    .eq('id', user!.id)
-    .single()
-
-  // Load categories
-  const { data: categories } = await supabase
-    .from('job_categories')
-    .select('*')
-    .order('name_uz')
-
-  // Load unique regions
-  const { data: locationData } = await supabase
-    .from('locations')
-    .select('region')
-    .order('region')
+  // Run all queries in parallel
+  const [
+    { data: workerProfile },
+    { data: profile },
+    { data: categories },
+    { data: locationData },
+  ] = await Promise.all([
+    supabase.from('worker_profiles').select('*').eq('user_id', user!.id).single(),
+    supabase.from('profiles').select('full_name, phone, language_preference').eq('id', user!.id).single(),
+    supabase.from('job_categories').select('*').order('name_uz'),
+    supabase.from('locations').select('region').order('region'),
+  ])
 
   const regions = [...new Set((locationData ?? []).map((l) => l.region))]
 
-  // Load current location if set
+  // Load current location if set (depends on workerProfile result)
   let currentLocation = null
   if (workerProfile?.location_id) {
     const { data } = await supabase

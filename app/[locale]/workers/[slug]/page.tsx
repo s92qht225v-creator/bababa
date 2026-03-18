@@ -10,6 +10,16 @@ import { SaveWorkerButton } from '@/components/workers/SaveWorkerButton'
 import Image from 'next/image'
 import type { Locale, WorkerWithRelations, ExperienceEntry } from '@/types'
 
+// Map DB language codes to translation keys
+const LANG_KEY_MAP: Record<string, string> = {
+  uz: 'uzbek', uzbek: 'uzbek',
+  zh: 'chinese', chinese: 'chinese',
+  ru: 'russian', russian: 'russian',
+  en: 'english', english: 'english',
+  ko: 'korean', korean: 'korean',
+  other: 'other',
+}
+
 export const dynamic = 'force-dynamic'
 
 export async function generateMetadata({
@@ -214,11 +224,14 @@ export default async function WorkerProfilePage({
           <div className="mt-6 rounded-lg border border-gray-200 bg-white p-6">
             <h2 className="text-lg font-semibold">{t('language_skills')}</h2>
             <div className="mt-3 flex flex-wrap gap-2">
-              {(worker.languages as string[]).map((lang) => (
-                <span key={lang} className="rounded-full bg-gray-100 px-3 py-1 text-xs text-gray-700">
-                  {t(lang as 'uzbek' | 'russian' | 'english' | 'korean' | 'other')}
-                </span>
-              ))}
+              {(worker.languages as string[]).map((lang) => {
+                const key = LANG_KEY_MAP[lang] ?? lang
+                return (
+                  <span key={lang} className="rounded-full bg-gray-100 px-3 py-1 text-xs text-gray-700">
+                    {t(key as 'uzbek' | 'russian' | 'english' | 'korean' | 'other')}
+                  </span>
+                )
+              })}
             </div>
           </div>
         )}

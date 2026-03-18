@@ -145,6 +145,7 @@
     "account_suspended": "Hisobingiz to'xtatilgan. Bog'lanish: support@bababa.uz"
   },
   "jobs": {
+    "title": "Ish o'rinlari",
     "post_job": "Ish e'loni berish",
     "edit_job": "Tahrirlash",
     "update_job": "Yangilash",
@@ -265,6 +266,7 @@
     "beginner": "Boshlang'ich",
     "other_languages": "Boshqa tillar",
     "uzbek": "O'zbek",
+    "chinese": "Xitoy",
     "russian": "Rus",
     "english": "Ingliz",
     "korean": "Koreys",
@@ -312,6 +314,7 @@
     "browse_jobs": "Ishlarni ko'rish",
     "days_ago": "{days} kun oldin",
     "char_count": "{count} / {max} belgi",
+    "filters": "Filterlar",
     "all_workers": "Barcha ishchilar",
     "sort_active": "Oxirgi faol",
     "sort_hsk": "HSK darajasi",
@@ -394,7 +397,9 @@
     "not_selected": "Tanlanmadi",
     "search_name": "Ism bo'yicha qidirish",
     "cancel": "Bekor qilish",
-    "confirm": "Tasdiqlash"
+    "confirm": "Tasdiqlash",
+    "today": "Bugun",
+    "days_ago": "{days} kun oldin"
   },
   "notifications": {
     "title": "Bildirishnomalar",
@@ -420,6 +425,8 @@
     "title": "bababa haqida",
     "what_is": "bababa — O'zbekistondagi xitoy kompaniyalari va mahalliy ishchilarni bog'lovchi ish platformasi.",
     "who_for": "Platforma kimlar uchun",
+    "who_for_workers": "Ishchilar uchun",
+    "who_for_employers": "Ish beruvchilar uchun",
     "for_workers_desc": "Xitoy kompaniyalarida ish qidiruvchi o'zbek ishchilar uchun — tarjimonlar, muhandislar, haydovchilar va boshqalar.",
     "for_employers_desc": "O'zbekistonda faoliyat yurituvchi xitoy kompaniyalari uchun — malakali mahalliy ishchilarni toping.",
     "how_translation": "Tarjima qanday ishlaydi",

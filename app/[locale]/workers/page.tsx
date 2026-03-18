@@ -98,18 +98,16 @@ export default async function WorkersPage({
   const from = (page - 1) * PER_PAGE
   query = query.range(from, from + PER_PAGE - 1)
 
-  const { data: workers, count } = await query
-
-  // Load filter data
-  const { data: categories } = await supabase
-    .from('job_categories')
-    .select('*')
-    .order('name_uz')
-
-  const { data: regionData } = await supabase
-    .from('locations')
-    .select('region')
-    .order('region')
+  // Run main query and filter data queries in parallel
+  const [
+    { data: workers, count },
+    { data: categories },
+    { data: regionData },
+  ] = await Promise.all([
+    query,
+    supabase.from('job_categories').select('*').order('name_uz'),
+    supabase.from('locations').select('region').order('region'),
+  ])
 
   const regions = [...new Set((regionData ?? []).map((r) => r.region))]
 
@@ -209,7 +207,7 @@ export default async function WorkersPage({
 
           {/* Region filter */}
           <div>
-            <h3 className="mb-2 text-sm font-semibold">Region</h3>
+            <h3 className="mb-2 text-sm font-semibold">{t('region')}</h3>
             <div className="space-y-1">
               <a
                 href={buildUrl({ region: '', page: '1' })}
@@ -275,7 +273,7 @@ export default async function WorkersPage({
         {/* Mobile filter toggle */}
         <details className="lg:hidden">
           <summary className="cursor-pointer rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium">
-            Filters
+            {t('filters')}
           </summary>
           <div className="mt-2 space-y-4 rounded-lg border border-gray-200 bg-white p-4">
             <form action={`/${locale}/workers`} method="GET">

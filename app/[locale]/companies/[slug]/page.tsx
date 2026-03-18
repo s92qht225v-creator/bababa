@@ -42,16 +42,22 @@ export default async function CompanyProfilePage({
   const t = await getTranslations('companies_page')
   const supabase = await createClient()
 
-  const { data: company } = await supabase
-    .from('companies')
-    .select('*')
-    .eq('slug', slug)
-    .single()
+  const [{ data: company }, { data: categories }] = await Promise.all([
+    supabase.from('companies').select('*').eq('slug', slug).single(),
+    supabase.from('job_categories').select('slug, name_uz, name_zh, name_ru'),
+  ])
 
   if (!company) notFound()
 
+  // Build industry label map
+  const industryLabels: Record<string, string> = {}
+  for (const cat of categories ?? []) {
+    industryLabels[cat.slug] = (cat[`name_${l}`] ?? cat.slug) as string
+  }
+
   const name = (company[`name_${l}`] ?? company.name_original) as string
   const description = (company[`description_${l}`] ?? '') as string
+  const industryLabel = company.industry ? (industryLabels[company.industry] ?? company.industry) : null
 
   // Fetch active jobs
   const { data: jobs } = await supabase
@@ -120,8 +126,8 @@ export default async function CompanyProfilePage({
                 <span className="text-sm text-green-600">✓</span>
               )}
             </div>
-            {company.industry && (
-              <p className="mt-1 text-sm text-gray-600">{company.industry}</p>
+            {industryLabel && (
+              <p className="mt-1 text-sm text-gray-600">{industryLabel}</p>
             )}
             <div className="mt-1 flex flex-wrap gap-x-4 text-sm text-gray-500">
               {company.website && (

@@ -74,11 +74,11 @@ export default async function AboutPage({
 
         <div className="mt-10 grid gap-6 sm:grid-cols-2">
           <div className="rounded-lg border border-gray-200 bg-white p-6">
-            <h2 className="text-lg font-semibold">{t('who_for')}</h2>
+            <h2 className="text-lg font-semibold">{t('who_for_workers')}</h2>
             <p className="mt-2 text-sm text-gray-600">{t('for_workers_desc')}</p>
           </div>
           <div className="rounded-lg border border-gray-200 bg-white p-6">
-            <h2 className="text-lg font-semibold">{t('who_for')}</h2>
+            <h2 className="text-lg font-semibold">{t('who_for_employers')}</h2>
             <p className="mt-2 text-sm text-gray-600">{t('for_employers_desc')}</p>
           </div>
         </div>
