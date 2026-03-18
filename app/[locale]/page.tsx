@@ -426,7 +426,7 @@ export default async function HomePage({
         {/* ── Section 8: CTA Banner ── */}
         <section className="bg-red-600 px-4 py-16 text-center text-white">
           <div className="mx-auto max-w-2xl">
-            <h2 className="text-2xl font-bold">{t('cta_title')}</h2>
+            <h2 className="text-xl font-bold sm:text-2xl" style={{ overflowWrap: 'break-word' }}>{t('cta_title')}</h2>
             <p className="mt-3 text-red-100">{t('cta_subtitle')}</p>
             <a
               href={`/${locale}/employer/post-job`}

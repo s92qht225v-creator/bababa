@@ -194,25 +194,62 @@ export default async function JobsPage({
     <main className="mx-auto max-w-7xl px-4 py-8">
       <h1 className="text-2xl font-bold">{t('all_jobs')}</h1>
 
+      {/* Search — always visible */}
+      <form action={`/${locale}/jobs`} method="GET" className="mt-6">
+        <input
+          type="text"
+          name="q"
+          defaultValue={search}
+          placeholder={t('search_placeholder')}
+          className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-red-500 focus:outline-none focus:ring-1 focus:ring-red-500"
+        />
+        {categoryFilter && <input type="hidden" name="category" value={categoryFilter} />}
+        {regionFilter && <input type="hidden" name="region" value={regionFilter} />}
+        {typeFilter && <input type="hidden" name="type" value={typeFilter} />}
+        {hskFilter && <input type="hidden" name="hsk" value={hskFilter} />}
+        {sortBy !== 'newest' && <input type="hidden" name="sort" value={sortBy} />}
+      </form>
+
+      {/* Mobile filters toggle */}
+      <details className="mt-4 rounded-lg border border-gray-300 lg:hidden">
+        <summary className="cursor-pointer px-4 py-2 text-sm font-medium">{t('filters')}</summary>
+        <div className="space-y-4 px-4 pb-4">
+          {/* Category */}
+          <div>
+            <h3 className="mb-1 text-xs font-semibold">{t('category')}</h3>
+            <div className="flex flex-wrap gap-1">
+              {(categories ?? []).map((cat) => (
+                <a key={cat.id} href={buildUrl({ category: categoryFilter === cat.id ? '' : cat.id, page: '1' })} className={`rounded border px-2 py-0.5 text-xs ${categoryFilter === cat.id ? 'border-red-600 bg-red-50 text-red-700' : 'border-gray-300 text-gray-600'}`}>
+                  {categoryName(cat)}
+                </a>
+              ))}
+            </div>
+          </div>
+          {/* Region */}
+          <div>
+            <h3 className="mb-1 text-xs font-semibold">{t('region')}</h3>
+            <div className="flex flex-wrap gap-1">
+              {regions.map((r) => (
+                <a key={r} href={buildUrl({ region: regionFilter === r ? '' : r, city: '', page: '1' })} className={`rounded border px-2 py-0.5 text-xs ${regionFilter === r ? 'border-red-600 bg-red-50 text-red-700' : 'border-gray-300 text-gray-600'}`}>
+                  {localizeRegion(r, l)}
+                </a>
+              ))}
+            </div>
+          </div>
+          {/* HSK */}
+          <div>
+            <h3 className="mb-1 text-xs font-semibold">{t('hsk_required')}</h3>
+            <div className="flex flex-wrap gap-1">
+              <a href={buildUrl({ hsk: '', page: '1' })} className={`rounded border px-2 py-0.5 text-xs ${!hskFilter ? 'border-red-600 bg-red-50 text-red-700' : 'border-gray-300 text-gray-600'}`}>{t('any_level')}</a>
+              {[1,2,3,4,5,6].map((lv) => <a key={lv} href={buildUrl({ hsk: String(lv), page: '1' })} className={`rounded border px-2 py-0.5 text-xs ${hskFilter === String(lv) ? 'border-red-600 bg-red-50 text-red-700' : 'border-gray-300 text-gray-600'}`}>HSK {lv}</a>)}
+            </div>
+          </div>
+        </div>
+      </details>
+
       <div className="mt-6 flex flex-col gap-6 lg:flex-row">
-        {/* Filters sidebar */}
-        <aside className="w-full shrink-0 space-y-6 lg:w-64">
-          {/* Search */}
-          <form action={`/${locale}/jobs`} method="GET">
-            <input
-              type="text"
-              name="q"
-              defaultValue={search}
-              placeholder={t('search_placeholder')}
-              className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-red-500 focus:outline-none focus:ring-1 focus:ring-red-500"
-            />
-            {/* Preserve other filters */}
-            {categoryFilter && <input type="hidden" name="category" value={categoryFilter} />}
-            {regionFilter && <input type="hidden" name="region" value={regionFilter} />}
-            {typeFilter && <input type="hidden" name="type" value={typeFilter} />}
-            {hskFilter && <input type="hidden" name="hsk" value={hskFilter} />}
-            {sortBy !== 'newest' && <input type="hidden" name="sort" value={sortBy} />}
-          </form>
+        {/* Desktop filters sidebar */}
+        <aside className="hidden w-64 shrink-0 space-y-6 lg:block">
 
           {/* Category filter */}
           <div>
