@@ -1,8 +1,12 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: var(--font-inter), var(--font-noto-sc), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --animate-slide-up: slide-up 0.3s ease-out;
+}
+
+.font-chinese {
+  font-family: 'Noto Sans SC', var(--font-inter), ui-sans-serif, system-ui, sans-serif;
 }
 
 @keyframes slide-up {
