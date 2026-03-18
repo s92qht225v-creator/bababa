@@ -45,7 +45,7 @@ export function UserProvider({ children }: { children: ReactNode }) {
       const supabase = createClient()
       const { data } = await supabase
         .from('profiles')
-        .select('id, full_name, phone, role, language_preference, is_active, photo_url, created_at')
+        .select('*')
         .eq('id', userId)
         .single()
       setUser(data)
