@@ -4,6 +4,7 @@ import { getTranslations } from 'next-intl/server'
 import { createClient } from '@/lib/supabase/server'
 import { siteConfig } from '@/lib/seo'
 import Image from 'next/image'
+import { localizeCity, localizeRegion, localizeLocation } from '@/lib/location-names'
 import type { Locale } from '@/types'
 
 export const dynamic = 'force-dynamic'
@@ -221,7 +222,7 @@ export default async function WorkersPage({
                   href={buildUrl({ region: regionFilter === r ? '' : r, page: '1' })}
                   className={`block rounded px-2 py-1 text-sm ${regionFilter === r ? 'bg-red-50 font-medium text-red-700' : 'text-gray-600 hover:bg-gray-50'}`}
                 >
-                  {r}
+                  {localizeRegion(r, l)}
                 </a>
               ))}
             </div>
@@ -363,7 +364,7 @@ export default async function WorkersPage({
 
                         <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-sm text-gray-500">
                           {location && (
-                            <span>📍 {location.city as string}, {location.region as string}</span>
+                            <span>📍 {localizeLocation(location.city as string, location.region as string, l)}</span>
                           )}
                           {(worker.hsk_level as number) > 0 && (
                             <span>🗣 HSK {worker.hsk_level as number}</span>

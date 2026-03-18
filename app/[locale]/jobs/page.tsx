@@ -4,6 +4,7 @@ import { getTranslations } from 'next-intl/server'
 import { createClient } from '@/lib/supabase/server'
 import { siteConfig } from '@/lib/seo'
 import Image from 'next/image'
+import { localizeCity, localizeRegion } from '@/lib/location-names'
 import type { Locale } from '@/types'
 
 export const dynamic = 'force-dynamic'
@@ -251,7 +252,7 @@ export default async function JobsPage({
                   href={buildUrl({ region: regionFilter === r ? '' : r, city: '', page: '1' })}
                   className={`block rounded px-2 py-1 text-sm ${regionFilter === r ? 'bg-red-50 font-medium text-red-700' : 'text-gray-600 hover:bg-gray-50'}`}
                 >
-                  {r}
+                  {localizeRegion(r, l)}
                 </a>
               ))}
             </div>
@@ -390,7 +391,7 @@ export default async function JobsPage({
 
                     <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-sm text-gray-500">
                       {job.location && (
-                        <span>📍 {(job.location as Record<string, unknown>).city as string}</span>
+                        <span>📍 {localizeCity((job.location as Record<string, unknown>).city as string, l)}</span>
                       )}
                       <span>💰 {formatSalary(job)}{t('per_month')}</span>
                       <span>🕐 {t((job.employment_type ?? 'full_time') as 'full_time')}</span>

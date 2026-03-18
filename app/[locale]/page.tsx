@@ -6,6 +6,7 @@ import { siteConfig } from '@/lib/seo'
 import { JsonLd } from '@/components/seo/JsonLd'
 import { StatsCounter } from '@/components/home/StatsCounter'
 import { HowItWorksTabs } from '@/components/home/HowItWorksTabs'
+import { localizeCity } from '@/lib/location-names'
 import type { Locale } from '@/types'
 
 const CATEGORY_ICONS: Record<string, string> = {
@@ -203,7 +204,7 @@ export default async function HomePage({
               >
                 <option value="">{t('search_location')}</option>
                 {cities.map((c) => (
-                  <option key={c} value={c}>{c}</option>
+                  <option key={c} value={c}>{localizeCity(c, l)}</option>
                 ))}
               </select>
               <button
@@ -321,7 +322,7 @@ export default async function HomePage({
                           {getTitle(job)}
                         </h3>
                         <div className="mt-1 flex flex-wrap gap-x-3 text-xs text-gray-500">
-                          {job.location && <span>📍 {(job.location as unknown as { city: string }).city}</span>}
+                          {job.location && <span>📍 {localizeCity((job.location as unknown as { city: string }).city, l)}</span>}
                           <span>💰 {formatSalary(job)}</span>
                           {job.hsk_required > 0 && <span>🗣 HSK {job.hsk_required}</span>}
                         </div>

@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback, useRef } from 'react'
 import { useTranslations, useLocale } from 'next-intl'
 import { createClient } from '@/lib/supabase/client'
 import { saveWorkerProfile, updateProfilePhoto, updateProfileVideo, toggleProfileVisibility } from '@/lib/actions/worker'
+import { localizeRegion, localizeCity } from '@/lib/location-names'
 import type { Locale, AvailabilityStatus, ExperienceEntry, JobCategory, Location, WorkerProfile, Profile } from '@/types'
 
 interface ProfileFormProps {
@@ -484,7 +485,7 @@ export function ProfileForm({ locale, profile, workerProfile, categories, region
             >
               <option value="">{t('region')}</option>
               {regions.map((r) => (
-                <option key={r} value={r}>{r}</option>
+                <option key={r} value={r}>{localizeRegion(r, locale)}</option>
               ))}
             </select>
           </div>
@@ -498,7 +499,7 @@ export function ProfileForm({ locale, profile, workerProfile, categories, region
               >
                 <option value="">—</option>
                 {cities.map((c) => (
-                  <option key={c} value={c}>{c}</option>
+                  <option key={c} value={c}>{localizeCity(c, locale)}</option>
                 ))}
               </select>
             </div>

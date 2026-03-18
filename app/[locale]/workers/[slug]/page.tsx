@@ -8,6 +8,7 @@ import { JsonLd } from '@/components/seo/JsonLd'
 import { BreadcrumbSchema } from '@/components/seo/BreadcrumbSchema'
 import { SaveWorkerButton } from '@/components/workers/SaveWorkerButton'
 import Image from 'next/image'
+import { localizeLocation } from '@/lib/location-names'
 import type { Locale, WorkerWithRelations, ExperienceEntry } from '@/types'
 
 // Map DB language codes to translation keys
@@ -149,7 +150,7 @@ export default async function WorkerProfilePage({
             </div>
             <p className="mt-1 text-gray-600">{worker.profession}</p>
             {location && (
-              <p className="mt-1 text-sm text-gray-500">📍 {location.city}, {location.region}</p>
+              <p className="mt-1 text-sm text-gray-500">📍 {localizeLocation(location.city, location.region, locale)}</p>
             )}
             <div className="mt-2 flex flex-wrap gap-2 text-sm">
               {worker.availability_status === 'available' && (

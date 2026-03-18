@@ -6,6 +6,7 @@ import { siteConfig } from '@/lib/seo'
 import { JsonLd } from '@/components/seo/JsonLd'
 import { BreadcrumbSchema } from '@/components/seo/BreadcrumbSchema'
 import Image from 'next/image'
+import { localizeCity } from '@/lib/location-names'
 import type { Locale } from '@/types'
 
 export const revalidate = 86400
@@ -215,7 +216,7 @@ export default async function CategoryPage({
 
                   <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-sm text-gray-500">
                     {job.location && (
-                      <span>📍 {(job.location as Record<string, unknown>).city as string}</span>
+                      <span>📍 {localizeCity((job.location as Record<string, unknown>).city as string, l)}</span>
                     )}
                     <span>💰 {formatSalary(job)}{t('per_month')}</span>
                     <span>🕐 {t((job.employment_type ?? 'full_time') as 'full_time')}</span>

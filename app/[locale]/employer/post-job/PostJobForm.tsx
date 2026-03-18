@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { createJob, updateJob } from '@/lib/actions/jobs'
 import { useUser } from '@/hooks/useUser'
+import { localizeRegion, localizeCity } from '@/lib/location-names'
 import type { JobCategory, Location, Locale, EmploymentType, Job } from '@/types'
 
 const BENEFITS_KEYS = [
@@ -331,7 +332,7 @@ export function PostJobForm({ categories, regions, editJob }: PostJobFormProps) 
               <option value="">{t('select_region')}</option>
               {regions.map((r) => (
                 <option key={r} value={r}>
-                  {r}
+                  {localizeRegion(r, locale)}
                 </option>
               ))}
             </select>
@@ -351,7 +352,7 @@ export function PostJobForm({ categories, regions, editJob }: PostJobFormProps) 
               <option value="">{t('select_city')}</option>
               {cities.map((c) => (
                 <option key={c} value={c}>
-                  {c}
+                  {localizeCity(c, locale)}
                 </option>
               ))}
             </select>

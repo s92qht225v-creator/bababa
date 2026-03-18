@@ -6,6 +6,7 @@ import { useSearchParams } from 'next/navigation'
 import { useUser } from '@/hooks/useUser'
 import { createClient } from '@/lib/supabase/client'
 import { updateJobStatus } from '@/lib/actions/jobs'
+import { localizeCity } from '@/lib/location-names'
 import type { Locale, Job } from '@/types'
 
 interface DashboardJob extends Job {
@@ -147,7 +148,7 @@ export function EmployerDashboardContent({ locale }: { locale: string }) {
           </span>
         </div>
         <p className="mt-1 text-sm text-gray-500">
-          {job.location?.city ?? '—'} · {formatSalary(job)} · {daysAgo(job.created_at)} · {job._count.applications} {t('applicants')}
+          {job.location?.city ? localizeCity(job.location.city, locale) : '—'} · {formatSalary(job)} · {daysAgo(job.created_at)} · {job._count.applications} {t('applicants')}
         </p>
       </div>
       <div className="flex flex-shrink-0 gap-2">

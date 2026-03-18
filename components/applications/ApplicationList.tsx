@@ -4,6 +4,7 @@ import { useEffect, useState, useCallback } from 'react'
 import { useTranslations, useLocale } from 'next-intl'
 import { useUser } from '@/hooks/useUser'
 import { createClient } from '@/lib/supabase/client'
+import { localizeCity } from '@/lib/location-names'
 import type { Locale, ApplicationStatus } from '@/types'
 
 interface ApplicationWithJob {
@@ -170,7 +171,7 @@ export function ApplicationList() {
                 </h3>
                 <p className="mt-1 text-sm text-gray-500">
                   {getCompanyName(app.job.company)} ·{' '}
-                  {app.job.location?.city ?? '—'}
+                  {app.job.location?.city ? localizeCity(app.job.location.city, locale) : '—'}
                 </p>
                 <div className="mt-2 flex items-center gap-3">
                   <span className="text-sm text-gray-500">

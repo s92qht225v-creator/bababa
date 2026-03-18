@@ -5,6 +5,7 @@ import { useTranslations, useLocale } from 'next-intl'
 import { useSearchParams, useRouter } from 'next/navigation'
 import { useUser } from '@/hooks/useUser'
 import { Search } from 'lucide-react'
+import { localizeCity } from '@/lib/location-names'
 import {
   getApplicants,
   updateApplicationStatus,
@@ -155,7 +156,7 @@ export function ApplicantKanban() {
         <div className="mt-3 rounded-lg bg-gray-50 px-4 py-3">
           <p className="font-semibold">{getJobTitle(selectedJob)}</p>
           <p className="text-sm text-gray-500">
-            {selectedJob.location?.city ?? '—'} ·{' '}
+            {selectedJob.location?.city ? localizeCity(selectedJob.location.city, locale) : '—'} ·{' '}
             {selectedJob.salary_min && selectedJob.salary_max
               ? `$${selectedJob.salary_min.toLocaleString()}–$${selectedJob.salary_max.toLocaleString()}/mo`
               : '—'}

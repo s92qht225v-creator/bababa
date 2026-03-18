@@ -9,6 +9,7 @@ import { BreadcrumbSchema } from '@/components/seo/BreadcrumbSchema'
 import { incrementJobViews } from '@/lib/actions/jobs'
 import { ApplyButton } from '@/components/jobs/ApplyButton'
 import Image from 'next/image'
+import { localizeCity, localizeRegion } from '@/lib/location-names'
 import type { Locale, JobWithRelations } from '@/types'
 
 export const revalidate = 86400
@@ -202,7 +203,7 @@ export default async function JobDetailPage({
 
           <div className="mt-4 flex flex-wrap gap-x-6 gap-y-2 text-sm text-gray-600">
             {job.location && (
-              <span>📍 {job.location.city}, {job.location.region}</span>
+              <span>📍 {localizeCity(job.location.city, l)}, {localizeRegion(job.location.region, l)}</span>
             )}
             <span>💰 {formatSalary()}</span>
             <span>🕐 {employmentTypeLabels[job.employment_type ?? 'full_time']} · {t('positions', { count: job.workers_needed })}</span>
