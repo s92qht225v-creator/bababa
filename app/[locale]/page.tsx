@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { setRequestLocale, getTranslations } from 'next-intl/server'
 import Image from 'next/image'
-import { createClient } from '@/lib/supabase/server'
+import { createPublicClient } from '@/lib/supabase/server'
 import { siteConfig } from '@/lib/seo'
 import { JsonLd } from '@/components/seo/JsonLd'
 import { StatsCounter } from '@/components/home/StatsCounter'
@@ -75,7 +75,7 @@ export default async function HomePage({
   const l = locale as Locale
   const t = await getTranslations('home')
 
-  const supabase = await createClient()
+  const supabase = createPublicClient()
 
   // Run ALL independent queries in parallel
   const [

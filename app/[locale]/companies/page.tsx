@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { setRequestLocale } from 'next-intl/server'
 import { getTranslations } from 'next-intl/server'
-import { createClient } from '@/lib/supabase/server'
+import { createPublicClient } from '@/lib/supabase/server'
 import { siteConfig } from '@/lib/seo'
 import { CompanyDirectoryContent } from '@/components/companies/CompanyDirectoryContent'
 import type { Locale } from '@/types'
@@ -44,7 +44,7 @@ export default async function CompaniesPage({
 
   const l = locale as Locale
   const t = await getTranslations('companies_page')
-  const supabase = await createClient()
+  const supabase = createPublicClient()
 
   // Run all queries in parallel
   const [

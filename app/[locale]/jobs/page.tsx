@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { setRequestLocale } from 'next-intl/server'
 import { getTranslations } from 'next-intl/server'
-import { createClient } from '@/lib/supabase/server'
+import { createPublicClient } from '@/lib/supabase/server'
 import { siteConfig } from '@/lib/seo'
 import Image from 'next/image'
 import { localizeCity, localizeRegion } from '@/lib/location-names'
@@ -50,7 +50,7 @@ export default async function JobsPage({
 
   const l = locale as Locale
   const t = await getTranslations('jobs')
-  const supabase = await createClient()
+  const supabase = createPublicClient()
 
   const page = Math.max(1, Number(sp.page) || 1)
   const search = sp.q ?? ''
