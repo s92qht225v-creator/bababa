@@ -1,7 +1,7 @@
 import { NextIntlClientProvider } from 'next-intl'
 import { getMessages, setRequestLocale } from 'next-intl/server'
 import { notFound } from 'next/navigation'
-import { Inter } from 'next/font/google'
+import { Plus_Jakarta_Sans } from 'next/font/google'
 import { routing } from '@/i18n/routing'
 import { UserProvider } from '@/hooks/useUser'
 import { Header } from '@/components/layout/Header'
@@ -10,7 +10,7 @@ import { ToastProvider } from '@/components/ui/Toast'
 import type { Locale } from '@/types'
 import '@/app/globals.css'
 
-const inter = Inter({ subsets: ['latin', 'cyrillic'], variable: '--font-inter' })
+const jakarta = Plus_Jakarta_Sans({ subsets: ['latin', 'cyrillic-ext'], variable: '--font-jakarta' })
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }))
@@ -34,7 +34,7 @@ export default async function LocaleLayout({
   const messages = await getMessages()
 
   return (
-    <html lang={locale} dir="ltr" className={inter.variable}>
+    <html lang={locale} dir="ltr" className={jakarta.variable}>
       <head>
         {locale === 'zh' && (
           <link
