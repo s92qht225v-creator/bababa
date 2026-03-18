@@ -73,6 +73,17 @@ export default async function WorkerProfilePage({
   const isOwner = user?.id === worker?.user_id
   if (!worker || (!worker.is_public && !isOwner)) notFound()
 
+  // Get viewer role for messages link
+  let viewerRole = 'worker'
+  if (user) {
+    const { data: viewerProfile } = await supabase
+      .from('profiles')
+      .select('role')
+      .eq('id', user.id)
+      .single()
+    viewerRole = viewerProfile?.role ?? 'worker'
+  }
+
   const name = (worker.profile?.full_name
     || worker.slug?.split('-').slice(0, 2).map((w: string) => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')
     || '') as string
@@ -176,7 +187,7 @@ export default async function WorkerProfilePage({
         {user && user.id !== worker.user_id && (
           <div className="mt-6 flex gap-3">
             <a
-              href={`/${locale}/messages?partner=${worker.user_id}`}
+              href={`/${locale}/${viewerRole === 'employer' ? 'employer' : 'worker'}/messages?partner=${worker.user_id}`}
               className="rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700"
             >
               {t('contact_worker')}
