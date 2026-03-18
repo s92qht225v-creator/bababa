@@ -26,25 +26,25 @@ export function CompanyProfileForm({
   company,
   locale,
 }: {
-  company: CompanyData
+  company: CompanyData | null
   locale: string
 }) {
   const t = useTranslations('company_profile')
   const { toast } = useToast()
 
-  const [nameOriginal, setNameOriginal] = useState(company.name_original)
-  const [nameUz, setNameUz] = useState(company.name_uz ?? '')
-  const [nameZh, setNameZh] = useState(company.name_zh ?? '')
-  const [nameRu, setNameRu] = useState(company.name_ru ?? '')
-  const [industry, setIndustry] = useState(company.industry ?? '')
+  const [nameOriginal, setNameOriginal] = useState(company?.name_original ?? '')
+  const [nameUz, setNameUz] = useState(company?.name_uz ?? '')
+  const [nameZh, setNameZh] = useState(company?.name_zh ?? '')
+  const [nameRu, setNameRu] = useState(company?.name_ru ?? '')
+  const [industry, setIndustry] = useState(company?.industry ?? '')
   const [description, setDescription] = useState(
-    (company[`description_${locale}` as keyof CompanyData] as string) ?? ''
+    company ? ((company[`description_${locale}` as keyof CompanyData] as string) ?? '') : ''
   )
   const [descLang, setDescLang] = useState(locale)
-  const [website, setWebsite] = useState(company.website ?? '')
-  const [establishedYear, setEstablishedYear] = useState(company.established_year?.toString() ?? '')
-  const [employeeCount, setEmployeeCount] = useState(company.employee_count ?? '')
-  const [logoUrl, setLogoUrl] = useState(company.logo_url ?? '')
+  const [website, setWebsite] = useState(company?.website ?? '')
+  const [establishedYear, setEstablishedYear] = useState(company?.established_year?.toString() ?? '')
+  const [employeeCount, setEmployeeCount] = useState(company?.employee_count ?? '')
+  const [logoUrl, setLogoUrl] = useState(company?.logo_url ?? '')
   const [saving, setSaving] = useState(false)
 
   async function handleLogoUpload(e: React.ChangeEvent<HTMLInputElement>) {

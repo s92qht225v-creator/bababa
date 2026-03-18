@@ -20,13 +20,13 @@ export default async function EmployerCompanyPage({
   } = await supabase.auth.getUser()
   if (!user) redirect(`/${locale}/auth/login`)
 
-  const { data: company } = await supabase
+  const { data: companies } = await supabase
     .from('companies')
     .select('*')
     .eq('user_id', user.id)
-    .single()
+    .limit(1)
 
-  if (!company) redirect(`/${locale}/employer/dashboard`)
+  const company = companies?.[0] ?? null
 
   return (
     <main className="mx-auto max-w-2xl px-4 py-8">

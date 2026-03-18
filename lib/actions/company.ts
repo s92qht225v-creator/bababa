@@ -30,14 +30,14 @@ export async function saveCompanyProfile(input: SaveCompanyInput): Promise<Actio
   } = await supabase.auth.getUser()
   if (!user) return { success: false, error: 'Not authenticated' }
 
-  // Get company for this user
-  const { data: company } = await supabase
+  // Get existing company for this user
+  const { data: companies } = await supabase
     .from('companies')
     .select('id')
     .eq('user_id', user.id)
-    .single()
+    .limit(1)
 
-  if (!company) return { success: false, error: 'Company not found' }
+  const existingCompany = companies?.[0]
 
   // Translate description if provided
   let descriptions = {}
@@ -57,20 +57,41 @@ export async function saveCompanyProfile(input: SaveCompanyInput): Promise<Actio
     }
   }
 
-  const { error } = await supabase
-    .from('companies')
-    .update({
-      name_original: input.nameOriginal,
-      name_uz: input.nameUz || null,
-      name_zh: input.nameZh || null,
-      name_ru: input.nameRu || null,
-      industry: input.industry || null,
-      website: input.website || null,
-      established_year: input.establishedYear,
-      employee_count: input.employeeCount || null,
-      ...descriptions,
-    })
-    .eq('id', company.id)
+  // Generate slug from name
+  const slug = input.nameOriginal
+    .toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, '')
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-')
+    .slice(0, 80)
+
+  const companyData = {
+    name_original: input.nameOriginal,
+    name_uz: input.nameUz || null,
+    name_zh: input.nameZh || null,
+    name_ru: input.nameRu || null,
+    industry: input.industry || null,
+    website: input.website || null,
+    established_year: input.establishedYear,
+    employee_count: input.employeeCount || null,
+    ...descriptions,
+  }
+
+  let error
+  if (existingCompany) {
+    ;({ error } = await supabase
+      .from('companies')
+      .update(companyData)
+      .eq('id', existingCompany.id))
+  } else {
+    ;({ error } = await supabase
+      .from('companies')
+      .insert({
+        ...companyData,
+        user_id: user.id,
+        slug: slug || `company-${Date.now()}`,
+      }))
+  }
 
   if (error) return { success: false, error: error.message }
 
