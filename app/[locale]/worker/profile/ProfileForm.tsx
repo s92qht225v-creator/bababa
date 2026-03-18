@@ -289,6 +289,10 @@ export function ProfileForm({ locale, profile, workerProfile, categories, region
       })
 
       if (result.success) {
+        // Explicitly set isPublic from server response to survive any re-renders
+        if (result.isPublic !== undefined) {
+          setIsPublic(result.isPublic)
+        }
         setSaved(true)
         setTimeout(() => setSaved(false), 3000)
       } else {

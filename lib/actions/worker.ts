@@ -28,9 +28,10 @@ export interface SaveProfileInput {
   isPublic: boolean
 }
 
-interface ActionResult {
+export interface ActionResult {
   success: boolean
   error?: string
+  isPublic?: boolean
 }
 
 export async function saveWorkerProfile(input: SaveProfileInput): Promise<ActionResult> {
@@ -98,11 +99,10 @@ export async function saveWorkerProfile(input: SaveProfileInput): Promise<Action
     return { success: false, error: 'Failed to save profile' }
   }
 
-  revalidatePath('/[locale]/worker/profile', 'page')
   revalidatePath('/[locale]/worker/dashboard', 'page')
   revalidatePath('/[locale]/workers', 'page')
 
-  return { success: true }
+  return { success: true, isPublic: input.isPublic }
 }
 
 export async function updateProfilePhoto(photoUrl: string): Promise<ActionResult> {
