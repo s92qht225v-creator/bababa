@@ -236,7 +236,11 @@ export async function markAsRead(partnerId: string, jobId?: string | null) {
     query = query.eq('job_id', jobId)
   }
 
-  await query
+  const { error } = await query
+
+  if (error) {
+    console.error('[markAsRead] Failed:', error.message, { partnerId, jobId, userId: user.id })
+  }
 }
 
 /**
