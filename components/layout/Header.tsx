@@ -93,8 +93,8 @@ export function Header() {
     <header className="sticky top-0 z-50 border-b border-gray-200 bg-white">
       <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4">
         {/* Logo */}
-        <a href={`/${locale}`} className="text-xl font-bold text-red-600">
-          bababa
+        <a href={`/${locale}`} className="flex items-center">
+          <img src="/logo.svg" alt="bababa" className="h-8" />
         </a>
 
         {/* Desktop Navigation */}
