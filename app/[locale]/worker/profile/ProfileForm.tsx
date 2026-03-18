@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { useTranslations, useLocale } from 'next-intl'
 import { createClient } from '@/lib/supabase/client'
-import { saveWorkerProfile, updateProfilePhoto, updateProfileVideo } from '@/lib/actions/worker'
+import { saveWorkerProfile, updateProfilePhoto, updateProfileVideo, toggleProfileVisibility } from '@/lib/actions/worker'
 import type { Locale, AvailabilityStatus, ExperienceEntry, JobCategory, Location, WorkerProfile, Profile } from '@/types'
 
 interface ProfileFormProps {
@@ -251,9 +251,15 @@ export function ProfileForm({ locale, profile, workerProfile, categories, region
     }
   }
 
-  // Visibility toggle (saved with the rest of the form on submit)
-  const handleVisibilityToggle = () => {
-    setIsPublic((prev) => !prev)
+  // Visibility toggle — saves immediately to DB
+  const handleVisibilityToggle = async () => {
+    const newVal = !isPublic
+    setIsPublic(newVal)
+    const result = await toggleProfileVisibility(newVal)
+    if (!result.success) {
+      // Revert on failure
+      setIsPublic(!newVal)
+    }
   }
 
   // Submit

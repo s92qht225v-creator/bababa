@@ -65,7 +65,7 @@ export async function saveWorkerProfile(input: SaveProfileInput): Promise<Action
     }
   }
 
-  const { error } = await supabase
+  const { data: updated, error } = await supabase
     .from('worker_profiles')
     .update({
       age: input.age,
@@ -93,16 +93,20 @@ export async function saveWorkerProfile(input: SaveProfileInput): Promise<Action
       last_active: new Date().toISOString(),
     })
     .eq('user_id', user.id)
+    .select('is_public')
+    .single()
 
   if (error) {
     console.error('Profile save error:', error)
     return { success: false, error: 'Failed to save profile' }
   }
 
+  console.log('Profile saved, is_public sent:', input.isPublic, 'DB returned:', updated?.is_public)
+
   revalidatePath('/[locale]/worker/dashboard', 'page')
   revalidatePath('/[locale]/workers', 'page')
 
-  return { success: true, isPublic: input.isPublic }
+  return { success: true, isPublic: updated?.is_public ?? input.isPublic }
 }
 
 export async function updateProfilePhoto(photoUrl: string): Promise<ActionResult> {
