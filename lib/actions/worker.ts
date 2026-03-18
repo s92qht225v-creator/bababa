@@ -65,34 +65,42 @@ export async function saveWorkerProfile(input: SaveProfileInput): Promise<Action
     }
   }
 
+  // Generate slug for new profiles
+  const slug = input.fullName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || 'worker'
+  const uniqueSlug = `${slug}-${Math.floor(1000 + Math.random() * 9000)}`
+
+  const profileData = {
+    user_id: user.id,
+    slug: uniqueSlug,
+    age: input.age,
+    gender: input.gender,
+    location_id: input.locationId || null,
+    profession: input.profession || '',
+    category_id: input.categoryId || null,
+    experience_years: input.experienceYears,
+    skills: input.skills,
+    hsk_level: input.hskLevel,
+    languages: input.languages,
+    expected_salary_min: input.salaryMin,
+    expected_salary_max: input.salaryMax,
+    salary_currency: input.salaryCurrency,
+    availability_status: input.availabilityStatus,
+    available_from: input.availableFrom || null,
+    bio_original: input.bioOriginal || null,
+    bio_zh: bioZh,
+    bio_uz: bioUz,
+    bio_ru: bioRu,
+    source_language: input.sourceLanguage,
+    experience_history: input.experienceHistory,
+    bio_translation_status: bioStatus,
+    is_public: input.isPublic,
+    last_active: new Date().toISOString(),
+  }
+
+  // Upsert: insert if no row exists, update if it does (keyed on user_id unique constraint)
   const { data: updated, error } = await supabase
     .from('worker_profiles')
-    .update({
-      age: input.age,
-      gender: input.gender,
-      location_id: input.locationId || null,
-      profession: input.profession,
-      category_id: input.categoryId || null,
-      experience_years: input.experienceYears,
-      skills: input.skills,
-      hsk_level: input.hskLevel,
-      languages: input.languages,
-      expected_salary_min: input.salaryMin,
-      expected_salary_max: input.salaryMax,
-      salary_currency: input.salaryCurrency,
-      availability_status: input.availabilityStatus,
-      available_from: input.availableFrom || null,
-      bio_original: input.bioOriginal || null,
-      bio_zh: bioZh,
-      bio_uz: bioUz,
-      bio_ru: bioRu,
-      source_language: input.sourceLanguage,
-      experience_history: input.experienceHistory,
-      bio_translation_status: bioStatus,
-      is_public: input.isPublic,
-      last_active: new Date().toISOString(),
-    })
-    .eq('user_id', user.id)
+    .upsert(profileData, { onConflict: 'user_id' })
     .select('is_public')
     .single()
 
@@ -100,8 +108,6 @@ export async function saveWorkerProfile(input: SaveProfileInput): Promise<Action
     console.error('Profile save error:', error)
     return { success: false, error: 'Failed to save profile' }
   }
-
-  console.log('Profile saved, is_public sent:', input.isPublic, 'DB returned:', updated?.is_public)
 
   revalidatePath('/[locale]/worker/dashboard', 'page')
   revalidatePath('/[locale]/workers', 'page')
@@ -151,12 +157,34 @@ export async function toggleProfileVisibility(isPublic: boolean): Promise<Action
   } = await supabase.auth.getUser()
   if (!user) return { success: false, error: 'Not authenticated' }
 
-  const { error } = await supabase
+  // Check if profile exists
+  const { data: existing } = await supabase
     .from('worker_profiles')
-    .update({ is_public: isPublic })
+    .select('id')
     .eq('user_id', user.id)
+    .single()
 
-  if (error) return { success: false, error: 'Failed to toggle visibility' }
+  if (!existing) {
+    // Create profile with visibility setting
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('full_name')
+      .eq('id', user.id)
+      .single()
+    const name = profile?.full_name || 'worker'
+    const slug = `${name.toLowerCase().replace(/[^a-z0-9]+/g, '-')}-${Math.floor(1000 + Math.random() * 9000)}`
+    const { error } = await supabase
+      .from('worker_profiles')
+      .insert({ user_id: user.id, slug, profession: '', is_public: isPublic })
+    if (error) return { success: false, error: 'Failed to create profile' }
+  } else {
+    const { error } = await supabase
+      .from('worker_profiles')
+      .update({ is_public: isPublic })
+      .eq('user_id', user.id)
+    if (error) return { success: false, error: 'Failed to toggle visibility' }
+  }
+
   return { success: true }
 }
 
