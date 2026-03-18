@@ -48,7 +48,8 @@ export async function sendMessage(
       } else {
         try {
           translations[targetLang] = await translateMessage(body, senderLang, targetLang)
-        } catch {
+        } catch (err) {
+          console.error(`[sendMessage] Translation to ${targetLang} failed:`, err)
           translations[targetLang] = body
         }
       }

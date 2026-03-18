@@ -10,7 +10,12 @@ const LANG_NAMES: Record<Locale, string> = {
 }
 
 function getOpenAI() {
-  return new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
+  const key = process.env.OPENAI_API_KEY
+  if (!key) {
+    console.error('[translate] OPENAI_API_KEY is not set!')
+    throw new Error('OPENAI_API_KEY is not configured')
+  }
+  return new OpenAI({ apiKey: key })
 }
 
 async function chatTranslate(system: string, text: string, maxTokens = 1024): Promise<string> {
@@ -23,7 +28,9 @@ async function chatTranslate(system: string, text: string, maxTokens = 1024): Pr
       { role: 'user', content: text },
     ],
   })
-  return response.choices[0]?.message?.content?.trim() ?? text
+  const result = response.choices[0]?.message?.content?.trim() ?? text
+  console.log(`[translate] ${text.substring(0, 30)}... → ${result.substring(0, 30)}...`)
+  return result
 }
 
 /**
@@ -73,7 +80,7 @@ export async function translateMessage(
 
     return translatedText
   } catch (error) {
-    console.error('Translation failed:', error)
+    console.error('[translateMessage] Failed:', error instanceof Error ? error.message : error)
     return text
   }
 }
