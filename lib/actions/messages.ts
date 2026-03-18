@@ -309,5 +309,3 @@ export async function getOrCreateConversation(
     data: { partnerId: receiverId, jobId },
   }
 }
-
-export { LANG_LABELS }
