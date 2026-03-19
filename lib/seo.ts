@@ -7,7 +7,7 @@ import type {
 } from '@/types'
 
 export const siteConfig = {
-  name: 'bababa | 888',
+  name: '百邦',
   url: 'https://bababa.uz',
   defaultLocale: 'uz' as Locale,
   description: {
@@ -59,7 +59,7 @@ export function buildJobMetadata(
   ).substring(0, 155)
 
   const companyName = job.company?.name_original ?? ''
-  const fullTitle = `${title} — ${companyName} | bababa`
+  const fullTitle = `${title} — ${companyName} | 百邦`
 
   const alternates = generateAlternates('/jobs', job.slug)
 
@@ -98,7 +98,7 @@ export function buildWorkerMetadata(
     || worker.slug?.split('-').slice(0, 2).map((w: string) => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')
     || ''
   const profession = worker.profession
-  const fullTitle = `${name} — ${profession} | bababa`
+  const fullTitle = `${name} — ${profession} | 百邦`
 
   const alternates = generateAlternates('/workers', worker.slug)
 
@@ -136,7 +136,7 @@ export function buildCompanyMetadata(
     (company[descField as keyof typeof company] as string) ?? ''
   ).substring(0, 155)
 
-  const fullTitle = `${name} | bababa`
+  const fullTitle = `${name} | 百邦`
 
   const alternates = generateAlternates('/companies', company.slug)
 

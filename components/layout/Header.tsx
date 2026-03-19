@@ -94,7 +94,7 @@ export function Header() {
       <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4">
         {/* Logo */}
         <a href={`/${locale}`} className="flex items-center">
-          <img src="/logo.svg" alt="bababa" className="h-8" />
+          <img src="/logo.svg" alt="百邦" className="h-8" />
         </a>
 
         {/* Desktop Navigation */}

@@ -99,7 +99,7 @@ export default async function CompanyProfilePage({
       <JsonLd data={orgJsonLd} />
       <BreadcrumbSchema
         items={[
-          { name: 'bababa', href: `/${locale}` },
+          { name: '百邦', href: `/${locale}` },
           { name: t('title'), href: `/${locale}/companies` },
           { name, href: `/${locale}/companies/${slug}` },
         ]}

@@ -11,9 +11,9 @@ export function Footer() {
       <div className="mx-auto max-w-7xl px-4 py-10">
         <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
           <div>
-            <a href={`/${locale}`} className="inline-block"><img src="/logo.svg" alt="bababa" className="h-7" /></a>
+            <a href={`/${locale}`} className="inline-block"><img src="/logo.svg" alt="百邦" className="h-7" /></a>
             <p className="mt-2 text-xs text-gray-500">
-              &copy; {new Date().getFullYear()} bababa. {t('copyright')}
+              &copy; {new Date().getFullYear()} 百邦. {t('copyright')}
             </p>
           </div>
           <div>

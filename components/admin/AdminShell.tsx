@@ -59,7 +59,7 @@ export function AdminShell({
         {/* Sidebar header */}
         <div className="flex h-16 items-center justify-between border-b border-gray-200 px-4">
           <a href={`/${locale}`} className="text-xl font-bold text-red-600">
-            bababa
+            百邦
           </a>
           <span className="rounded bg-red-100 px-2 py-0.5 text-xs font-medium text-red-700">
             Admin

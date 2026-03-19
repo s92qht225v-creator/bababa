@@ -68,7 +68,7 @@ export default async function HowItWorksPage({
       <JsonLd data={faqJsonLd} />
       <BreadcrumbSchema
         items={[
-          { name: 'bababa', href: `/${locale}` },
+          { name: '百邦', href: `/${locale}` },
           { name: t('title'), href: `/${locale}/how-it-works` },
         ]}
       />

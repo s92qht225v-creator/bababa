@@ -8,9 +8,9 @@ import type { Locale } from '@/types'
 export const revalidate = 86400
 
 const META_TITLES: Record<Locale, string> = {
-  uz: 'bababa haqida',
-  zh: '关于 bababa',
-  ru: 'О платформе bababa',
+  uz: '百邦 haqida',
+  zh: '关于百邦',
+  ru: 'О платформе 百邦',
 }
 
 export async function generateMetadata({
@@ -46,7 +46,7 @@ export default async function AboutPage({
   const orgJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Organization',
-    name: 'bababa',
+    name: '百邦',
     url: siteConfig.url,
     description: siteConfig.description[locale as Locale],
     contactPoint: {
@@ -61,7 +61,7 @@ export default async function AboutPage({
       <JsonLd data={orgJsonLd} />
       <BreadcrumbSchema
         items={[
-          { name: 'bababa', href: `/${locale}` },
+          { name: '百邦', href: `/${locale}` },
           { name: t('title'), href: `/${locale}/about` },
         ]}
       />

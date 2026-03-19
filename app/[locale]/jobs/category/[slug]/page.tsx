@@ -53,9 +53,9 @@ export async function generateMetadata({
     .eq('status', 'active')
 
   const descriptions: Record<Locale, string> = {
-    uz: `${name} — ${count ?? 0} ta faol ish o'rinlari | bababa`,
-    zh: `${name} — ${count ?? 0} 个活跃职位 | bababa`,
-    ru: `${name} — ${count ?? 0} активных вакансий | bababa`,
+    uz: `${name} — ${count ?? 0} ta faol ish o'rinlari | 百邦`,
+    zh: `${name} — ${count ?? 0} 个活跃职位 | 百邦`,
+    ru: `${name} — ${count ?? 0} активных вакансий | 百邦`,
   }
 
   return {
@@ -155,7 +155,7 @@ export default async function CategoryPage({
       <JsonLd data={itemListJsonLd} />
       <BreadcrumbSchema
         items={[
-          { name: 'bababa', href: `/${locale}` },
+          { name: '百邦', href: `/${locale}` },
           { name: t('title'), href: `/${locale}/jobs` },
           { name, href: `/${locale}/jobs/category/${slug}` },
         ]}

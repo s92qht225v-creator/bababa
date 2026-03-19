@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from 'next'
 
 export const metadata: Metadata = {
-  title: 'bababa — Ish topish platformasi',
+  title: '百邦 — Ish topish platformasi',
   description: 'Job marketplace connecting Chinese companies in Uzbekistan with local talent',
 }
 

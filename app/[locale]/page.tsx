@@ -25,9 +25,9 @@ const CATEGORY_ICONS: Record<string, string> = {
 export const revalidate = 3600
 
 const META_TITLES: Record<Locale, string> = {
-  uz: "bababa — O'zbekistondagi xitoy kompaniyalarida ish",
-  zh: 'bababa — 在乌兹别克斯坦的中国企业招聘平台',
-  ru: 'bababa — Работа в китайских компаниях Узбекистана',
+  uz: "百邦 — O'zbekistondagi xitoy kompaniyalarida ish",
+  zh: '百邦 — 在乌兹别克斯坦的中国企业招聘平台',
+  ru: '百邦 — Работа в китайских компаниях Узбекистана',
 }
 
 const META_DESCRIPTIONS: Record<Locale, string> = {
@@ -59,7 +59,7 @@ export async function generateMetadata({
       title: META_TITLES[l],
       description: META_DESCRIPTIONS[l],
       type: 'website',
-      siteName: 'bababa',
+      siteName: '百邦',
       locale: l,
     },
   }
@@ -160,7 +160,7 @@ export default async function HomePage({
   const websiteSchema = {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
-    name: 'bababa',
+    name: '百邦',
     url: 'https://bababa.uz',
     potentialAction: {
       '@type': 'SearchAction',

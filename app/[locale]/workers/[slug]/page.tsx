@@ -133,7 +133,7 @@ export default async function WorkerProfilePage({
       <JsonLd data={personJsonLd} />
       <BreadcrumbSchema
         items={[
-          { name: 'bababa', href: `/${locale}` },
+          { name: '百邦', href: `/${locale}` },
           { name: t('all_workers'), href: `/${locale}/workers` },
           { name, href: `/${locale}/workers/${slug}` },
         ]}
