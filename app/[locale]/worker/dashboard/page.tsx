@@ -1,4 +1,6 @@
 import { setRequestLocale } from 'next-intl/server'
+import { createClient } from '@/lib/supabase/server'
+import { redirect } from 'next/navigation'
 import { WorkerDashboardContent } from './DashboardContent'
 
 export const dynamic = 'force-dynamic'
@@ -11,5 +13,21 @@ export default async function WorkerDashboardPage({
   const { locale } = await params
   setRequestLocale(locale)
 
-  return <WorkerDashboardContent locale={locale} />
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) redirect(`/${locale}/auth/login`)
+
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('full_name, role')
+    .eq('id', user.id)
+    .single()
+
+  return (
+    <WorkerDashboardContent
+      locale={locale}
+      userName={profile?.full_name ?? ''}
+      userRole={profile?.role ?? 'worker'}
+    />
+  )
 }

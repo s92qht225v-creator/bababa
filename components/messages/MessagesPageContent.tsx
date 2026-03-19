@@ -115,10 +115,10 @@ export function MessagesPageContent() {
   }
 
   return (
-    <main className="mx-auto max-w-6xl px-4 py-8">
-      <h1 className="mb-6 text-2xl font-bold">{t('title')}</h1>
+    <main className="mx-auto max-w-6xl px-4 py-8 md:py-8">
+      <h1 className={`mb-6 text-2xl font-bold ${showChat ? 'hidden md:block' : ''}`}>{t('title')}</h1>
 
-      <div className="overflow-hidden rounded-lg border border-gray-200 bg-white" style={{ height: '600px' }}>
+      <div className="overflow-hidden rounded-lg border border-gray-200 bg-white" style={{ height: 'calc(100dvh - 140px)' }}>
         <div className="flex h-full">
           {/* Conversation list — hidden on mobile when chat is active */}
           <div

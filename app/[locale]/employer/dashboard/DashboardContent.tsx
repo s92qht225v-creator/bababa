@@ -7,6 +7,7 @@ import { useUser } from '@/hooks/useUser'
 import { createClient } from '@/lib/supabase/client'
 import { updateJobStatus } from '@/lib/actions/jobs'
 import { localizeCity } from '@/lib/location-names'
+import { formatSalary as fmtSalary } from '@/lib/utils'
 import type { Locale, Job } from '@/types'
 
 interface DashboardJob extends Job {
@@ -115,12 +116,9 @@ export function EmployerDashboardContent({ locale }: { locale: string }) {
   }
 
   const formatSalary = (job: Job) => {
-    if (!job.salary_min && !job.salary_max) return '—'
-    const cur = job.salary_currency === 'UZS' ? 'UZS' : '$'
-    if (job.salary_min && job.salary_max)
-      return `${cur}${job.salary_min.toLocaleString()}–${cur}${job.salary_max.toLocaleString()}${t('per_month')}`
-    if (job.salary_min) return `${cur}${job.salary_min.toLocaleString()}+${t('per_month')}`
-    return `${cur}${job.salary_max!.toLocaleString()}${t('per_month')}`
+    const base = fmtSalary(job.salary_min, job.salary_max, job.salary_currency ?? 'USD')
+    if (base === '—') return base
+    return `${base}${t('per_month')}`
   }
 
   if (loading || loadingJobs) {

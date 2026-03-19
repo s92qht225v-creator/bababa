@@ -3,6 +3,7 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { SaveJobButton } from '@/components/jobs/SaveJobButton'
 import { localizeCity } from '@/lib/location-names'
+import { formatSalary as fmtSalary } from '@/lib/utils'
 import type { Locale } from '@/types'
 
 export default async function SavedJobsPage({
@@ -36,14 +37,7 @@ export default async function SavedJobsPage({
   }
 
   const formatSalary = (job: Record<string, unknown>) => {
-    const min = job.salary_min as number | null
-    const max = job.salary_max as number | null
-    const currency = (job.salary_currency ?? 'USD') as string
-    if (!min && !max) return ''
-    const sym = currency === 'UZS' ? '' : '$'
-    if (min && max) return `${sym}${min.toLocaleString()}–${sym}${max.toLocaleString()}`
-    if (min) return `${sym}${min.toLocaleString()}+`
-    return `${t('up_to')} ${sym}${max!.toLocaleString()}`
+    return fmtSalary(job.salary_min as number | null, job.salary_max as number | null, (job.salary_currency as string) ?? 'USD')
   }
 
   return (

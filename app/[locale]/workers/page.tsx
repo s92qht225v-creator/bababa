@@ -5,6 +5,7 @@ import { createPublicClient } from '@/lib/supabase/server'
 import { siteConfig } from '@/lib/seo'
 import Image from 'next/image'
 import { localizeCity, localizeRegion, localizeLocation } from '@/lib/location-names'
+import { formatSalary as fmtSalary } from '@/lib/utils'
 import type { Locale } from '@/types'
 
 export const revalidate = 60
@@ -132,13 +133,7 @@ export default async function WorkersPage({
     (cat[`name_${l}`] ?? cat.name_uz) as string
 
   const formatSalary = (w: Record<string, unknown>) => {
-    const min = w.expected_salary_min as number | null
-    const max = w.expected_salary_max as number | null
-    if (!min && !max) return '—'
-    const cur = (w.salary_currency as string) === 'UZS' ? 'UZS ' : '$'
-    if (min && max) return `${cur}${min.toLocaleString()}–${cur}${max.toLocaleString()}`
-    if (min) return `${cur}${min.toLocaleString()}+`
-    return `${cur}${max!.toLocaleString()}`
+    return fmtSalary(w.expected_salary_min as number | null, w.expected_salary_max as number | null, (w.salary_currency as string) ?? 'USD')
   }
 
   const buildUrl = (overrides: Record<string, string>) => {

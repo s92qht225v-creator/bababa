@@ -7,6 +7,7 @@ import { JsonLd } from '@/components/seo/JsonLd'
 import { BreadcrumbSchema } from '@/components/seo/BreadcrumbSchema'
 import Image from 'next/image'
 import { localizeCity } from '@/lib/location-names'
+import { formatSalary as fmtSalary } from '@/lib/utils'
 import type { Locale } from '@/types'
 
 export const revalidate = 86400
@@ -121,13 +122,7 @@ export default async function CategoryPage({
   }
 
   const formatSalary = (job: Record<string, unknown>) => {
-    const min = job.salary_min as number | null
-    const max = job.salary_max as number | null
-    if (!min && !max) return '—'
-    const cur = (job.salary_currency as string) === 'UZS' ? 'UZS ' : '$'
-    if (min && max) return `${cur}${min.toLocaleString()}–${cur}${max.toLocaleString()}`
-    if (min) return `${cur}${min.toLocaleString()}+`
-    return `${cur}${max!.toLocaleString()}`
+    return fmtSalary(job.salary_min as number | null, job.salary_max as number | null, (job.salary_currency as string) ?? 'USD')
   }
 
   const daysAgo = (date: string) => {

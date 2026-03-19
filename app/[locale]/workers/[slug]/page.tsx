@@ -9,6 +9,7 @@ import { BreadcrumbSchema } from '@/components/seo/BreadcrumbSchema'
 import { SaveWorkerButton } from '@/components/workers/SaveWorkerButton'
 import Image from 'next/image'
 import { localizeLocation } from '@/lib/location-names'
+import { formatSalary as fmtSalary } from '@/lib/utils'
 import type { Locale, WorkerWithRelations, ExperienceEntry } from '@/types'
 
 // Map DB language codes to translation keys
@@ -93,13 +94,7 @@ export default async function WorkerProfilePage({
   const experienceHistory = (worker.experience_history ?? []) as ExperienceEntry[]
 
   const formatSalary = () => {
-    const min = worker.expected_salary_min as number | null
-    const max = worker.expected_salary_max as number | null
-    if (!min && !max) return '—'
-    const cur = worker.salary_currency === 'UZS' ? 'UZS ' : '$'
-    if (min && max) return `${cur}${min.toLocaleString()} – ${cur}${max.toLocaleString()}`
-    if (min) return `${cur}${min.toLocaleString()}+`
-    return `${cur}${max!.toLocaleString()}`
+    return fmtSalary(worker.expected_salary_min as number | null, worker.expected_salary_max as number | null, (worker.salary_currency as string) ?? 'USD')
   }
 
   const hskLabel = worker.hsk_level === 0 ? t('no_chinese') : `HSK ${worker.hsk_level}`

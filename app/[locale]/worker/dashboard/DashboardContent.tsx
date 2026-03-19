@@ -38,7 +38,13 @@ function calculateCompletion(wp: WorkerProfile, profile: { full_name?: string | 
   return Math.round((filled / total) * 100)
 }
 
-export function WorkerDashboardContent({ locale }: { locale: string }) {
+interface Props {
+  locale: string
+  userName?: string
+  userRole?: string
+}
+
+export function WorkerDashboardContent({ locale, userName, userRole }: Props) {
   const t = useTranslations('worker')
   const ts = useTranslations('status')
   const td = useTranslations('dashboard')
@@ -123,7 +129,7 @@ export function WorkerDashboardContent({ locale }: { locale: string }) {
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="text-2xl font-bold">
-            {td('welcome', { name: user?.full_name || '' })}
+            {td('welcome', { name: user?.full_name || userName || '' })}
           </h1>
           <p className="mt-1 text-sm text-gray-500">{td('role_worker')}</p>
         </div>

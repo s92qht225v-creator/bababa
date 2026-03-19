@@ -42,7 +42,21 @@ export function formatSalary(
   currency: string = 'USD'
 ): string {
   if (min == null && max == null) return '—'
-  if (min != null && max != null) return `$${min} – $${max} ${currency}`
-  if (min != null) return `$${min}+ ${currency}`
-  return `Up to $${max} ${currency}`
+
+  const fmt = (n: number) => {
+    if (currency === 'UZS') {
+      // 3000000 → "3 000 000"
+      return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
+    }
+    return n.toLocaleString('en-US')
+  }
+
+  const symbol = currency === 'UZS' ? '' : currency === 'CNY' ? '¥' : '$'
+  const suffix = currency === 'UZS' ? ' UZS' : ''
+
+  if (min != null && max != null) {
+    return `${symbol}${fmt(min)}–${symbol}${fmt(max)}${suffix}`
+  }
+  if (min != null) return `${symbol}${fmt(min)}+${suffix}`
+  return `${symbol}${fmt(max!)}${suffix}`
 }

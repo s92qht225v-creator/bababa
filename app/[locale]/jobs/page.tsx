@@ -6,6 +6,7 @@ import { siteConfig } from '@/lib/seo'
 import Image from 'next/image'
 import { SaveJobButton } from '@/components/jobs/SaveJobButton'
 import { localizeCity, localizeRegion } from '@/lib/location-names'
+import { formatSalary as fmtSalary } from '@/lib/utils'
 import type { Locale } from '@/types'
 
 export const revalidate = 60
@@ -152,11 +153,8 @@ export default async function JobsPage({
   const formatSalary = (job: Record<string, unknown>) => {
     const min = job.salary_min as number | null
     const max = job.salary_max as number | null
-    if (!min && !max) return '—'
-    const cur = (job.salary_currency as string) === 'UZS' ? 'UZS ' : '$'
-    if (min && max) return `${cur}${min.toLocaleString()}–${cur}${max.toLocaleString()}`
-    if (min) return `${cur}${min.toLocaleString()}+`
-    return `${cur}${max!.toLocaleString()}`
+    const currency = (job.salary_currency as string) ?? 'USD'
+    return fmtSalary(min, max, currency)
   }
 
   const daysAgo = (date: string) => {
