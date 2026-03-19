@@ -142,7 +142,7 @@
     "reset_password_button": "Havolani yuborish",
     "reset_password_email_sent": "Emailingizni tekshiring — parolni tiklash havolasi yuborildi",
     "back_to_login": "Kirishga qaytish",
-    "account_suspended": "Hisobingiz to'xtatilgan. Bog'lanish: support@bababa.uz"
+    "account_suspended": "Hisobingiz to'xtatilgan. Bog'lanish: support@baibang.uz"
   },
   "jobs": {
     "title": "Ish o'rinlari",
@@ -435,7 +435,7 @@
     "how_translation": "Tarjima qanday ishlaydi",
     "translation_desc": "Barcha xabarlar va ish e'lonlari avtomatik ravishda o'zbek, xitoy va rus tillariga tarjima qilinadi. Sun'iy intellekt yordamida.",
     "contact": "Bog'lanish",
-    "contact_email": "info@bababa.uz"
+    "contact_email": "info@baibang.uz"
   },
   "how_it_works_page": {
     "title": "Qanday ishlaydi",

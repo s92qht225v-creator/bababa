@@ -142,7 +142,7 @@
     "reset_password_button": "Отправить ссылку",
     "reset_password_email_sent": "Проверьте почту — ссылка для сброса пароля отправлена",
     "back_to_login": "Вернуться к входу",
-    "account_suspended": "Ваш аккаунт приостановлен. Контакт: support@bababa.uz"
+    "account_suspended": "Ваш аккаунт приостановлен. Контакт: support@baibang.uz"
   },
   "jobs": {
     "title": "Вакансии",
@@ -435,7 +435,7 @@
     "how_translation": "Как работает перевод",
     "translation_desc": "Все сообщения и вакансии автоматически переводятся на узбекский, китайский и русский языки. На основе ИИ.",
     "contact": "Контакты",
-    "contact_email": "info@bababa.uz"
+    "contact_email": "info@baibang.uz"
   },
   "how_it_works_page": {
     "title": "Как это работает",

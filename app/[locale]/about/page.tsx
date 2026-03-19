@@ -51,7 +51,7 @@ export default async function AboutPage({
     description: siteConfig.description[locale as Locale],
     contactPoint: {
       '@type': 'ContactPoint',
-      email: 'info@bababa.uz',
+      email: 'info@baibang.uz',
       contactType: 'customer service',
     },
   }

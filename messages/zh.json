@@ -142,7 +142,7 @@
     "reset_password_button": "发送链接",
     "reset_password_email_sent": "请检查您的邮箱——重置密码链接已发送",
     "back_to_login": "返回登录",
-    "account_suspended": "您的账户已被暂停。联系方式：support@bababa.uz"
+    "account_suspended": "您的账户已被暂停。联系方式：support@baibang.uz"
   },
   "jobs": {
     "title": "职位列表",
@@ -435,7 +435,7 @@
     "how_translation": "翻译如何运作",
     "translation_desc": "所有消息和职位信息自动翻译为乌兹别克语、中文和俄语。由人工智能驱动。",
     "contact": "联系我们",
-    "contact_email": "info@bababa.uz"
+    "contact_email": "info@baibang.uz"
   },
   "how_it_works_page": {
     "title": "使用流程",

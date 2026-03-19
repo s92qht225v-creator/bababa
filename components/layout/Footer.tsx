@@ -30,7 +30,7 @@ export function Footer() {
             </ul>
           </div>
           <div>
-            <p className="break-all text-sm text-gray-600">info@bababa.uz</p>
+            <p className="break-all text-sm text-gray-600">info@baibang.uz</p>
           </div>
         </div>
       </div>

@@ -13,6 +13,6 @@ export default function robots(): MetadataRoute.Robots {
         '/*/auth/',
       ],
     },
-    sitemap: 'https://bababa.uz/sitemap.xml',
+    sitemap: 'https://baibang.uz/sitemap.xml',
   }
 }

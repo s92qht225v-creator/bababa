@@ -8,7 +8,7 @@ import type {
 
 export const siteConfig = {
   name: '百邦',
-  url: 'https://bababa.uz',
+  url: 'https://baibang.uz',
   defaultLocale: 'uz' as Locale,
   description: {
     uz: "O'zbekistondagi xitoy kompaniyalari uchun ish o'rinlari platformasi",

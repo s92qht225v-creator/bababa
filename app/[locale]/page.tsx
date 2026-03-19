@@ -156,12 +156,12 @@ export default async function HomePage({
     '@context': 'https://schema.org',
     '@type': 'WebSite',
     name: '百邦',
-    url: 'https://bababa.uz',
+    url: 'https://baibang.uz',
     potentialAction: {
       '@type': 'SearchAction',
       target: {
         '@type': 'EntryPoint',
-        urlTemplate: `https://bababa.uz/${l}/jobs?q={search_term_string}`,
+        urlTemplate: `https://baibang.uz/${l}/jobs?q={search_term_string}`,
       },
       'query-input': 'required name=search_term_string',
     },

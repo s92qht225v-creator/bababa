@@ -12,6 +12,19 @@ function getLocale(pathname: string): string {
 
 export default async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
+
+  // Auto-detect language on first visit to root "/" (no locale prefix)
+  if (pathname === '/') {
+    const acceptLang = request.headers.get('accept-language') ?? ''
+    let detectedLocale = 'uz' // default
+    if (acceptLang.includes('zh')) {
+      detectedLocale = 'zh'
+    } else if (acceptLang.includes('ru')) {
+      detectedLocale = 'ru'
+    }
+    return NextResponse.redirect(new URL(`/${detectedLocale}`, request.url))
+  }
+
   const locale = getLocale(pathname)
   const path = pathname.replace(/^\/(uz|zh|ru)/, '')
 
