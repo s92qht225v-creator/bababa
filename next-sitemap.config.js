@@ -1,6 +1,6 @@
 /** @type {import('next-sitemap').IConfig} */
 module.exports = {
-  siteUrl: 'https://bababa.uz',
+  siteUrl: 'https://baibang.uz',
   generateRobotsTxt: false,
   generateIndexSitemap: true,
   exclude: [
@@ -26,7 +26,7 @@ module.exports = {
           priority: page === '' ? 1.0 : 0.8,
           lastmod: new Date().toISOString(),
           alternateRefs: locales.map((l) => ({
-            href: `https://bababa.uz/${l}${page}`,
+            href: `https://baibang.uz/${l}${page}`,
             hreflang: l,
           })),
         })
@@ -55,7 +55,7 @@ module.exports = {
               priority: 0.7,
               lastmod: job.updated_at || new Date().toISOString(),
               alternateRefs: locales.map((l) => ({
-                href: `https://bababa.uz/${l}/jobs/${job.slug}`,
+                href: `https://baibang.uz/${l}/jobs/${job.slug}`,
                 hreflang: l,
               })),
             })
@@ -76,7 +76,7 @@ module.exports = {
               priority: 0.6,
               lastmod: company.updated_at || new Date().toISOString(),
               alternateRefs: locales.map((l) => ({
-                href: `https://bababa.uz/${l}/companies/${company.slug}`,
+                href: `https://baibang.uz/${l}/companies/${company.slug}`,
                 hreflang: l,
               })),
             })
@@ -96,7 +96,7 @@ module.exports = {
               changefreq: 'weekly',
               priority: 0.6,
               alternateRefs: locales.map((l) => ({
-                href: `https://bababa.uz/${l}/jobs/category/${cat.slug}`,
+                href: `https://baibang.uz/${l}/jobs/category/${cat.slug}`,
                 hreflang: l,
               })),
             })
