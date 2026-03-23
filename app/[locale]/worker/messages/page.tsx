@@ -1,3 +1,4 @@
+import { Suspense } from 'react'
 import { setRequestLocale } from 'next-intl/server'
 import { MessagesPageContent } from '@/components/messages/MessagesPageContent'
 
@@ -11,5 +12,14 @@ export default async function WorkerMessagesPage({
   const { locale } = await params
   setRequestLocale(locale)
 
-  return <MessagesPageContent />
+  return (
+    <Suspense fallback={
+      <main className="mx-auto max-w-7xl px-4 py-8">
+        <div className="h-8 w-48 animate-pulse rounded bg-gray-200" />
+        <div className="mt-4 h-96 animate-pulse rounded-lg bg-gray-100" />
+      </main>
+    }>
+      <MessagesPageContent />
+    </Suspense>
+  )
 }
