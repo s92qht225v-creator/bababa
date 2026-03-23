@@ -2,14 +2,12 @@
 
 import { useState } from 'react'
 import { useTranslations } from 'next-intl'
-import { useRouter } from 'next/navigation'
 import { register } from '@/lib/actions/auth'
 import { TelegramButton } from '@/components/layout/TelegramButton'
 import type { Locale, UserRole } from '@/types'
 
 export function RegisterForm({ locale }: { locale: string }) {
   const t = useTranslations('auth')
-  const router = useRouter()
 
   const [fullName, setFullName] = useState('')
   const [email, setEmail] = useState('')
@@ -60,7 +58,7 @@ export function RegisterForm({ locale }: { locale: string }) {
     }
 
     if (result.redirectTo) {
-      router.push(result.redirectTo)
+      window.location.href = result.redirectTo
     }
   }
 

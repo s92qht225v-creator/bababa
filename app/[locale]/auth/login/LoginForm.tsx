@@ -2,13 +2,12 @@
 
 import { useState } from 'react'
 import { useTranslations } from 'next-intl'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
 import { login } from '@/lib/actions/auth'
 import { TelegramButton } from '@/components/layout/TelegramButton'
 
 export function LoginForm({ locale }: { locale: string }) {
   const t = useTranslations('auth')
-  const router = useRouter()
   const searchParams = useSearchParams()
   const isSuspended = searchParams.get('suspended') === 'true'
 
@@ -44,7 +43,7 @@ export function LoginForm({ locale }: { locale: string }) {
     }
 
     if (result.redirectTo) {
-      router.push(result.redirectTo)
+      window.location.href = result.redirectTo
     }
   }
 
