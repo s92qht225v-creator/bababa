@@ -149,8 +149,8 @@ export function Header() {
               <span className="text-gray-700">{user.full_name}</span>
               {isEmployer && (
                 <>
-                  <a href={`/${locale}/employer/company`} className="text-gray-500 hover:text-gray-700">
-                    {t('company_profile')}
+                  <a href={`/${locale}/employer/dashboard`} className="text-gray-500 hover:text-gray-700">
+                    {t('dashboard')}
                   </a>
                   <a
                     href={`/${locale}/employer/post-job`}
@@ -161,9 +161,14 @@ export function Header() {
                 </>
               )}
               {isWorker && (
-                <a href={`/${locale}/worker/profile`} className="text-gray-500 hover:text-gray-700">
-                  {t('my_profile')}
-                </a>
+                <>
+                  <a href={`/${locale}/worker/dashboard`} className="text-gray-500 hover:text-gray-700">
+                    {t('dashboard')}
+                  </a>
+                  <a href={`/${locale}/worker/profile`} className="text-gray-500 hover:text-gray-700">
+                    {t('my_profile')}
+                  </a>
+                </>
               )}
               <button onClick={signOut} className="text-gray-500 hover:text-gray-700">
                 {t('logout')}
