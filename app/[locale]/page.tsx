@@ -172,12 +172,15 @@ export default async function HomePage({
       <JsonLd data={websiteSchema} />
       <main>
         {/* ── Section 1: Hero ── */}
-        <section className="bg-gradient-to-br from-red-50 via-white to-red-50 px-4 py-16 sm:py-24">
-          <div className="mx-auto max-w-3xl text-center">
-            <h1 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl lg:text-5xl">
+        <section className="relative overflow-hidden bg-gradient-to-br from-red-50 via-white to-orange-50 px-4 py-20 sm:py-28">
+          {/* Decorative elements */}
+          <div className="pointer-events-none absolute -right-32 -top-32 h-96 w-96 rounded-full bg-red-100/40 blur-3xl" />
+          <div className="pointer-events-none absolute -left-32 bottom-0 h-72 w-72 rounded-full bg-orange-100/30 blur-3xl" />
+          <div className="relative mx-auto max-w-3xl text-center">
+            <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl lg:text-6xl">
               {t('hero_title')}
             </h1>
-            <p className="mt-4 text-lg text-gray-600">
+            <p className="mt-5 text-lg text-gray-500">
               {t('hero_subtitle')}
             </p>
 
@@ -185,17 +188,17 @@ export default async function HomePage({
             <form
               action={`/${locale}/jobs`}
               method="GET"
-              className="mx-auto mt-8 flex max-w-2xl flex-col gap-2 sm:flex-row"
+              className="mx-auto mt-10 flex max-w-2xl flex-col gap-2 rounded-2xl border border-gray-200/80 bg-white p-2 shadow-lg shadow-gray-200/50 sm:flex-row"
             >
               <input
                 type="text"
                 name="q"
                 placeholder={t('search_placeholder')}
-                className="flex-1 rounded-lg border border-gray-300 px-4 py-3 text-sm focus:border-red-500 focus:outline-none focus:ring-1 focus:ring-red-500"
+                className="flex-1 rounded-xl border-0 bg-transparent px-4 py-3 text-sm focus:outline-none focus:ring-0"
               />
               <select
                 name="city"
-                className="rounded-lg border border-gray-300 px-3 py-3 text-sm text-gray-600 focus:border-red-500 focus:outline-none"
+                className="rounded-xl border-0 bg-gray-50 px-3 py-3 text-sm text-gray-600 focus:outline-none focus:ring-0"
               >
                 <option value="">{t('search_location')}</option>
                 {cities.map((c) => (
@@ -204,7 +207,7 @@ export default async function HomePage({
               </select>
               <button
                 type="submit"
-                className="rounded-lg bg-red-600 px-6 py-3 text-sm font-semibold text-white hover:bg-red-700"
+                className="rounded-xl bg-red-600 px-8 py-3 text-sm font-semibold text-white shadow-md shadow-red-200 transition hover:bg-red-700 hover:shadow-lg hover:shadow-red-200"
               >
                 {t('search_button')}
               </button>
@@ -227,17 +230,17 @@ export default async function HomePage({
             )}
 
             {/* CTAs */}
-            <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
+            <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
               <a
                 href={`/${locale}/jobs`}
-                className="rounded-lg bg-red-600 px-8 py-3 text-sm font-semibold text-white hover:bg-red-700"
+                className="rounded-xl bg-red-600 px-8 py-3.5 text-sm font-semibold text-white shadow-md shadow-red-200 transition-all hover:bg-red-700 hover:shadow-lg hover:shadow-red-200"
               >
                 {t('find_job')}
                 <span className="ml-1 text-xs font-normal opacity-75">— {t('find_job_sub')}</span>
               </a>
               <a
                 href={`/${locale}/employer/post-job`}
-                className="rounded-lg border border-red-600 px-8 py-3 text-sm font-semibold text-red-600 hover:bg-red-50"
+                className="rounded-xl border-2 border-red-600 px-8 py-3.5 text-sm font-semibold text-red-600 transition-all hover:bg-red-600 hover:text-white"
               >
                 {t('post_job')}
                 <span className="ml-1 text-xs font-normal opacity-75">— {t('post_job_sub')}</span>
@@ -247,8 +250,8 @@ export default async function HomePage({
         </section>
 
         {/* ── Section 2: Stats Bar ── */}
-        <section className="border-y border-gray-200 bg-white px-4 py-10">
-          <div className="mx-auto grid max-w-3xl grid-cols-3 gap-8">
+        <section className="border-y border-gray-100 bg-white px-4 py-12">
+          <div className="mx-auto grid max-w-4xl grid-cols-3 gap-8">
             <StatsCounter end={jobCount ?? 0} label={t('stats_jobs')} />
             <StatsCounter end={companyCount ?? 0} label={t('stats_companies')} />
             <StatsCounter end={workerCount ?? 0} label={t('stats_workers')} />
@@ -257,21 +260,23 @@ export default async function HomePage({
 
         {/* ── Section 3: Job Categories ── */}
         {categoriesWithCounts.length > 0 && (
-          <section className="px-4 py-16">
+          <section className="px-4 py-20">
             <div className="mx-auto max-w-5xl">
               <h2 className="text-center text-2xl font-bold">{t('categories_title')}</h2>
-              <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-4">
+              <div className="mt-10 grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
                 {categoriesWithCounts.map((cat) => (
                   <a
                     key={cat.id}
                     href={`/${locale}/jobs/category/${cat.slug}`}
-                    className="flex flex-col items-center rounded-xl border border-gray-200 bg-white p-5 text-center transition hover:border-red-300 hover:shadow-sm"
+                    className="card-hover group flex flex-col items-center rounded-2xl border border-gray-100 bg-white p-6 text-center"
                   >
-                    <span className="text-2xl">{CATEGORY_ICONS[cat.icon] || '💼'}</span>
-                    <span className="mt-2 text-sm font-semibold text-gray-900">
+                    <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-red-50 text-2xl transition-colors group-hover:bg-red-100">
+                      {CATEGORY_ICONS[cat.icon] || '💼'}
+                    </span>
+                    <span className="mt-3 text-sm font-semibold text-gray-900">
                       {getCatName(cat)}
                     </span>
-                    <span className="mt-1 text-xs text-gray-500">
+                    <span className="mt-1 text-xs text-gray-400">
                       {cat.jobCount} {t('stats_jobs').toLowerCase()}
                     </span>
                   </a>
@@ -283,40 +288,40 @@ export default async function HomePage({
 
         {/* ── Section 4: Featured Jobs ── */}
         {(featuredJobs ?? []).length > 0 && (
-          <section className="bg-gray-50 px-4 py-16">
+          <section className="bg-gray-50/50 px-4 py-20">
             <div className="mx-auto max-w-5xl">
               <h2 className="text-center text-2xl font-bold">{t('featured_jobs_title')}</h2>
-              <div className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-2">
+              <div className="mt-10 grid grid-cols-1 gap-4 md:grid-cols-2">
                 {(featuredJobs ?? []).map((job) => {
                   const company = job.company as unknown as Record<string, unknown> | null
                   return (
                     <a
                       key={job.id}
                       href={`/${locale}/jobs/${job.slug}`}
-                      className="flex items-start gap-3 rounded-lg border border-gray-200 bg-white p-4 transition hover:border-red-300 hover:shadow-sm"
+                      className="card-hover flex items-start gap-4 rounded-2xl border border-gray-100 bg-white p-5"
                     >
                       {company?.logo_url ? (
                         <Image
                           src={company.logo_url as string}
                           alt={getCompanyName(company)}
-                          width={40}
-                          height={40}
-                          className="rounded-lg object-cover"
+                          width={44}
+                          height={44}
+                          className="rounded-xl object-cover"
                         />
                       ) : (
-                        <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-red-100 text-sm font-bold text-red-600">
+                        <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-xl bg-red-50 text-sm font-bold text-red-600">
                           {getCompanyName(company ?? {}).charAt(0)}
                         </div>
                       )}
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center gap-1.5">
-                          <span className="text-xs text-gray-500">{getCompanyName(company ?? {})}</span>
+                          <span className="text-xs font-medium text-gray-400">{getCompanyName(company ?? {})}</span>
                           {(company?.is_verified as boolean) && <span className="text-xs text-green-500">✓</span>}
                         </div>
-                        <h3 className="mt-0.5 truncate text-sm font-semibold text-gray-900">
+                        <h3 className="mt-1 truncate font-semibold text-gray-900">
                           {getTitle(job)}
                         </h3>
-                        <div className="mt-1 flex flex-wrap gap-x-3 text-xs text-gray-500">
+                        <div className="mt-2 flex flex-wrap gap-x-3 text-xs text-gray-400">
                           {job.location && <span>📍 {localizeCity((job.location as unknown as { city: string }).city, l)}</span>}
                           <span>💰 {formatSalary(job)}</span>
                           {job.hsk_required > 0 && <span>🗣 HSK {job.hsk_required}</span>}
@@ -326,10 +331,10 @@ export default async function HomePage({
                   )
                 })}
               </div>
-              <div className="mt-8 text-center">
+              <div className="mt-10 text-center">
                 <a
                   href={`/${locale}/jobs`}
-                  className="text-sm font-semibold text-red-600 hover:text-red-800"
+                  className="inline-flex items-center gap-1 rounded-full border border-red-200 px-6 py-2.5 text-sm font-semibold text-red-600 transition hover:bg-red-50"
                 >
                   {t('view_all_jobs')} →
                 </a>
@@ -397,20 +402,21 @@ export default async function HomePage({
         )}
 
         {/* ── Section 7: Testimonials ── */}
-        <section className="px-4 py-16">
+        <section className="px-4 py-20">
           <div className="mx-auto max-w-4xl">
             <h2 className="text-center text-2xl font-bold">{t('testimonials_title')}</h2>
-            <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-3">
+            <div className="mt-10 grid grid-cols-1 gap-5 md:grid-cols-3">
               {[1, 2, 3].map((i) => (
                 <div
                   key={i}
-                  className="rounded-xl border border-gray-200 bg-white p-5"
+                  className="relative rounded-2xl border border-gray-100 bg-white p-6"
                 >
-                  <p className="text-sm text-gray-700 italic">
-                    &ldquo;{t(`testimonial_${i}_text` as 'testimonial_1_text')}&rdquo;
+                  <span className="absolute -top-3 left-5 text-4xl text-red-200">&ldquo;</span>
+                  <p className="relative mt-2 text-sm leading-relaxed text-gray-600">
+                    {t(`testimonial_${i}_text` as 'testimonial_1_text')}
                   </p>
-                  <p className="mt-3 text-xs font-semibold text-gray-900">
-                    — {t(`testimonial_${i}_author` as 'testimonial_1_author')}
+                  <p className="mt-4 text-xs font-semibold text-gray-900">
+                    {t(`testimonial_${i}_author` as 'testimonial_1_author')}
                   </p>
                 </div>
               ))}
@@ -419,13 +425,15 @@ export default async function HomePage({
         </section>
 
         {/* ── Section 8: CTA Banner ── */}
-        <section className="bg-red-600 px-4 py-16 text-center text-white">
-          <div className="mx-auto max-w-2xl">
+        <section className="relative overflow-hidden bg-red-600 px-4 py-20 text-center text-white">
+          <div className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-red-500/30 blur-3xl" />
+          <div className="pointer-events-none absolute -bottom-20 -left-20 h-64 w-64 rounded-full bg-red-700/30 blur-3xl" />
+          <div className="relative mx-auto max-w-2xl">
             <h2 className="text-xl font-bold sm:text-2xl" style={{ overflowWrap: 'break-word' }}>{t('cta_title')}</h2>
-            <p className="mt-3 text-red-100">{t('cta_subtitle')}</p>
+            <p className="mt-4 text-red-100/80">{t('cta_subtitle')}</p>
             <a
               href={`/${locale}/employer/post-job`}
-              className="mt-6 inline-block rounded-lg bg-white px-8 py-3 text-sm font-semibold text-red-600 hover:bg-red-50"
+              className="mt-8 inline-block rounded-xl bg-white px-8 py-3.5 text-sm font-semibold text-red-600 shadow-lg transition hover:bg-red-50 hover:shadow-xl"
             >
               {t('cta_button')} →
             </a>

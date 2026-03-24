@@ -50,10 +50,10 @@ export function StatsCounter({ end, label, suffix = '+' }: Props) {
 
   return (
     <div ref={ref} className="text-center">
-      <p className="text-3xl font-bold text-red-600">
+      <p className="text-4xl font-bold tracking-tight gradient-text">
         {count.toLocaleString()}{suffix}
       </p>
-      <p className="mt-1 text-sm text-gray-600">{label}</p>
+      <p className="mt-2 text-sm text-gray-500">{label}</p>
     </div>
   )
 }

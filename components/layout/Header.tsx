@@ -90,8 +90,8 @@ export function Header() {
     : `/${locale}/worker/profile`
 
   return (
-    <header className="sticky top-0 z-50 border-b border-gray-200 bg-white">
-      <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4">
+    <header className="sticky top-0 z-50 border-b border-gray-200/60 glass-header">
+      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6">
         {/* Logo */}
         <a href={`/${locale}`} className="flex items-center">
           <img src="/logo.svg" alt="百邦" className="h-8" />

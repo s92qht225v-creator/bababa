@@ -1,7 +1,7 @@
 import { NextIntlClientProvider } from 'next-intl'
 import { getMessages, setRequestLocale } from 'next-intl/server'
 import { notFound } from 'next/navigation'
-import { Inter } from 'next/font/google'
+import { DM_Sans } from 'next/font/google'
 import { routing } from '@/i18n/routing'
 import { UserProvider } from '@/hooks/useUser'
 import { Header } from '@/components/layout/Header'
@@ -10,7 +10,7 @@ import { ToastProvider } from '@/components/ui/Toast'
 import type { Locale } from '@/types'
 import '@/app/globals.css'
 
-const inter = Inter({ subsets: ['latin', 'cyrillic'], variable: '--font-inter' })
+const dmSans = DM_Sans({ subsets: ['latin', 'latin-ext'], weight: ['400', '500', '600', '700'], variable: '--font-dm-sans' })
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }))
@@ -34,7 +34,7 @@ export default async function LocaleLayout({
   const messages = await getMessages()
 
   return (
-    <html lang={locale} dir="ltr" className={inter.variable}>
+    <html lang={locale} dir="ltr" className={dmSans.variable}>
       <head>
         {locale === 'zh' && (
           <link
@@ -43,7 +43,7 @@ export default async function LocaleLayout({
           />
         )}
       </head>
-      <body className={`min-h-screen bg-gray-50 font-sans text-gray-900 antialiased ${locale === 'zh' ? 'font-chinese' : ''}`}>
+      <body className={`min-h-screen bg-gray-50/50 font-sans text-gray-900 antialiased ${locale === 'zh' ? 'font-chinese' : ''}`}>
         <NextIntlClientProvider messages={messages}>
           <UserProvider>
             <ToastProvider>
