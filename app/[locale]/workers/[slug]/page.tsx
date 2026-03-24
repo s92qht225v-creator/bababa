@@ -140,7 +140,7 @@ export default async function WorkerProfilePage({
     '@context': 'https://schema.org',
     '@type': 'Person',
     name,
-    jobTitle: worker.profession,
+    jobTitle: (worker[`profession_${l}`] as string) || worker.profession,
     ...(worker.photo_url ? { image: worker.photo_url } : {}),
   }
 
@@ -177,7 +177,7 @@ export default async function WorkerProfilePage({
                 <span className="text-sm text-green-600">✓ {t('verified')}</span>
               )}
             </div>
-            <p className="mt-1 text-gray-600">{worker.profession}</p>
+            <p className="mt-1 text-gray-600">{(worker[`profession_${l}`] as string) || worker.profession}</p>
             {location && (
               <p className="mt-1 text-sm text-gray-500">📍 {localizeLocation(location.city, location.region, locale)}</p>
             )}

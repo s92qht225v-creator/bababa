@@ -1,7 +1,7 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
-import { translateBio } from '@/lib/translate'
+import { translateBio, translateProfession } from '@/lib/translate'
 import { revalidatePath } from 'next/cache'
 import type { Locale, AvailabilityStatus, ExperienceEntry } from '@/types'
 
@@ -65,6 +65,22 @@ export async function saveWorkerProfile(input: SaveProfileInput): Promise<Action
     }
   }
 
+  // Translate profession
+  let professionUz = input.profession
+  let professionZh = input.profession
+  let professionRu = input.profession
+
+  if (input.profession && input.profession.trim().length > 0) {
+    try {
+      const profTranslations = await translateProfession(input.profession, input.sourceLanguage)
+      professionUz = profTranslations.profession_uz
+      professionZh = profTranslations.profession_zh
+      professionRu = profTranslations.profession_ru
+    } catch {
+      // Keep original on failure
+    }
+  }
+
   // Check if profile already exists
   const { data: existing } = await supabase
     .from('worker_profiles')
@@ -77,6 +93,9 @@ export async function saveWorkerProfile(input: SaveProfileInput): Promise<Action
     gender: input.gender,
     location_id: input.locationId || null,
     profession: input.profession || '',
+    profession_uz: professionUz,
+    profession_zh: professionZh,
+    profession_ru: professionRu,
     category_id: input.categoryId || null,
     experience_years: input.experienceYears,
     skills: input.skills,

@@ -281,6 +281,24 @@ export async function translateBio(
 /**
  * Translate a company description into all 3 locales.
  */
+/**
+ * Translate a profession/job title into all 3 locales.
+ */
+export async function translateProfession(
+  profession: string,
+  sourceLang: string
+): Promise<{ profession_zh: string; profession_uz: string; profession_ru: string }> {
+  if (!profession || profession.trim().length === 0) {
+    return { profession_zh: '', profession_uz: '', profession_ru: '' }
+  }
+  const [profZh, profUz, profRu] = await Promise.all([
+    sourceLang === 'zh' ? profession : translateMessage(profession, sourceLang as Locale, 'zh'),
+    sourceLang === 'uz' ? profession : translateMessage(profession, sourceLang as Locale, 'uz'),
+    sourceLang === 'ru' ? profession : translateMessage(profession, sourceLang as Locale, 'ru'),
+  ])
+  return { profession_zh: profZh, profession_uz: profUz, profession_ru: profRu }
+}
+
 export async function translateCompanyDescription(
   description: string,
   sourceLang: string

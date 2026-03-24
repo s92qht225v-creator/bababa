@@ -446,7 +446,7 @@ export default async function WorkersPage({
                           )}
                         </div>
 
-                        <p className="mt-1 text-sm text-gray-600">{worker.profession}</p>
+                        <p className="mt-1 text-sm text-gray-600">{(worker[`profession_${l}`] as string) || worker.profession}</p>
 
                         <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-sm text-gray-500">
                           {location && (
