@@ -11,6 +11,7 @@ import {
 } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
+import { useLocale } from 'next-intl'
 import type { Profile } from '@/types'
 
 interface UserContextValue {
@@ -35,6 +36,7 @@ export function UserProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<Profile | null>(null)
   const [loading, setLoading] = useState(true)
   const router = useRouter()
+  const locale = useLocale()
   const fetchedRef = useRef(false)
 
   const fetchProfile = useCallback(async (userId: string) => {
@@ -88,9 +90,8 @@ export function UserProvider({ children }: { children: ReactNode }) {
     await supabase.auth.signOut()
     setUser(null)
     fetchedRef.current = false
-    router.push('/')
-    router.refresh()
-  }, [router])
+    window.location.href = `/${locale}`
+  }, [locale])
 
   return (
     <UserContext.Provider
