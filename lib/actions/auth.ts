@@ -128,6 +128,14 @@ export async function login(
 
   if (!profile) return { error: 'error_invalid_credentials' }
 
+  // Update last_active for workers
+  if (profile.role === 'worker') {
+    await supabase
+      .from('worker_profiles')
+      .update({ last_active: new Date().toISOString() })
+      .eq('user_id', user.id)
+  }
+
   const locale = profile.language_preference || 'uz'
   const dashboardMap: Record<string, string> = {
     worker: `/${locale}/worker/dashboard`,

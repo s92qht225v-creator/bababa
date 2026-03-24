@@ -23,6 +23,12 @@ export default async function WorkerDashboardPage({
     .eq('id', user.id)
     .single()
 
+  // Update last_active timestamp
+  await supabase
+    .from('worker_profiles')
+    .update({ last_active: new Date().toISOString() })
+    .eq('user_id', user.id)
+
   return (
     <WorkerDashboardContent
       locale={locale}
