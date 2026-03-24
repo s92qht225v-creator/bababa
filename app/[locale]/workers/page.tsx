@@ -280,7 +280,98 @@ export default async function WorkersPage({
                 placeholder={t('profession')}
                 className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-red-500 focus:outline-none focus:ring-1 focus:ring-red-500"
               />
+              {categoryFilter && <input type="hidden" name="category" value={categoryFilter} />}
+              {regionFilter && <input type="hidden" name="region" value={regionFilter} />}
+              {hskFilter && <input type="hidden" name="hsk" value={hskFilter} />}
+              {availabilityFilter && <input type="hidden" name="availability" value={availabilityFilter} />}
+              {sortBy !== 'active' && <input type="hidden" name="sort" value={sortBy} />}
             </form>
+
+            {/* Category */}
+            <div>
+              <h3 className="mb-1 text-xs font-semibold">{t('category')}</h3>
+              <div className="flex flex-wrap gap-1">
+                <a
+                  href={buildUrl({ category: '', page: '1' })}
+                  className={`rounded border px-2 py-0.5 text-xs ${!categoryFilter ? 'border-red-600 bg-red-50 text-red-700' : 'border-gray-300 text-gray-600'}`}
+                >
+                  {t('all_workers')}
+                </a>
+                {(categories ?? []).map((cat) => (
+                  <a
+                    key={cat.id}
+                    href={buildUrl({ category: cat.id, page: '1' })}
+                    className={`rounded border px-2 py-0.5 text-xs ${categoryFilter === cat.id ? 'border-red-600 bg-red-50 text-red-700' : 'border-gray-300 text-gray-600'}`}
+                  >
+                    {getCategoryName(cat)}
+                  </a>
+                ))}
+              </div>
+            </div>
+
+            {/* Region */}
+            <div>
+              <h3 className="mb-1 text-xs font-semibold">{t('region')}</h3>
+              <div className="flex flex-wrap gap-1">
+                <a
+                  href={buildUrl({ region: '', page: '1' })}
+                  className={`rounded border px-2 py-0.5 text-xs ${!regionFilter ? 'border-red-600 bg-red-50 text-red-700' : 'border-gray-300 text-gray-600'}`}
+                >
+                  {t('all_workers')}
+                </a>
+                {regions.map((r) => (
+                  <a
+                    key={r}
+                    href={buildUrl({ region: regionFilter === r ? '' : r, page: '1' })}
+                    className={`rounded border px-2 py-0.5 text-xs ${regionFilter === r ? 'border-red-600 bg-red-50 text-red-700' : 'border-gray-300 text-gray-600'}`}
+                  >
+                    {localizeRegion(r, l)}
+                  </a>
+                ))}
+              </div>
+            </div>
+
+            {/* HSK */}
+            <div>
+              <h3 className="mb-1 text-xs font-semibold">{t('chinese_level')}</h3>
+              <div className="flex flex-wrap gap-1">
+                <a
+                  href={buildUrl({ hsk: '', page: '1' })}
+                  className={`rounded border px-2 py-0.5 text-xs ${!hskFilter ? 'border-red-600 bg-red-50 text-red-700' : 'border-gray-300 text-gray-600'}`}
+                >
+                  {t('no_chinese')}
+                </a>
+                {[1, 2, 3, 4, 5, 6].map((level) => (
+                  <a
+                    key={level}
+                    href={buildUrl({ hsk: String(level), page: '1' })}
+                    className={`rounded border px-2 py-0.5 text-xs ${hskFilter === String(level) ? 'border-red-600 bg-red-50 text-red-700' : 'border-gray-300 text-gray-600'}`}
+                  >
+                    HSK {level}+
+                  </a>
+                ))}
+              </div>
+            </div>
+
+            {/* Availability */}
+            <div>
+              <h3 className="mb-1 text-xs font-semibold">{t('availability')}</h3>
+              <div className="flex flex-wrap gap-1">
+                {[
+                  { value: '', label: t('all_workers') },
+                  { value: 'available', label: t('available_now') },
+                  { value: 'available_from', label: t('available_from') },
+                ].map((opt) => (
+                  <a
+                    key={opt.value}
+                    href={buildUrl({ availability: opt.value, page: '1' })}
+                    className={`rounded border px-2 py-0.5 text-xs ${availabilityFilter === opt.value ? 'border-red-600 bg-red-50 text-red-700' : 'border-gray-300 text-gray-600'}`}
+                  >
+                    {opt.label}
+                  </a>
+                ))}
+              </div>
+            </div>
           </div>
         </details>
 
