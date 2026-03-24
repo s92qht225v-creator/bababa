@@ -357,22 +357,23 @@ export function PostJobForm({ categories, regions, editJob }: PostJobFormProps) 
               ))}
             </select>
           </div>
-          <div>
-            <label className="mb-1 block text-sm font-medium">{t('district')}</label>
-            <select
-              value={selectedDistrict}
-              onChange={(e) => setSelectedDistrict(e.target.value)}
-              className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-red-500 focus:outline-none focus:ring-1 focus:ring-red-500"
-              disabled={districts.length === 0}
-            >
-              <option value="">{t('select_district')}</option>
-              {districts.map((d) => (
-                <option key={d} value={d}>
-                  {d}
-                </option>
-              ))}
-            </select>
-          </div>
+          {districts.length > 0 && (
+            <div>
+              <label className="mb-1 block text-sm font-medium">{t('district')}</label>
+              <select
+                value={selectedDistrict}
+                onChange={(e) => setSelectedDistrict(e.target.value)}
+                className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-red-500 focus:outline-none focus:ring-1 focus:ring-red-500"
+              >
+                <option value="">{t('select_district')}</option>
+                {districts.map((d) => (
+                  <option key={d} value={d}>
+                    {d}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
         </div>
       </section>
 
