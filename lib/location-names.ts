@@ -107,7 +107,31 @@ const CITY_NAMES: Record<string, LocaleNames> = {
   'Other':          { uz: 'Boshqa',         zh: '其他',        ru: 'Другое' },
 }
 
+const DISTRICT_NAMES: Record<string, LocaleNames> = {
+  // Tashkent districts
+  'Bektemir':       { uz: 'Bektemir',       zh: '别克铁米尔',   ru: 'Бектемир' },
+  'Mirobod':        { uz: 'Mirobod',        zh: '米拉巴德',    ru: 'Мирабад' },
+  "Mirzo Ulug'bek": { uz: "Mirzo Ulug'bek", zh: '米尔佐·乌鲁格别克', ru: 'Мирзо Улугбек' },
+  'Olmazor':        { uz: 'Olmazor',        zh: '阿尔马扎尔',   ru: 'Алмазар' },
+  'Sergeli':        { uz: 'Sergeli',        zh: '谢尔盖利',    ru: 'Сергели' },
+  'Uchtepa':        { uz: 'Uchtepa',        zh: '乌奇捷帕',    ru: 'Учтепа' },
+  'Yakkasaroy':     { uz: 'Yakkasaroy',     zh: '亚卡萨莱',    ru: 'Яккасарай' },
+  'Yangihayot':     { uz: 'Yangihayot',     zh: '扬吉哈约特',   ru: 'Янгихаёт' },
+  'Yashnobod':      { uz: 'Yashnobod',      zh: '亚什纳巴德',   ru: 'Яшнабад' },
+  'Yunusobod':      { uz: 'Yunusobod',       zh: '尤努萨巴德',   ru: 'Юнусабад' },
+  'Shayxontohur':   { uz: 'Shayxontohur',   zh: '谢赫安塔胡尔', ru: 'Шайхантахур' },
+  'Chilonzor':      { uz: 'Chilonzor',      zh: '奇兰扎尔',    ru: 'Чиланзар' },
+  // Samarkand districts
+  'Samarkand City': { uz: 'Samarqand shahri', zh: '撒马尔罕市',  ru: 'Город Самарканд' },
+}
+
 type Locale = 'uz' | 'zh' | 'ru'
+
+/** Get localized district name. Falls back to the raw name. */
+export function localizeDistrict(district: string, locale: string): string {
+  const l = locale as Locale
+  return DISTRICT_NAMES[district]?.[l] ?? district
+}
 
 /** Get localized city name. Falls back to the English name. */
 export function localizeCity(city: string, locale: string): string {
