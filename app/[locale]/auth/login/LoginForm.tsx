@@ -49,7 +49,7 @@ export function LoginForm({ locale }: { locale: string }) {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      <h1 className="text-center text-2xl font-bold">{t('login_title')}</h1>
+      <h1 className="text-center text-2xl font-bold tracking-tight">{t('login_title')}</h1>
 
       {isSuspended && (
         <div className="rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700">
@@ -83,10 +83,10 @@ export function LoginForm({ locale }: { locale: string }) {
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className={`w-full rounded-lg border px-3 py-2 text-sm outline-none transition focus:ring-2 ${
+          className={`w-full rounded-xl border px-4 py-3 text-sm outline-none transition focus:ring-2 ${
             errors.email
               ? 'border-red-400 focus:ring-red-200'
-              : 'border-gray-300 focus:ring-red-200'
+              : 'border-gray-200 bg-gray-50/50 focus:border-red-300 focus:bg-white focus:ring-red-100'
           }`}
         />
         {errors.email && (
@@ -131,7 +131,7 @@ export function LoginForm({ locale }: { locale: string }) {
       <button
         type="submit"
         disabled={submitting}
-        className="flex w-full items-center justify-center gap-2 rounded-lg bg-red-600 px-4 py-3 text-sm font-semibold text-white hover:bg-red-700 disabled:opacity-50"
+        className="flex w-full items-center justify-center gap-2 rounded-xl bg-red-600 px-4 py-3.5 text-sm font-semibold text-white shadow-md shadow-red-200 transition-all hover:bg-red-700 hover:shadow-lg hover:shadow-red-200 disabled:opacity-50"
       >
         {submitting ? (
           <>

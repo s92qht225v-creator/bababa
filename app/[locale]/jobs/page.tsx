@@ -390,7 +390,7 @@ export default async function JobsPage({
                   <a
                     key={job.id}
                     href={`/${locale}/jobs/${job.slug}`}
-                    className="block rounded-lg border border-gray-200 bg-white p-5 transition hover:border-red-300 hover:shadow-sm"
+                    className="card-hover block rounded-2xl border border-gray-100 bg-white p-5"
                   >
                     <div className="flex items-start justify-between">
                       <div className="flex items-center gap-3">
@@ -403,7 +403,7 @@ export default async function JobsPage({
                             className="h-10 w-10 rounded-lg object-cover"
                           />
                         ) : (
-                          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-red-100 text-sm font-bold text-red-600">
+                          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-red-50 text-sm font-bold text-red-600">
                             {getCompanyName(job).charAt(0)}
                           </div>
                         )}
@@ -454,22 +454,22 @@ export default async function JobsPage({
 
           {/* Pagination */}
           {totalPages > 1 && (
-            <div className="mt-8 flex items-center justify-center gap-4">
+            <div className="mt-10 flex items-center justify-center gap-3">
               {page > 1 && (
                 <a
                   href={buildUrl({ page: String(page - 1) })}
-                  className="rounded border border-gray-300 px-4 py-2 text-sm hover:bg-gray-50"
+                  className="rounded-xl border border-gray-200 px-5 py-2.5 text-sm font-medium text-gray-600 transition hover:bg-gray-50"
                 >
                   {t('prev_page')}
                 </a>
               )}
-              <span className="text-sm text-gray-500">
+              <span className="rounded-xl bg-red-50 px-4 py-2.5 text-sm font-semibold text-red-700">
                 {page} / {totalPages}
               </span>
               {page < totalPages && (
                 <a
                   href={buildUrl({ page: String(page + 1) })}
-                  className="rounded border border-gray-300 px-4 py-2 text-sm hover:bg-gray-50"
+                  className="rounded-xl border border-gray-200 px-5 py-2.5 text-sm font-medium text-gray-600 transition hover:bg-gray-50"
                 >
                   {t('next_page')}
                 </a>
