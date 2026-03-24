@@ -1,7 +1,7 @@
 import { NextIntlClientProvider } from 'next-intl'
 import { getMessages, setRequestLocale } from 'next-intl/server'
 import { notFound } from 'next/navigation'
-import { DM_Sans } from 'next/font/google'
+import { DM_Sans, Source_Sans_3 } from 'next/font/google'
 import { routing } from '@/i18n/routing'
 import { UserProvider } from '@/hooks/useUser'
 import { Header } from '@/components/layout/Header'
@@ -10,7 +10,8 @@ import { ToastProvider } from '@/components/ui/Toast'
 import type { Locale } from '@/types'
 import '@/app/globals.css'
 
-const dmSans = DM_Sans({ subsets: ['latin', 'latin-ext'], weight: ['400', '500', '600', '700'], variable: '--font-dm-sans' })
+const dmSans = DM_Sans({ subsets: ['latin', 'latin-ext'], weight: ['400', '500', '600', '700'], variable: '--font-dm-sans', display: 'swap' })
+const sourceSans = Source_Sans_3({ subsets: ['latin', 'cyrillic'], weight: ['400', '500', '600', '700'], variable: '--font-source-sans', display: 'swap' })
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }))
@@ -34,7 +35,7 @@ export default async function LocaleLayout({
   const messages = await getMessages()
 
   return (
-    <html lang={locale} dir="ltr" className={dmSans.variable}>
+    <html lang={locale} dir="ltr" className={`${dmSans.variable} ${sourceSans.variable}`}>
       <head>
         {locale === 'zh' && (
           <link
@@ -43,7 +44,7 @@ export default async function LocaleLayout({
           />
         )}
       </head>
-      <body className={`min-h-screen bg-gray-50/50 font-sans text-gray-900 antialiased ${locale === 'zh' ? 'font-chinese' : ''}`}>
+      <body className={`min-h-screen bg-gray-50/50 font-sans text-gray-900 antialiased ${locale === 'zh' ? 'font-chinese' : locale === 'ru' ? 'font-cyrillic' : ''}`}>
         <NextIntlClientProvider messages={messages}>
           <UserProvider>
             <ToastProvider>

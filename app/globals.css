@@ -11,6 +11,10 @@
   font-family: 'Noto Sans SC', var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
 }
 
+.font-cyrillic {
+  font-family: var(--font-source-sans), ui-sans-serif, system-ui, sans-serif;
+}
+
 /* Smooth page transitions */
 @keyframes slide-up {
   from { opacity: 0; transform: translateY(1rem); }
