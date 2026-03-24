@@ -38,9 +38,16 @@ export async function generateMetadata({
     .eq('slug', slug)
     .single()
 
-  if (!worker || !worker.is_public) {
+  if (!worker) {
     return {
       title: 'Worker Not Found',
+      robots: { index: false, follow: false },
+    }
+  }
+
+  if (!worker.is_public) {
+    return {
+      title: (worker.profile as { full_name: string })?.full_name ?? 'Worker Profile',
       robots: { index: false, follow: false },
     }
   }
@@ -72,7 +79,21 @@ export default async function WorkerProfilePage({
   } = await supabase.auth.getUser()
 
   const isOwner = user?.id === worker?.user_id
-  if (!worker || (!worker.is_public && !isOwner)) notFound()
+
+  // Employers can view profiles of workers who applied to their jobs
+  let isEmployerOfApplicant = false
+  if (user && worker && !worker.is_public && !isOwner) {
+    const { data: match } = await supabase
+      .from('applications')
+      .select('id, job:jobs!inner(company:companies!inner(user_id))')
+      .eq('worker_id', worker.id)
+      .limit(1)
+      .maybeSingle()
+    const companyUserId = (match?.job as unknown as { company: { user_id: string } })?.company?.user_id
+    isEmployerOfApplicant = companyUserId === user.id
+  }
+
+  if (!worker || (!worker.is_public && !isOwner && !isEmployerOfApplicant)) notFound()
 
   // Get viewer role for messages link
   let viewerRole = 'worker'
