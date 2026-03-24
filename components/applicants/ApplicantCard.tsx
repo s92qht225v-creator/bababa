@@ -1,7 +1,7 @@
 'use client'
 
 import { useTranslations, useLocale } from 'next-intl'
-import { MessageSquare, Star, X, CheckCircle } from 'lucide-react'
+import { MessageSquare, Star, X, CheckCircle, User } from 'lucide-react'
 import type { Locale, ApplicationStatus } from '@/types'
 import type { ApplicantWithDetails } from '@/lib/actions/applicants'
 
@@ -43,7 +43,12 @@ export function ApplicantCard({
   return (
     <div className="rounded-lg border border-gray-200 bg-white p-3">
       {/* Photo + Name */}
-      <div className="flex items-start gap-2">
+      <a
+        href={worker?.slug ? `/${currentLocale}/workers/${worker.slug}` : undefined}
+        className="flex items-start gap-2 group"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
         {photoUrl ? (
           <img
             src={photoUrl}
@@ -56,14 +61,14 @@ export function ApplicantCard({
           </div>
         )}
         <div className="min-w-0 flex-1">
-          <p className="truncate text-sm font-semibold text-gray-900">
+          <p className="truncate text-sm font-semibold text-gray-900 group-hover:text-red-600 group-hover:underline">
             {fullName}
           </p>
           <p className="truncate text-xs text-gray-500">
             {worker?.profession || '—'}
           </p>
         </div>
-      </div>
+      </a>
 
       {/* Details */}
       <div className="mt-2 space-y-1 text-xs text-gray-500">
@@ -75,6 +80,17 @@ export function ApplicantCard({
 
       {/* Actions */}
       <div className="mt-3 flex flex-wrap gap-1.5">
+        {worker?.slug && (
+          <a
+            href={`/${currentLocale}/workers/${worker.slug}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1 rounded border border-blue-200 px-2 py-1 text-[11px] font-medium text-blue-700 hover:bg-blue-50"
+          >
+            <User className="h-3 w-3" />
+            {t('view_profile')}
+          </a>
+        )}
         {worker?.user_id && (
           <button
             onClick={() => onMessage(worker.user_id, applicant.job_id)}
