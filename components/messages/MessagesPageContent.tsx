@@ -149,9 +149,7 @@ export function MessagesPageContent() {
                 jobId={activeJobId}
                 jobTitle={getJobTitle(activeConv)}
                 currentUserId={user?.id ?? ''}
-                currentUserLang={
-                  (user?.language_preference as Locale) ?? locale
-                }
+                currentUserLang={locale}
                 onBack={handleBack}
               />
             ) : activePartnerId ? (
@@ -163,9 +161,7 @@ export function MessagesPageContent() {
                 jobId={activeJobId}
                 jobTitle={null}
                 currentUserId={user?.id ?? ''}
-                currentUserLang={
-                  (user?.language_preference as Locale) ?? locale
-                }
+                currentUserLang={locale}
                 onBack={handleBack}
               />
             ) : (
