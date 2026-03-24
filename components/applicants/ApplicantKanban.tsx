@@ -110,7 +110,7 @@ export function ApplicantKanban() {
   // Filter applicants
   const filtered = applicants.filter((a) => {
     if (searchQuery) {
-      const name = a.workerProfile.full_name.toLowerCase()
+      const name = (a.workerProfile?.full_name || '').toLowerCase()
       if (!name.includes(searchQuery.toLowerCase())) return false
     }
     return true
