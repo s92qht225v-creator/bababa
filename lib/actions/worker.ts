@@ -126,7 +126,7 @@ export async function saveWorkerProfile(input: SaveProfileInput): Promise<Action
 
   if (error) {
     console.error('Profile save error:', error)
-    return { success: false, error: 'Failed to save profile' }
+    return { success: false, error: `Failed to save profile: ${error.message}` }
   }
 
   revalidatePath('/[locale]/worker/dashboard', 'page')
