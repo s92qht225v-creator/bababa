@@ -19,5 +19,5 @@ export default async function AdminMessages({
     .order('created_at', { ascending: false })
     .limit(200)
 
-  return <AdminMessagesPage reports={reports ?? []} />
+  return <AdminMessagesPage reports={(reports ?? []) as any} />
 }

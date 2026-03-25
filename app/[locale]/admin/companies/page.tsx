@@ -15,9 +15,9 @@ export default async function AdminCompanies({
   const supabase = await createClient()
   const { data: companies } = await supabase
     .from('companies')
-    .select('id, name_original, logo_url, industry, verification_status, is_verified, created_at, profiles!companies_user_id_fkey(full_name), jobs(id)')
+    .select('id, name_original, logo_url, industry, verification_status, is_verified, created_at, profiles!companies_user_id_fkey(full_name, phone), jobs(id)')
     .order('created_at', { ascending: false })
     .limit(500)
 
-  return <AdminCompaniesPage companies={companies ?? []} locale={locale} />
+  return <AdminCompaniesPage companies={(companies ?? []) as any} locale={locale} />
 }

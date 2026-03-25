@@ -19,5 +19,5 @@ export default async function AdminUsers({
     .order('created_at', { ascending: false })
     .limit(500)
 
-  return <AdminUsersPage users={users ?? []} />
+  return <AdminUsersPage users={(users ?? []) as any} />
 }

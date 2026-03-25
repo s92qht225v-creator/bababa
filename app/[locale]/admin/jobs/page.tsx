@@ -19,5 +19,5 @@ export default async function AdminJobs({
     .order('created_at', { ascending: false })
     .limit(500)
 
-  return <AdminJobsPage jobs={jobs ?? []} locale={locale} />
+  return <AdminJobsPage jobs={(jobs ?? []) as any} locale={locale} />
 }
