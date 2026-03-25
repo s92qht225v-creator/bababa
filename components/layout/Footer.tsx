@@ -41,7 +41,7 @@ export function Footer() {
           </div>
           <div>
             <p className="text-xs font-semibold uppercase tracking-wider text-gray-400">
-              Contact
+              {t('contact')}
             </p>
             <p className="mt-3 text-sm text-gray-500">info@baibang.uz</p>
             <a href="tel:+998911733231" className="mt-1 block text-sm text-gray-500 transition hover:text-gray-900">+998 91 173 32 31</a>
