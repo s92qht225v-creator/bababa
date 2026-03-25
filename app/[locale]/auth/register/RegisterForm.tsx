@@ -185,29 +185,6 @@ export function RegisterForm({ locale }: { locale: string }) {
         />
       )}
 
-      {/* Language preference */}
-      <div>
-        <label className="mb-1 block text-sm font-medium text-gray-700">
-          {t('language_preference')}
-        </label>
-        <div className="flex gap-2">
-          {(['uz', 'zh', 'ru'] as const).map((l) => (
-            <button
-              key={l}
-              type="button"
-              onClick={() => setLangPref(l)}
-              className={`rounded-md border px-4 py-2 text-sm font-medium transition ${
-                langPref === l
-                  ? 'border-red-600 bg-red-600 text-white'
-                  : 'border-gray-300 bg-white text-gray-700 hover:bg-gray-50'
-              }`}
-            >
-              {l.toUpperCase()}
-            </button>
-          ))}
-        </div>
-      </div>
-
       <button
         type="submit"
         disabled={submitting}
