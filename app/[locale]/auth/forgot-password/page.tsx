@@ -1,6 +1,8 @@
 import { setRequestLocale } from 'next-intl/server'
 import { ForgotPasswordForm } from './ForgotPasswordForm'
 
+export const metadata = { robots: { index: false, follow: false } }
+
 export default async function ForgotPasswordPage({
   params,
 }: {

@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { setRequestLocale } from 'next-intl/server'
 import { getTranslations } from 'next-intl/server'
 import { notFound } from 'next/navigation'
-import { createClient } from '@/lib/supabase/server'
+import { createPublicClient } from '@/lib/supabase/server'
 import { buildJobMetadata } from '@/lib/seo'
 import { JsonLd } from '@/components/seo/JsonLd'
 import { BreadcrumbSchema } from '@/components/seo/BreadcrumbSchema'
@@ -21,7 +21,7 @@ export async function generateMetadata({
   params: Promise<{ locale: string; slug: string }>
 }): Promise<Metadata> {
   const { locale, slug } = await params
-  const supabase = await createClient()
+  const supabase = createPublicClient()
 
   const { data: job } = await supabase
     .from('jobs')
@@ -44,7 +44,7 @@ export default async function JobDetailPage({
 
   const l = locale as Locale
   const t = await getTranslations('jobs')
-  const supabase = await createClient()
+  const supabase = createPublicClient()
 
   const { data: job } = await supabase
     .from('jobs')

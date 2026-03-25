@@ -1,6 +1,8 @@
 import { setRequestLocale } from 'next-intl/server'
 import { RegisterForm } from './RegisterForm'
 
+export const metadata = { robots: { index: false, follow: false } }
+
 export default async function RegisterPage({
   params,
 }: {

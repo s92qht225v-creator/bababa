@@ -77,6 +77,11 @@ export function buildJobMetadata(
       locale,
       url: `${siteConfig.url}/${locale}/jobs/${job.slug}`,
     },
+    twitter: {
+      card: 'summary_large_image',
+      title: fullTitle,
+      description,
+    },
   }
 }
 
@@ -116,6 +121,11 @@ export function buildWorkerMetadata(
       locale,
       url: `${siteConfig.url}/${locale}/workers/${worker.slug}`,
     },
+    twitter: {
+      card: 'summary_large_image',
+      title: fullTitle,
+      description: bio,
+    },
   }
 }
 
@@ -153,6 +163,11 @@ export function buildCompanyMetadata(
       type: 'website',
       locale,
       url: `${siteConfig.url}/${locale}/companies/${company.slug}`,
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: fullTitle,
+      description,
     },
   }
 }
