@@ -108,6 +108,7 @@
     "invalid_phone": "Yaroqli telefon raqam kiriting"
   },
   "auth": {
+    "continue_with_google": "Google orqali kirish",
     "continue_with_telegram": "Telegram orqali kirish",
     "or": "yoki",
     "register_title": "Hisob yaratish",

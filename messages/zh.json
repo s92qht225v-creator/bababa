@@ -108,6 +108,7 @@
     "invalid_phone": "请输入有效的电话号码"
   },
   "auth": {
+    "continue_with_google": "通过 Google 登录",
     "continue_with_telegram": "通过 Telegram 登录",
     "or": "或者",
     "register_title": "创建账户",

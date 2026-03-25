@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl'
 import { useSearchParams } from 'next/navigation'
 import { login } from '@/lib/actions/auth'
 import { TelegramButton } from '@/components/layout/TelegramButton'
+import { GoogleButton } from '@/components/layout/GoogleButton'
 
 export function LoginForm({ locale }: { locale: string }) {
   const t = useTranslations('auth')
@@ -57,7 +58,8 @@ export function LoginForm({ locale }: { locale: string }) {
         </div>
       )}
 
-      {/* Telegram */}
+      {/* Social login */}
+      <GoogleButton />
       <TelegramButton />
 
       <div className="relative flex items-center py-2">

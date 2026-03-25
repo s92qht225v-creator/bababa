@@ -108,6 +108,7 @@
     "invalid_phone": "Введите действительный номер телефона"
   },
   "auth": {
+    "continue_with_google": "Войти через Google",
     "continue_with_telegram": "Войти через Telegram",
     "or": "или",
     "register_title": "Создать аккаунт",

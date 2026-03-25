@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { register } from '@/lib/actions/auth'
 import { TelegramButton } from '@/components/layout/TelegramButton'
+import { GoogleButton } from '@/components/layout/GoogleButton'
 import type { Locale, UserRole } from '@/types'
 
 export function RegisterForm({ locale }: { locale: string }) {
@@ -94,7 +95,8 @@ export function RegisterForm({ locale }: { locale: string }) {
     <form onSubmit={handleSubmit} className="space-y-6">
       <h1 className="text-center text-2xl font-bold">{t('register_title')}</h1>
 
-      {/* Telegram */}
+      {/* Social login */}
+      <GoogleButton />
       <TelegramButton />
 
       <div className="relative flex items-center py-2">
