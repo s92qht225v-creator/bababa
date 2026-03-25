@@ -19,7 +19,14 @@ export async function GET(request: Request) {
       return NextResponse.redirect(loginUrl.toString())
     }
 
-    const { data: { user } } = await supabase.auth.getUser()
+    const { data: { user }, error: userError } = await supabase.auth.getUser()
+    if (userError || !user) {
+      console.error('OAuth getUser failed:', userError?.message || 'no user')
+      const loginUrl = new URL(`/${localeParam || 'uz'}/auth/login`, origin)
+      loginUrl.searchParams.set('error', 'no_user')
+      return NextResponse.redirect(loginUrl.toString())
+    }
+
     if (user) {
       const { data: profile } = await supabase
         .from('profiles')
@@ -97,5 +104,8 @@ export async function GET(request: Request) {
     }
   }
 
-  return NextResponse.redirect(`${origin}/uz`)
+  // No code param — callback was hit without an auth code
+  const loginUrl = new URL(`/${localeParam || 'uz'}/auth/login`, origin)
+  loginUrl.searchParams.set('error', 'no_code')
+  return NextResponse.redirect(loginUrl.toString())
 }
