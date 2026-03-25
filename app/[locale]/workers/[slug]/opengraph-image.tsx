@@ -20,7 +20,8 @@ export default async function OgImage({ params }: { params: Promise<{ locale: st
     .eq('slug', slug)
     .single()
 
-  const name = (worker?.profile as { full_name: string } | null)?.full_name || 'Worker'
+  const profileArr = worker?.profile as { full_name: string }[] | null
+  const name = profileArr?.[0]?.full_name || 'Worker'
   const profession = worker?.profession || ''
 
   return new ImageResponse(
