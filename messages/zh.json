@@ -143,7 +143,10 @@
     "reset_password_button": "发送链接",
     "reset_password_email_sent": "请检查您的邮箱——重置密码链接已发送",
     "back_to_login": "返回登录",
-    "account_suspended": "您的账户已被暂停。联系方式：support@baibang.uz"
+    "account_suspended": "您的账户已被暂停。联系方式：support@baibang.uz",
+    "confirm_email_title": "请验证您的邮箱",
+    "confirm_email_desc": "请点击发送到您邮箱的链接来激活账户。",
+    "error_email_not_confirmed": "请先验证您的邮箱，请检查收件箱。"
   },
   "jobs": {
     "title": "职位列表",

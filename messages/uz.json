@@ -143,7 +143,10 @@
     "reset_password_button": "Havolani yuborish",
     "reset_password_email_sent": "Emailingizni tekshiring — parolni tiklash havolasi yuborildi",
     "back_to_login": "Kirishga qaytish",
-    "account_suspended": "Hisobingiz to'xtatilgan. Bog'lanish: support@baibang.uz"
+    "account_suspended": "Hisobingiz to'xtatilgan. Bog'lanish: support@baibang.uz",
+    "confirm_email_title": "Emailingizni tasdiqlang",
+    "confirm_email_desc": "Hisobingizni faollashtirish uchun emailingizga yuborilgan havolani bosing.",
+    "error_email_not_confirmed": "Avval emailingizni tasdiqlang. Emailingizni tekshiring."
   },
   "jobs": {
     "title": "Ish o'rinlari",

@@ -19,6 +19,7 @@ export function RegisterForm({ locale }: { locale: string }) {
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [submitting, setSubmitting] = useState(false)
   const [serverError, setServerError] = useState('')
+  const [showConfirmEmail, setShowConfirmEmail] = useState(false)
 
   function validate(): boolean {
     const e: Record<string, string> = {}
@@ -57,9 +58,36 @@ export function RegisterForm({ locale }: { locale: string }) {
       return
     }
 
+    if (result.confirmEmail) {
+      setShowConfirmEmail(true)
+      setSubmitting(false)
+      return
+    }
+
     if (result.redirectTo) {
       window.location.href = result.redirectTo
     }
+  }
+
+  if (showConfirmEmail) {
+    return (
+      <div className="space-y-4 text-center">
+        <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-green-100">
+          <svg className="h-8 w-8 text-green-600" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
+          </svg>
+        </div>
+        <h2 className="text-xl font-bold text-gray-900">{t('confirm_email_title')}</h2>
+        <p className="text-sm text-gray-600">{t('confirm_email_desc')}</p>
+        <p className="text-sm font-medium text-gray-800">{email}</p>
+        <a
+          href={`/${locale}/auth/login`}
+          className="mt-4 inline-block rounded-lg bg-red-600 px-6 py-2.5 text-sm font-semibold text-white hover:bg-red-700"
+        >
+          {t('login_link')}
+        </a>
+      </div>
+    )
   }
 
   return (

@@ -143,7 +143,10 @@
     "reset_password_button": "Отправить ссылку",
     "reset_password_email_sent": "Проверьте почту — ссылка для сброса пароля отправлена",
     "back_to_login": "Вернуться к входу",
-    "account_suspended": "Ваш аккаунт приостановлен. Контакт: support@baibang.uz"
+    "account_suspended": "Ваш аккаунт приостановлен. Контакт: support@baibang.uz",
+    "confirm_email_title": "Подтвердите вашу почту",
+    "confirm_email_desc": "Перейдите по ссылке, отправленной на вашу почту, чтобы активировать аккаунт.",
+    "error_email_not_confirmed": "Сначала подтвердите вашу почту. Проверьте входящие."
   },
   "jobs": {
     "title": "Вакансии",

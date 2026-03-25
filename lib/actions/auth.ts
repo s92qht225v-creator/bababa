@@ -17,6 +17,7 @@ interface RegisterInput {
 interface AuthResult {
   error?: string
   redirectTo?: string
+  confirmEmail?: boolean
 }
 
 export async function register(input: RegisterInput): Promise<AuthResult> {
@@ -49,10 +50,13 @@ export async function register(input: RegisterInput): Promise<AuthResult> {
   const userId = data.user?.id
   if (!userId) return { error: 'Registration failed' }
 
+  // If email confirmation is required, user won't be confirmed yet
+  const needsConfirmation = data.user?.identities?.length === 0 ||
+    data.user?.email_confirmed_at === null
+
   // Create role-specific row
   if (input.role === 'worker') {
     const baseSlug = slugify(input.fullName)
-    // Check uniqueness, append random suffix if needed
     const { data: existing } = await supabase
       .from('worker_profiles')
       .select('slug')
@@ -70,6 +74,7 @@ export async function register(input: RegisterInput): Promise<AuthResult> {
       profession: '',
     })
 
+    if (needsConfirmation) return { confirmEmail: true }
     return { redirectTo: `/${input.languagePreference}/worker/dashboard` }
   }
 
@@ -93,9 +98,11 @@ export async function register(input: RegisterInput): Promise<AuthResult> {
       name_original: companyName,
     })
 
+    if (needsConfirmation) return { confirmEmail: true }
     return { redirectTo: `/${input.languagePreference}/employer/dashboard` }
   }
 
+  if (needsConfirmation) return { confirmEmail: true }
   return { redirectTo: `/${input.languagePreference}` }
 }
 
@@ -111,6 +118,9 @@ export async function login(
   })
 
   if (error) {
+    if (error.message.includes('Email not confirmed')) {
+      return { error: 'error_email_not_confirmed' }
+    }
     return { error: 'error_invalid_credentials' }
   }
 
