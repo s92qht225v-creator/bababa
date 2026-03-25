@@ -95,8 +95,32 @@ export function RegisterForm({ locale }: { locale: string }) {
     <form onSubmit={handleSubmit} className="space-y-6">
       <h1 className="text-center text-2xl font-bold">{t('register_title')}</h1>
 
+      {/* Role selector */}
+      <fieldset>
+        <legend className="mb-3 text-sm font-medium text-gray-700">
+          {t('role_label')}
+        </legend>
+        <div className="grid grid-cols-2 gap-3">
+          <RoleCard
+            selected={role === 'worker'}
+            onClick={() => setRole('worker')}
+            title={t('role_worker')}
+            desc={t('role_worker_desc')}
+          />
+          <RoleCard
+            selected={role === 'employer'}
+            onClick={() => setRole('employer')}
+            title={t('role_employer')}
+            desc={t('role_employer_desc')}
+          />
+        </div>
+        {errors.role && (
+          <p className="mt-1 text-sm text-red-600">{errors.role}</p>
+        )}
+      </fieldset>
+
       {/* Social login */}
-      <GoogleButton />
+      <GoogleButton role={role} locale={locale} disabled={!role} />
       <TelegramButton />
 
       <div className="relative flex items-center py-2">
@@ -149,30 +173,6 @@ export function RegisterForm({ locale }: { locale: string }) {
         error={errors.password}
         required
       />
-
-      {/* Role selector */}
-      <fieldset>
-        <legend className="mb-3 text-sm font-medium text-gray-700">
-          {t('role_label')}
-        </legend>
-        <div className="grid grid-cols-2 gap-3">
-          <RoleCard
-            selected={role === 'worker'}
-            onClick={() => setRole('worker')}
-            title={t('role_worker')}
-            desc={t('role_worker_desc')}
-          />
-          <RoleCard
-            selected={role === 'employer'}
-            onClick={() => setRole('employer')}
-            title={t('role_employer')}
-            desc={t('role_employer_desc')}
-          />
-        </div>
-        {errors.role && (
-          <p className="mt-1 text-sm text-red-600">{errors.role}</p>
-        )}
-      </fieldset>
 
       {/* Company name — only when employer */}
       {role === 'employer' && (

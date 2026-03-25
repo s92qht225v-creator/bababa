@@ -3,19 +3,25 @@
 import { useTranslations } from 'next-intl'
 import { createBrowserClient } from '@supabase/ssr'
 
-export function GoogleButton() {
+export function GoogleButton({ role, locale, disabled }: { role?: string; locale?: string; disabled?: boolean }) {
   const t = useTranslations('auth')
 
   async function handleClick() {
+    if (disabled) return
     const supabase = createBrowserClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
       process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
     )
 
+    const params = new URLSearchParams()
+    if (role) params.set('role', role)
+    if (locale) params.set('locale', locale)
+    const qs = params.toString()
+
     await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: `${window.location.origin}/auth/callback`,
+        redirectTo: `${window.location.origin}/auth/callback${qs ? `?${qs}` : ''}`,
       },
     })
   }
@@ -24,7 +30,8 @@ export function GoogleButton() {
     <button
       type="button"
       onClick={handleClick}
-      className="flex w-full items-center justify-center gap-3 rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm font-semibold text-gray-700 transition hover:bg-gray-50"
+      disabled={disabled}
+      className={`flex w-full items-center justify-center gap-3 rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm font-semibold text-gray-700 transition ${disabled ? 'opacity-40 cursor-not-allowed' : 'hover:bg-gray-50'}`}
     >
       <svg width="20" height="20" viewBox="0 0 24 24">
         <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4" />
