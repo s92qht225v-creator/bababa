@@ -44,7 +44,7 @@ export function AdminCompaniesPage({ companies: initial, locale }: { companies: 
       )
       toast(t('company_verified'), 'success')
     } else {
-      toast(result.error ?? 'Error', 'error')
+      toast(result.error ?? t('error'), 'error')
     }
     setLoading(null)
   }
@@ -59,7 +59,7 @@ export function AdminCompaniesPage({ companies: initial, locale }: { companies: 
       )
       toast(t('company_rejected'), 'success')
     } else {
-      toast(result.error ?? 'Error', 'error')
+      toast(result.error ?? t('error'), 'error')
     }
     setRejectModal(null)
     setRejectReason('')
@@ -99,12 +99,12 @@ export function AdminCompaniesPage({ companies: initial, locale }: { companies: 
         <table className="min-w-full text-sm">
           <thead className="border-b border-gray-200 bg-gray-50">
             <tr>
-              <th className="px-4 py-3 text-left font-medium text-gray-500">Company</th>
-              <th className="px-4 py-3 text-left font-medium text-gray-500">Industry</th>
-              <th className="px-4 py-3 text-left font-medium text-gray-500">Status</th>
-              <th className="px-4 py-3 text-left font-medium text-gray-500">Jobs</th>
-              <th className="px-4 py-3 text-left font-medium text-gray-500">Created</th>
-              <th className="px-4 py-3 text-right font-medium text-gray-500">Actions</th>
+              <th className="px-4 py-3 text-left font-medium text-gray-500">{t('th_company')}</th>
+              <th className="px-4 py-3 text-left font-medium text-gray-500">{t('th_industry')}</th>
+              <th className="px-4 py-3 text-left font-medium text-gray-500">{t('th_status')}</th>
+              <th className="px-4 py-3 text-left font-medium text-gray-500">{t('th_jobs')}</th>
+              <th className="px-4 py-3 text-left font-medium text-gray-500">{t('th_created')}</th>
+              <th className="px-4 py-3 text-right font-medium text-gray-500">{t('th_actions')}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-100">
@@ -189,7 +189,7 @@ export function AdminCompaniesPage({ companies: initial, locale }: { companies: 
                 onClick={() => { setRejectModal(null); setRejectReason('') }}
                 className="rounded-lg border border-gray-300 px-4 py-2 text-sm"
               >
-                Cancel
+                {t('cancel')}
               </button>
               <button
                 onClick={handleReject}

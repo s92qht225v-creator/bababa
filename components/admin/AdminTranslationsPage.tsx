@@ -63,7 +63,7 @@ export function AdminTranslationsPage({
       setFailedJobs((prev) => prev.filter((j) => j.id !== jobId))
       toast(t('translation_retried'), 'success')
     } else {
-      toast(result.error ?? 'Error', 'error')
+      toast(result.error ?? t('error'), 'error')
     }
     setLoading(null)
   }
@@ -77,7 +77,7 @@ export function AdminTranslationsPage({
       setEditingManual(null)
       setManualText('')
     } else {
-      toast(result.error ?? 'Error', 'error')
+      toast(result.error ?? t('error'), 'error')
     }
     setLoading(null)
   }
@@ -92,7 +92,7 @@ export function AdminTranslationsPage({
       setShowAddForm(false)
       // Optimistic: we don't have the new ID, page will refresh
     } else {
-      toast(result.error ?? 'Error', 'error')
+      toast(result.error ?? t('error'), 'error')
     }
     setLoading(null)
   }
@@ -104,7 +104,7 @@ export function AdminTranslationsPage({
       setOverrides((prev) => prev.filter((o) => o.id !== id))
       toast(t('override_deleted'), 'success')
     } else {
-      toast(result.error ?? 'Error', 'error')
+      toast(result.error ?? t('error'), 'error')
     }
     setLoading(null)
   }
@@ -124,7 +124,7 @@ export function AdminTranslationsPage({
             {failedJobs.map((j) => (
               <div key={j.id} className="flex items-center justify-between rounded-lg border border-gray-100 p-3">
                 <div className="min-w-0 flex-1">
-                  <span className="mr-2 rounded bg-blue-100 px-1.5 py-0.5 text-xs text-blue-700">Job</span>
+                  <span className="mr-2 rounded bg-blue-100 px-1.5 py-0.5 text-xs text-blue-700">{t('th_job')}</span>
                   <span className="text-sm font-medium text-gray-700">{j.title_original}</span>
                 </div>
                 <div className="ml-3 flex gap-2">
@@ -150,7 +150,7 @@ export function AdminTranslationsPage({
             {failedWorkers.map((w) => (
               <div key={w.id} className="flex items-center justify-between rounded-lg border border-gray-100 p-3">
                 <div className="min-w-0 flex-1">
-                  <span className="mr-2 rounded bg-green-100 px-1.5 py-0.5 text-xs text-green-700">Worker</span>
+                  <span className="mr-2 rounded bg-green-100 px-1.5 py-0.5 text-xs text-green-700">{t('th_worker')}</span>
                   <span className="text-sm font-medium text-gray-700">
                     {Array.isArray(w.profiles) ? w.profiles[0]?.full_name : w.profiles?.full_name}
                   </span>
@@ -190,7 +190,7 @@ export function AdminTranslationsPage({
                 onClick={() => setEditingManual(null)}
                 className="rounded-lg border border-gray-300 px-4 py-2 text-sm"
               >
-                Cancel
+                {t('cancel')}
               </button>
               <button
                 onClick={handleManualSave}
@@ -207,7 +207,7 @@ export function AdminTranslationsPage({
       {/* Translation Overrides */}
       <div className="rounded-lg border border-gray-200 bg-white p-4">
         <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-lg font-semibold text-gray-800">Translation Overrides</h2>
+          <h2 className="text-lg font-semibold text-gray-800">{t('translation_overrides')}</h2>
           <button
             onClick={() => setShowAddForm(!showAddForm)}
             className="rounded-lg bg-red-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-red-700"

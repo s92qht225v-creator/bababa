@@ -32,7 +32,7 @@ export function AdminUsersPage({ users: initial }: { users: Profile[] }) {
       setUsers((prev) => prev.map((u) => (u.id === userId ? { ...u, is_active: false } : u)))
       toast(t('user_suspended'), 'success')
     } else {
-      toast(result.error ?? 'Error', 'error')
+      toast(result.error ?? t('error'), 'error')
     }
     setLoading(null)
     setConfirmModal(null)
@@ -45,7 +45,7 @@ export function AdminUsersPage({ users: initial }: { users: Profile[] }) {
       setUsers((prev) => prev.map((u) => (u.id === userId ? { ...u, is_active: true } : u)))
       toast(t('user_reactivated'), 'success')
     } else {
-      toast(result.error ?? 'Error', 'error')
+      toast(result.error ?? t('error'), 'error')
     }
     setLoading(null)
   }
@@ -58,7 +58,7 @@ export function AdminUsersPage({ users: initial }: { users: Profile[] }) {
       setUsers((prev) => prev.map((u) => (u.id === confirmModal.userId ? { ...u, role: 'admin' } : u)))
       toast(t('admin_promoted'), 'success')
     } else {
-      toast(result.error ?? 'Error', 'error')
+      toast(result.error ?? t('error'), 'error')
     }
     setLoading(null)
     setConfirmModal(null)
@@ -78,7 +78,7 @@ export function AdminUsersPage({ users: initial }: { users: Profile[] }) {
               tab === key ? 'bg-red-50 text-red-700' : 'text-gray-500 hover:text-gray-700'
             }`}
           >
-            {key === 'suspended' ? t('suspended') : key === 'all' ? t('all') : key}
+            {{ all: t('all'), worker: t('workers'), employer: t('companies'), admin: t('role_admin'), suspended: t('suspended') }[key]}
           </button>
         ))}
       </div>
@@ -95,12 +95,12 @@ export function AdminUsersPage({ users: initial }: { users: Profile[] }) {
         <table className="min-w-full text-sm">
           <thead className="border-b border-gray-200 bg-gray-50">
             <tr>
-              <th className="px-4 py-3 text-left font-medium text-gray-500">Name</th>
-              <th className="px-4 py-3 text-left font-medium text-gray-500">Role</th>
-              <th className="px-4 py-3 text-left font-medium text-gray-500">Phone</th>
-              <th className="px-4 py-3 text-left font-medium text-gray-500">Status</th>
-              <th className="px-4 py-3 text-left font-medium text-gray-500">Joined</th>
-              <th className="px-4 py-3 text-right font-medium text-gray-500">Actions</th>
+              <th className="px-4 py-3 text-left font-medium text-gray-500">{t('th_name')}</th>
+              <th className="px-4 py-3 text-left font-medium text-gray-500">{t('th_role')}</th>
+              <th className="px-4 py-3 text-left font-medium text-gray-500">{t('th_phone')}</th>
+              <th className="px-4 py-3 text-left font-medium text-gray-500">{t('th_status')}</th>
+              <th className="px-4 py-3 text-left font-medium text-gray-500">{t('th_joined')}</th>
+              <th className="px-4 py-3 text-right font-medium text-gray-500">{t('th_actions')}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-100">
@@ -108,7 +108,7 @@ export function AdminUsersPage({ users: initial }: { users: Profile[] }) {
               <tr key={u.id}>
                 <td className="px-4 py-3 font-medium text-gray-900">{u.full_name}</td>
                 <td className="px-4 py-3">
-                  <RoleBadge role={u.role} />
+                  <RoleBadge role={u.role} label={t(`role_${u.role}`)} />
                 </td>
                 <td className="px-4 py-3 text-gray-500">{u.phone}</td>
                 <td className="px-4 py-3">
@@ -189,7 +189,7 @@ export function AdminUsersPage({ users: initial }: { users: Profile[] }) {
                 onClick={() => { setConfirmModal(null); setConfirmText('') }}
                 className="rounded-lg border border-gray-300 px-4 py-2 text-sm"
               >
-                Cancel
+                {t('cancel')}
               </button>
               <button
                 onClick={() => {
@@ -209,7 +209,7 @@ export function AdminUsersPage({ users: initial }: { users: Profile[] }) {
   )
 }
 
-function RoleBadge({ role }: { role: string }) {
+function RoleBadge({ role, label }: { role: string; label: string }) {
   const colors: Record<string, string> = {
     admin: 'bg-purple-100 text-purple-700',
     employer: 'bg-blue-100 text-blue-700',
@@ -217,7 +217,7 @@ function RoleBadge({ role }: { role: string }) {
   }
   return (
     <span className={`inline-block rounded-full px-2 py-0.5 text-xs font-medium ${colors[role] ?? 'bg-gray-100 text-gray-600'}`}>
-      {role}
+      {label}
     </span>
   )
 }

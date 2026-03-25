@@ -62,7 +62,7 @@ export function AdminShell({
             百邦
           </a>
           <span className="rounded bg-red-100 px-2 py-0.5 text-xs font-medium text-red-700">
-            Admin
+            {t('title')}
           </span>
         </div>
 
@@ -98,7 +98,7 @@ export function AdminShell({
             className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm text-gray-500 hover:bg-gray-50 hover:text-gray-700"
           >
             <LogOut className="h-4 w-4" />
-            Logout
+            {t('logout')}
           </button>
         </div>
       </aside>

@@ -38,7 +38,7 @@ export function AdminMessagesPage({ reports: initial }: { reports: Report[] }) {
       setReports((prev) => prev.map((r) => (r.id === id ? { ...r, status: action } : r)))
       toast(action === 'reviewed' ? t('report_reviewed') : t('report_dismissed'), 'success')
     } else {
-      toast(result.error ?? 'Error', 'error')
+      toast(result.error ?? t('error'), 'error')
     }
     setLoading(null)
   }
@@ -75,13 +75,13 @@ export function AdminMessagesPage({ reports: initial }: { reports: Report[] }) {
                   <span className="font-medium text-gray-700">
                     {r.reporter?.full_name ?? 'Unknown'}
                   </span>
-                  <span className="text-gray-400">reported</span>
+                  <span className="text-gray-400">{t('reported_by')}</span>
                   <span className="font-medium text-gray-700">
                     {r.messages?.profiles?.full_name ?? 'Unknown'}
                   </span>
                 </div>
                 <div className="mt-1 text-xs text-gray-400">
-                  Reason: {r.reason} &middot; {new Date(r.created_at).toLocaleString()}
+                  {t('reason')}: {r.reason} &middot; {new Date(r.created_at).toLocaleString()}
                 </div>
 
                 {expanded === r.id && r.messages && (
@@ -96,7 +96,7 @@ export function AdminMessagesPage({ reports: initial }: { reports: Report[] }) {
                   onClick={() => setExpanded(expanded === r.id ? null : r.id)}
                   className="rounded bg-gray-100 px-2 py-1 text-xs text-gray-600 hover:bg-gray-200"
                 >
-                  {expanded === r.id ? 'Hide' : 'View'}
+                  {expanded === r.id ? t('hide') : t('show')}
                 </button>
                 {r.status === 'pending' && (
                   <>
@@ -105,14 +105,14 @@ export function AdminMessagesPage({ reports: initial }: { reports: Report[] }) {
                       disabled={loading === r.id}
                       className="rounded bg-green-100 px-2 py-1 text-xs font-medium text-green-700 hover:bg-green-200 disabled:opacity-50"
                     >
-                      Review
+                      {t('review')}
                     </button>
                     <button
                       onClick={() => handleReview(r.id, 'dismissed')}
                       disabled={loading === r.id}
                       className="rounded bg-gray-100 px-2 py-1 text-xs font-medium text-gray-700 hover:bg-gray-200 disabled:opacity-50"
                     >
-                      Dismiss
+                      {t('dismiss')}
                     </button>
                   </>
                 )}

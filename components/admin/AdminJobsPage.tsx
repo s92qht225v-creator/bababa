@@ -41,7 +41,7 @@ export function AdminJobsPage({ jobs: initial, locale }: { jobs: Job[]; locale: 
       setJobs((prev) => prev.map((j) => (j.id === id ? { ...j, status } : j)))
       toast(`Job ${status}`, 'success')
     } else {
-      toast(result.error ?? 'Error', 'error')
+      toast(result.error ?? t('error'), 'error')
     }
     setLoading(null)
   }
@@ -53,7 +53,7 @@ export function AdminJobsPage({ jobs: initial, locale }: { jobs: Job[]; locale: 
       setJobs((prev) => prev.map((j) => (j.id === id ? { ...j, translation_status: 'done' } : j)))
       toast(t('translation_retried'), 'success')
     } else {
-      toast(result.error ?? 'Error', 'error')
+      toast(result.error ?? t('error'), 'error')
     }
     setLoading(null)
   }
@@ -88,12 +88,12 @@ export function AdminJobsPage({ jobs: initial, locale }: { jobs: Job[]; locale: 
         <table className="min-w-full text-sm">
           <thead className="border-b border-gray-200 bg-gray-50">
             <tr>
-              <th className="px-4 py-3 text-left font-medium text-gray-500">Job</th>
-              <th className="px-4 py-3 text-left font-medium text-gray-500">Company</th>
-              <th className="px-4 py-3 text-left font-medium text-gray-500">Status</th>
-              <th className="px-4 py-3 text-left font-medium text-gray-500">Translation</th>
-              <th className="px-4 py-3 text-left font-medium text-gray-500">Apps</th>
-              <th className="px-4 py-3 text-right font-medium text-gray-500">Actions</th>
+              <th className="px-4 py-3 text-left font-medium text-gray-500">{t('th_job')}</th>
+              <th className="px-4 py-3 text-left font-medium text-gray-500">{t('th_company')}</th>
+              <th className="px-4 py-3 text-left font-medium text-gray-500">{t('th_status')}</th>
+              <th className="px-4 py-3 text-left font-medium text-gray-500">{t('th_translation')}</th>
+              <th className="px-4 py-3 text-left font-medium text-gray-500">{t('th_apps')}</th>
+              <th className="px-4 py-3 text-right font-medium text-gray-500">{t('th_actions')}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-100">
