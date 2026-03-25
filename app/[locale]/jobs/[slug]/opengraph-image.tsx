@@ -21,7 +21,8 @@ export default async function OgImage({ params }: { params: Promise<{ locale: st
     .single()
 
   const title = job?.[`title_${locale}` as keyof typeof job] as string || job?.title_original || 'Job'
-  const company = (job?.company as { name_original: string } | null)?.name_original || ''
+  const companyArr = job?.company as { name_original: string }[] | null
+  const company = companyArr?.[0]?.name_original || ''
   const salary = job?.salary_min
     ? `${job.salary_min.toLocaleString()}${job.salary_max ? ` – ${job.salary_max.toLocaleString()}` : '+'} ${job.salary_currency || 'USD'}`
     : ''
