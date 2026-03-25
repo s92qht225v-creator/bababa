@@ -22,7 +22,7 @@ export function Footer() {
           </div>
           <div>
             <p className="text-xs font-semibold uppercase tracking-wider text-gray-400">
-              {t('jobs')}
+              {t('platform')}
             </p>
             <ul className="mt-3 space-y-2.5 text-sm">
               <li><a href={`/${locale}/jobs`} className="text-gray-500 transition hover:text-gray-900">{t('jobs')}</a></li>
@@ -32,7 +32,7 @@ export function Footer() {
           </div>
           <div>
             <p className="text-xs font-semibold uppercase tracking-wider text-gray-400">
-              {t('about')}
+              {t('company')}
             </p>
             <ul className="mt-3 space-y-2.5 text-sm">
               <li><a href={`/${locale}/about`} className="text-gray-500 transition hover:text-gray-900">{t('about')}</a></li>
@@ -44,6 +44,7 @@ export function Footer() {
               Contact
             </p>
             <p className="mt-3 text-sm text-gray-500">info@baibang.uz</p>
+            <a href="tel:+998911733231" className="mt-1 block text-sm text-gray-500 transition hover:text-gray-900">+998 91 173 32 31</a>
           </div>
         </div>
       </div>
