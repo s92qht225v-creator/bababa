@@ -15,8 +15,9 @@ export default async function AdminJobs({
   const supabase = await createClient()
   const { data: jobs } = await supabase
     .from('jobs')
-    .select('*, companies(name_original, logo_url), job_categories(name_uz, name_zh, name_ru), applications(id)')
+    .select('id, title_original, status, translation_status, created_at, companies(name_original), applications(id)')
     .order('created_at', { ascending: false })
+    .limit(500)
 
   return <AdminJobsPage jobs={jobs ?? []} locale={locale} />
 }
