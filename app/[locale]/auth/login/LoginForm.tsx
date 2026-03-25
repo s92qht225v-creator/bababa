@@ -58,7 +58,7 @@ export function LoginForm({ locale }: { locale: string }) {
       )}
 
       {/* Social login */}
-      <GoogleButton />
+      <GoogleButton locale={locale} />
 
       <div className="relative flex items-center py-2">
         <div className="flex-grow border-t border-gray-300" />

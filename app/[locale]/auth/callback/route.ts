@@ -10,7 +10,14 @@ export async function GET(request: Request) {
 
   if (code) {
     const supabase = await createClient()
-    await supabase.auth.exchangeCodeForSession(code)
+    const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(code)
+
+    if (exchangeError) {
+      console.error('OAuth code exchange failed:', exchangeError.message)
+      const loginUrl = new URL(`/${localeParam || 'uz'}/auth/login`, origin)
+      loginUrl.searchParams.set('error', 'oauth_failed')
+      return NextResponse.redirect(loginUrl.toString())
+    }
 
     const { data: { user } } = await supabase.auth.getUser()
     if (user) {
