@@ -2,6 +2,12 @@ import { createServerClient } from '@supabase/ssr'
 import { cookies } from 'next/headers'
 
 /**
+ * Server-side Supabase URL — use SUPABASE_URL (direct) if set, otherwise fall back to NEXT_PUBLIC_SUPABASE_URL.
+ * This allows server-side calls to go directly to Supabase without going through a proxy.
+ */
+const serverSupabaseUrl = () => process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL!
+
+/**
  * Authenticated Supabase client — uses cookies(), which opts the route into dynamic rendering.
  * Use this for protected pages and server actions that need the user session.
  */
@@ -9,7 +15,7 @@ export async function createClient() {
   const cookieStore = await cookies()
 
   return createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    serverSupabaseUrl(),
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
       cookies: {
@@ -37,7 +43,7 @@ export async function createClient() {
  */
 export function createPublicClient() {
   return createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    serverSupabaseUrl(),
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
       cookies: {

@@ -21,7 +21,7 @@ export function GoogleButton({ role, locale, disabled }: { role?: string; locale
     await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: `${window.location.origin}/auth/callback${qs ? `?${qs}` : ''}`,
+        redirectTo: `${window.location.origin}/${locale || 'uz'}/auth/callback${qs ? `?${qs}` : ''}`,
       },
     })
   }
