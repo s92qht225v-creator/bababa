@@ -157,14 +157,12 @@ export function RegisterForm({ locale }: { locale: string }) {
           <RoleCard
             selected={role === 'worker'}
             onClick={() => setRole('worker')}
-            icon="👷"
             title={t('role_worker')}
             desc={t('role_worker_desc')}
           />
           <RoleCard
             selected={role === 'employer'}
             onClick={() => setRole('employer')}
-            icon="🏢"
             title={t('role_employer')}
             desc={t('role_employer_desc')}
           />
@@ -247,13 +245,11 @@ function Field({
 function RoleCard({
   selected,
   onClick,
-  icon,
   title,
   desc,
 }: {
   selected: boolean
   onClick: () => void
-  icon: string
   title: string
   desc: string
 }) {
@@ -270,8 +266,7 @@ function RoleCard({
       {selected && (
         <span className="absolute right-2 top-2 text-red-600">✓</span>
       )}
-      <span className="text-2xl">{icon}</span>
-      <p className="mt-2 text-sm font-semibold">{title}</p>
+      <p className="text-sm font-semibold">{title}</p>
       <p className="mt-1 text-xs text-gray-500">{desc}</p>
     </button>
   )
