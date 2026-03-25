@@ -4,7 +4,6 @@ import { useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { useSearchParams } from 'next/navigation'
 import { login } from '@/lib/actions/auth'
-import { TelegramButton } from '@/components/layout/TelegramButton'
 import { GoogleButton } from '@/components/layout/GoogleButton'
 
 export function LoginForm({ locale }: { locale: string }) {
@@ -60,7 +59,6 @@ export function LoginForm({ locale }: { locale: string }) {
 
       {/* Social login */}
       <GoogleButton />
-      <TelegramButton />
 
       <div className="relative flex items-center py-2">
         <div className="flex-grow border-t border-gray-300" />

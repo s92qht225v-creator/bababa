@@ -3,7 +3,6 @@
 import { useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { register } from '@/lib/actions/auth'
-import { TelegramButton } from '@/components/layout/TelegramButton'
 import { GoogleButton } from '@/components/layout/GoogleButton'
 import type { Locale, UserRole } from '@/types'
 
@@ -121,7 +120,6 @@ export function RegisterForm({ locale }: { locale: string }) {
 
       {/* Social login */}
       <GoogleButton role={role} locale={locale} disabled={!role} />
-      <TelegramButton />
 
       <div className="relative flex items-center py-2">
         <div className="flex-grow border-t border-gray-300" />
