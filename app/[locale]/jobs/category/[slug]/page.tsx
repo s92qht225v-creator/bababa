@@ -8,6 +8,7 @@ import { BreadcrumbSchema } from '@/components/seo/BreadcrumbSchema'
 import Image from 'next/image'
 import { localizeCity } from '@/lib/location-names'
 import { formatSalary as fmtSalary } from '@/lib/utils'
+import { MapPin, DollarSign, Clock } from 'lucide-react'
 import type { Locale } from '@/types'
 
 export const revalidate = 86400
@@ -211,10 +212,10 @@ export default async function CategoryPage({
 
                   <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-sm text-gray-500">
                     {job.location && (
-                      <span>📍 {localizeCity((job.location as Record<string, unknown>).city as string, l)}</span>
+                      <span className="inline-flex items-center gap-1"><MapPin className="h-3.5 w-3.5" /> {localizeCity((job.location as Record<string, unknown>).city as string, l)}</span>
                     )}
-                    <span>💰 {formatSalary(job)}{t('per_month')}</span>
-                    <span>🕐 {t((job.employment_type ?? 'full_time') as 'full_time')}</span>
+                    <span className="inline-flex items-center gap-1"><DollarSign className="h-3.5 w-3.5" /> {formatSalary(job)}{t('per_month')}</span>
+                    <span className="inline-flex items-center gap-1"><Clock className="h-3.5 w-3.5" /> {t((job.employment_type ?? 'full_time') as 'full_time')}</span>
                   </div>
                 </a>
               )

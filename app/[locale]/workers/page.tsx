@@ -6,6 +6,7 @@ import { siteConfig } from '@/lib/seo'
 import Image from 'next/image'
 import { localizeCity, localizeRegion, localizeLocation } from '@/lib/location-names'
 import { formatSalary as fmtSalary } from '@/lib/utils'
+import { MapPin, MessageSquare, Briefcase, DollarSign } from 'lucide-react'
 import type { Locale } from '@/types'
 
 export const revalidate = 60
@@ -450,15 +451,15 @@ export default async function WorkersPage({
 
                         <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-sm text-gray-500">
                           {location && (
-                            <span>📍 {localizeLocation(location.city as string, location.region as string, l)}</span>
+                            <span className="inline-flex items-center gap-1"><MapPin className="h-3.5 w-3.5" /> {localizeLocation(location.city as string, location.region as string, l)}</span>
                           )}
                           {(worker.hsk_level as number) > 0 && (
-                            <span>🗣 HSK {worker.hsk_level as number}</span>
+                            <span className="inline-flex items-center gap-1"><MessageSquare className="h-3.5 w-3.5" /> HSK {worker.hsk_level as number}</span>
                           )}
                           {(worker.experience_years as number) > 0 && (
-                            <span>💼 {worker.experience_years}+ {t('experience_years')}</span>
+                            <span className="inline-flex items-center gap-1"><Briefcase className="h-3.5 w-3.5" /> {worker.experience_years}+ {t('experience_years')}</span>
                           )}
-                          <span>💰 {formatSalary(worker)}</span>
+                          <span className="inline-flex items-center gap-1"><DollarSign className="h-3.5 w-3.5" /> {formatSalary(worker)}</span>
                         </div>
                       </div>
                     </div>

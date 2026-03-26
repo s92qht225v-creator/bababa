@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useTranslations } from 'next-intl'
-import { Flag } from 'lucide-react'
+import { Flag, Globe } from 'lucide-react'
 import { reportMessage } from '@/lib/actions/admin'
 import { useToast } from '@/components/ui/Toast'
 import type { Locale, Message } from '@/types'
@@ -60,7 +60,7 @@ export function MessageBubble({ message, isOwn, locale }: Props) {
               onClick={() => setShowOriginal(!showOriginal)}
               className="flex items-center gap-1 text-[11px] text-gray-400 hover:text-gray-600"
             >
-              <span>🌐</span>
+              <Globe className="h-3 w-3" />
               {showOriginal
                 ? t('show_translation')
                 : t('translated_from', { lang: langLabel })}

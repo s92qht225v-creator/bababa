@@ -2,23 +2,24 @@
 
 import { useState } from 'react'
 import { useTranslations } from 'next-intl'
+import { FileText, Search, Send, MessageSquare, Building2, ClipboardList, Users } from 'lucide-react'
 
 export function HowItWorksTabs() {
   const t = useTranslations('home')
   const [tab, setTab] = useState<'workers' | 'employers'>('workers')
 
   const workerSteps = [
-    { icon: '📝', title: t('step_w1'), desc: t('step_w1_desc') },
-    { icon: '🔍', title: t('step_w2'), desc: t('step_w2_desc') },
-    { icon: '📨', title: t('step_w3'), desc: t('step_w3_desc') },
-    { icon: '💬', title: t('step_w4'), desc: t('step_w4_desc') },
+    { icon: FileText, title: t('step_w1'), desc: t('step_w1_desc') },
+    { icon: Search, title: t('step_w2'), desc: t('step_w2_desc') },
+    { icon: Send, title: t('step_w3'), desc: t('step_w3_desc') },
+    { icon: MessageSquare, title: t('step_w4'), desc: t('step_w4_desc') },
   ]
 
   const employerSteps = [
-    { icon: '🏢', title: t('step_e1'), desc: t('step_e1_desc') },
-    { icon: '📋', title: t('step_e2'), desc: t('step_e2_desc') },
-    { icon: '👥', title: t('step_e3'), desc: t('step_e3_desc') },
-    { icon: '💬', title: t('step_e4'), desc: t('step_e4_desc') },
+    { icon: Building2, title: t('step_e1'), desc: t('step_e1_desc') },
+    { icon: ClipboardList, title: t('step_e2'), desc: t('step_e2_desc') },
+    { icon: Users, title: t('step_e3'), desc: t('step_e3_desc') },
+    { icon: MessageSquare, title: t('step_e4'), desc: t('step_e4_desc') },
   ]
 
   const steps = tab === 'workers' ? workerSteps : employerSteps
@@ -51,8 +52,8 @@ export function HowItWorksTabs() {
       <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
         {steps.map((step, i) => (
           <div key={i} className="text-center">
-            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-red-50 text-2xl">
-              {step.icon}
+            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-red-50">
+              <step.icon className="h-6 w-6 text-red-600" />
             </div>
             <p className="mt-3 text-sm font-semibold text-gray-900">
               {i + 1}. {step.title}

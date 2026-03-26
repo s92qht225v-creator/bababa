@@ -8,19 +8,20 @@ import { StatsCounter } from '@/components/home/StatsCounter'
 import { HowItWorksTabs } from '@/components/home/HowItWorksTabs'
 import { localizeCity } from '@/lib/location-names'
 import { formatSalary as fmtSalary } from '@/lib/utils'
+import { HardHat, Pickaxe, Laptop, Truck, Factory, Banknote, Globe, Briefcase, Wheat, Settings, MapPin, DollarSign, MessageSquare } from 'lucide-react'
 import type { Locale } from '@/types'
 
-const CATEGORY_ICONS: Record<string, string> = {
-  'hard-hat': '🏗️',
-  'pickaxe': '⛏️',
-  'laptop': '💻',
-  'truck': '🚛',
-  'factory': '🏭',
-  'banknote': '💰',
-  'languages': '🌐',
-  'briefcase': '💼',
-  'wheat': '🌾',
-  'circle-dot': '⚙️',
+const CATEGORY_ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
+  'hard-hat': HardHat,
+  'pickaxe': Pickaxe,
+  'laptop': Laptop,
+  'truck': Truck,
+  'factory': Factory,
+  'banknote': Banknote,
+  'languages': Globe,
+  'briefcase': Briefcase,
+  'wheat': Wheat,
+  'circle-dot': Settings,
 }
 
 export const revalidate = 3600
@@ -270,8 +271,8 @@ export default async function HomePage({
                     href={`/${locale}/jobs/category/${cat.slug}`}
                     className="card-hover group flex flex-col items-center rounded-2xl border border-gray-100 bg-white p-6 text-center"
                   >
-                    <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-red-50 text-2xl transition-colors group-hover:bg-red-100">
-                      {CATEGORY_ICONS[cat.icon] || '💼'}
+                    <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-red-50 transition-colors group-hover:bg-red-100">
+                      {(() => { const Icon = CATEGORY_ICONS[cat.icon] || Briefcase; return <Icon className="h-6 w-6 text-red-600" /> })()}
                     </span>
                     <span className="mt-3 text-sm font-semibold text-gray-900">
                       {getCatName(cat)}
@@ -322,9 +323,9 @@ export default async function HomePage({
                           {getTitle(job)}
                         </h3>
                         <div className="mt-2 flex flex-wrap gap-x-3 text-xs text-gray-400">
-                          {job.location && <span>📍 {localizeCity((job.location as unknown as { city: string }).city, l)}</span>}
-                          <span>💰 {formatSalary(job)}</span>
-                          {job.hsk_required > 0 && <span>🗣 HSK {job.hsk_required}</span>}
+                          {job.location && <span className="inline-flex items-center gap-1"><MapPin className="h-3.5 w-3.5" /> {localizeCity((job.location as unknown as { city: string }).city, l)}</span>}
+                          <span className="inline-flex items-center gap-1"><DollarSign className="h-3.5 w-3.5" /> {formatSalary(job)}</span>
+                          {job.hsk_required > 0 && <span className="inline-flex items-center gap-1"><MessageSquare className="h-3.5 w-3.5" /> HSK {job.hsk_required}</span>}
                         </div>
                       </div>
                     </a>

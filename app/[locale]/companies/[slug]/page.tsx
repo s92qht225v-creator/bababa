@@ -9,6 +9,7 @@ import { BreadcrumbSchema } from '@/components/seo/BreadcrumbSchema'
 import Image from 'next/image'
 import { localizeCity } from '@/lib/location-names'
 import { formatSalary as fmtSalary } from '@/lib/utils'
+import { MapPin, DollarSign } from 'lucide-react'
 import type { Locale, Company } from '@/types'
 
 export const revalidate = 86400
@@ -168,8 +169,8 @@ export default async function CompanyProfilePage({
                   >
                     <h3 className="font-medium text-gray-900">{getJobTitle(job)}</h3>
                     <div className="mt-1 flex flex-wrap gap-x-4 text-sm text-gray-500">
-                      {loc && <span>📍 {localizeCity(loc.city, locale)}</span>}
-                      {formatSalary(job) && <span>💰 {formatSalary(job)}</span>}
+                      {loc && <span className="inline-flex items-center gap-1"><MapPin className="h-3.5 w-3.5" /> {localizeCity(loc.city, locale)}</span>}
+                      {formatSalary(job) && <span className="inline-flex items-center gap-1"><DollarSign className="h-3.5 w-3.5" /> {formatSalary(job)}</span>}
                     </div>
                   </a>
                 )

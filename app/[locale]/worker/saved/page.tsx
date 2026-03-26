@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation'
 import { SaveJobButton } from '@/components/jobs/SaveJobButton'
 import { localizeCity } from '@/lib/location-names'
 import { formatSalary as fmtSalary } from '@/lib/utils'
+import { MapPin, DollarSign } from 'lucide-react'
 import type { Locale } from '@/types'
 
 export default async function SavedJobsPage({
@@ -64,8 +65,8 @@ export default async function SavedJobsPage({
                   <p className="text-xs text-gray-500">{getCompanyName(job)}</p>
                   <h3 className="mt-1 font-semibold text-gray-900">{getTitle(job)}</h3>
                   <div className="mt-1 flex flex-wrap gap-x-3 text-sm text-gray-500">
-                    {loc && <span>📍 {localizeCity(loc.city, l)}</span>}
-                    {formatSalary(job) && <span>💰 {formatSalary(job)}</span>}
+                    {loc && <span className="inline-flex items-center gap-1"><MapPin className="h-3.5 w-3.5" /> {localizeCity(loc.city, l)}</span>}
+                    {formatSalary(job) && <span className="inline-flex items-center gap-1"><DollarSign className="h-3.5 w-3.5" /> {formatSalary(job)}</span>}
                   </div>
                 </a>
                 <SaveJobButton jobId={item.job_id} initialSaved={true} />

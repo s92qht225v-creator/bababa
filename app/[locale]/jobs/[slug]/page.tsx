@@ -11,6 +11,7 @@ import { ApplyButton } from '@/components/jobs/ApplyButton'
 import Image from 'next/image'
 import { localizeCity, localizeRegion, localizeLocation } from '@/lib/location-names'
 import { formatSalary as fmtSalary } from '@/lib/utils'
+import { MapPin, DollarSign, Clock, Calendar } from 'lucide-react'
 import type { Locale, JobWithRelations } from '@/types'
 
 export const revalidate = 86400
@@ -204,11 +205,11 @@ export default async function JobDetailPage({
 
           <div className="mt-4 flex flex-wrap gap-x-6 gap-y-2 text-sm text-gray-600">
             {job.location && (
-              <span>📍 {localizeLocation(job.location.city, job.location.region, l)}</span>
+              <span className="inline-flex items-center gap-1"><MapPin className="h-4 w-4" /> {localizeLocation(job.location.city, job.location.region, l)}</span>
             )}
-            <span>💰 {formatSalary()}</span>
-            <span>🕐 {employmentTypeLabels[job.employment_type ?? 'full_time']} · {t('positions', { count: job.workers_needed })}</span>
-            <span>📅 {daysAgo === 0 ? t('posted_today') : t('posted_ago', { days: daysAgo })}</span>
+            <span className="inline-flex items-center gap-1"><DollarSign className="h-4 w-4" /> {formatSalary()}</span>
+            <span className="inline-flex items-center gap-1"><Clock className="h-4 w-4" /> {employmentTypeLabels[job.employment_type ?? 'full_time']} · {t('positions', { count: job.workers_needed })}</span>
+            <span className="inline-flex items-center gap-1"><Calendar className="h-4 w-4" /> {daysAgo === 0 ? t('posted_today') : t('posted_ago', { days: daysAgo })}</span>
           </div>
 
           {categoryName && (

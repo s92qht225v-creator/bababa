@@ -5,6 +5,7 @@ import { useTranslations, useLocale } from 'next-intl'
 import { useUser } from '@/hooks/useUser'
 import { createClient } from '@/lib/supabase/client'
 import { localizeCity } from '@/lib/location-names'
+import { Clock, Eye, Star, CheckCircle, XCircle } from 'lucide-react'
 import type { Locale, ApplicationStatus } from '@/types'
 
 interface ApplicationWithJob {
@@ -32,13 +33,13 @@ interface ApplicationWithJob {
 
 const STATUS_CONFIG: Record<
   ApplicationStatus,
-  { icon: string; colorClass: string }
+  { icon: React.ComponentType<{ className?: string }>; colorClass: string }
 > = {
-  applied: { icon: '⏳', colorClass: 'text-gray-600 bg-gray-100' },
-  viewed: { icon: '👁', colorClass: 'text-red-600 bg-red-50' },
-  shortlisted: { icon: '⭐', colorClass: 'text-yellow-600 bg-yellow-50' },
-  hired: { icon: '✅', colorClass: 'text-green-600 bg-green-50' },
-  rejected: { icon: '❌', colorClass: 'text-red-500 bg-red-50' },
+  applied: { icon: Clock, colorClass: 'text-gray-600 bg-gray-100' },
+  viewed: { icon: Eye, colorClass: 'text-red-600 bg-red-50' },
+  shortlisted: { icon: Star, colorClass: 'text-yellow-600 bg-yellow-50' },
+  hired: { icon: CheckCircle, colorClass: 'text-green-600 bg-green-50' },
+  rejected: { icon: XCircle, colorClass: 'text-red-500 bg-red-50' },
 }
 
 export function ApplicationList() {
@@ -180,7 +181,7 @@ export function ApplicationList() {
                   <span
                     className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium ${statusConfig.colorClass}`}
                   >
-                    {statusConfig.icon} {getStatusLabel(app.status)}
+                    <statusConfig.icon className="h-3.5 w-3.5" /> {getStatusLabel(app.status)}
                   </span>
                 </div>
                 <div className="mt-3 flex gap-2">

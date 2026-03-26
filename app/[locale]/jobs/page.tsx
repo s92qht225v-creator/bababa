@@ -7,6 +7,7 @@ import Image from 'next/image'
 import { SaveJobButton } from '@/components/jobs/SaveJobButton'
 import { localizeCity, localizeRegion } from '@/lib/location-names'
 import { formatSalary as fmtSalary } from '@/lib/utils'
+import { MapPin, DollarSign, Clock, MessageSquare, Users, ClipboardList } from 'lucide-react'
 import type { Locale } from '@/types'
 
 export const revalidate = 60
@@ -430,20 +431,20 @@ export default async function JobsPage({
 
                     <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-sm text-gray-500">
                       {job.location && (
-                        <span>📍 {localizeCity((job.location as Record<string, unknown>).city as string, l)}</span>
+                        <span className="inline-flex items-center gap-1"><MapPin className="h-3.5 w-3.5" /> {localizeCity((job.location as Record<string, unknown>).city as string, l)}</span>
                       )}
-                      <span>💰 {formatSalary(job)}{t('per_month')}</span>
-                      <span>🕐 {t((job.employment_type ?? 'full_time') as 'full_time')}</span>
+                      <span className="inline-flex items-center gap-1"><DollarSign className="h-3.5 w-3.5" /> {formatSalary(job)}{t('per_month')}</span>
+                      <span className="inline-flex items-center gap-1"><Clock className="h-3.5 w-3.5" /> {t((job.employment_type ?? 'full_time') as 'full_time')}</span>
                       {(job.hsk_required as number) > 0 && (
-                        <span>🗣 HSK {job.hsk_required as number}+</span>
+                        <span className="inline-flex items-center gap-1"><MessageSquare className="h-3.5 w-3.5" /> HSK {job.hsk_required as number}+</span>
                       )}
                       {(job.workers_needed as number) > 1 && (
-                        <span>👥 {t('positions', { count: job.workers_needed as number })}</span>
+                        <span className="inline-flex items-center gap-1"><Users className="h-3.5 w-3.5" /> {t('positions', { count: job.workers_needed as number })}</span>
                       )}
                       {(() => {
                         const apps = job.applications as { count: number }[] | undefined
                         const count = apps?.[0]?.count ?? 0
-                        return count > 0 ? <span>📋 {count} {t('applicants')}</span> : null
+                        return count > 0 ? <span className="inline-flex items-center gap-1"><ClipboardList className="h-3.5 w-3.5" /> {count} {t('applicants')}</span> : null
                       })()}
                     </div>
                   </a>
