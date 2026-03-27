@@ -147,7 +147,10 @@
     "account_suspended": "Hisobingiz to'xtatilgan. Bog'lanish: support@baibang.uz",
     "confirm_email_title": "Emailingizni tasdiqlang",
     "confirm_email_desc": "Hisobingizni faollashtirish uchun emailingizga yuborilgan havolani bosing.",
-    "error_email_not_confirmed": "Avval emailingizni tasdiqlang. Emailingizni tekshiring."
+    "error_email_not_confirmed": "Avval emailingizni tasdiqlang. Emailingizni tekshiring.",
+    "resend_button": "Tasdiqlash emailini qayta yuborish",
+    "resend_success": "Email yuborildi! Pochta qutingizni tekshiring.",
+    "error_resend_rate_limit": "Juda ko'p urinish. Biroz kutib, qayta urinib ko'ring."
   },
   "jobs": {
     "title": "Ish o'rinlari",

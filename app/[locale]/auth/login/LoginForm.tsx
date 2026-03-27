@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { useSearchParams } from 'next/navigation'
-import { login } from '@/lib/actions/auth'
+import { login, resendConfirmation } from '@/lib/actions/auth'
 import { GoogleButton } from '@/components/layout/GoogleButton'
 
 export function LoginForm({ locale }: { locale: string }) {
@@ -16,6 +16,9 @@ export function LoginForm({ locale }: { locale: string }) {
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [serverError, setServerError] = useState('')
   const [submitting, setSubmitting] = useState(false)
+  const [resending, setResending] = useState(false)
+  const [resendSent, setResendSent] = useState(false)
+  const [showResend, setShowResend] = useState(false)
 
   function validate(): boolean {
     const e: Record<string, string> = {}
@@ -38,6 +41,8 @@ export function LoginForm({ locale }: { locale: string }) {
       setServerError(
         result.error.startsWith('error_') ? t(result.error) : result.error
       )
+      setShowResend(result.error === 'error_email_not_confirmed')
+      setResendSent(false)
       setSubmitting(false)
       return
     }
@@ -69,9 +74,27 @@ export function LoginForm({ locale }: { locale: string }) {
       </div>
 
       {serverError && (
-        <p className="rounded bg-red-50 p-3 text-sm text-red-600">
-          {serverError}
-        </p>
+        <div className="rounded bg-red-50 p-3 text-sm text-red-600">
+          <p>{serverError}</p>
+          {showResend && !resendSent && (
+            <button
+              type="button"
+              disabled={resending}
+              onClick={async () => {
+                setResending(true)
+                const result = await resendConfirmation(email)
+                if (!result.error) setResendSent(true)
+                setResending(false)
+              }}
+              className="mt-2 font-medium text-red-700 underline hover:no-underline disabled:opacity-50"
+            >
+              {resending ? `${t('resend_button')}...` : t('resend_button')}
+            </button>
+          )}
+          {resendSent && (
+            <p className="mt-2 text-green-600">{t('resend_success')}</p>
+          )}
+        </div>
       )}
 
       {/* Email */}

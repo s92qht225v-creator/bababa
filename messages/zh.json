@@ -147,7 +147,10 @@
     "account_suspended": "您的账户已被暂停。联系方式：support@baibang.uz",
     "confirm_email_title": "请验证您的邮箱",
     "confirm_email_desc": "请点击发送到您邮箱的链接来激活账户。",
-    "error_email_not_confirmed": "请先验证您的邮箱，请检查收件箱。"
+    "error_email_not_confirmed": "请先验证您的邮箱，请检查收件箱。",
+    "resend_button": "重新发送验证邮件",
+    "resend_success": "邮件已发送！请检查您的收件箱。",
+    "error_resend_rate_limit": "尝试次数过多，请稍后再试。"
   },
   "jobs": {
     "title": "职位列表",

@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useTranslations } from 'next-intl'
-import { register } from '@/lib/actions/auth'
+import { register, resendConfirmation } from '@/lib/actions/auth'
 import { GoogleButton } from '@/components/layout/GoogleButton'
 import type { Locale, UserRole } from '@/types'
 
@@ -20,6 +20,9 @@ export function RegisterForm({ locale }: { locale: string }) {
   const [submitting, setSubmitting] = useState(false)
   const [serverError, setServerError] = useState('')
   const [showConfirmEmail, setShowConfirmEmail] = useState(false)
+  const [resending, setResending] = useState(false)
+  const [resendSent, setResendSent] = useState(false)
+  const [resendError, setResendError] = useState('')
 
   function validate(): boolean {
     const e: Record<string, string> = {}
@@ -80,12 +83,37 @@ export function RegisterForm({ locale }: { locale: string }) {
         <h2 className="text-xl font-bold text-gray-900">{t('confirm_email_title')}</h2>
         <p className="text-sm text-gray-600">{t('confirm_email_desc')}</p>
         <p className="text-sm font-medium text-gray-800">{email}</p>
-        <a
-          href={`/${locale}/auth/login`}
-          className="mt-4 inline-block rounded-lg bg-red-600 px-6 py-2.5 text-sm font-semibold text-white hover:bg-red-700"
-        >
-          {t('login_link')}
-        </a>
+        {resendSent ? (
+          <p className="text-sm text-green-600">{t('resend_success')}</p>
+        ) : resendError ? (
+          <p className="text-sm text-red-600">{resendError}</p>
+        ) : null}
+        <div className="mt-4 flex flex-col items-center gap-3">
+          <button
+            type="button"
+            disabled={resending || resendSent}
+            onClick={async () => {
+              setResending(true)
+              setResendError('')
+              const result = await resendConfirmation(email)
+              if (result.error) {
+                setResendError(result.error.startsWith('error_') ? t(result.error) : result.error)
+              } else {
+                setResendSent(true)
+              }
+              setResending(false)
+            }}
+            className="text-sm font-medium text-red-600 hover:underline disabled:opacity-50"
+          >
+            {resending ? `${t('resend_button')}...` : t('resend_button')}
+          </button>
+          <a
+            href={`/${locale}/auth/login`}
+            className="inline-block rounded-lg bg-red-600 px-6 py-2.5 text-sm font-semibold text-white hover:bg-red-700"
+          >
+            {t('login_link')}
+          </a>
+        </div>
       </div>
     )
   }

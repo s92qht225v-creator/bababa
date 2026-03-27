@@ -170,6 +170,24 @@ export async function forgotPassword(email: string): Promise<AuthResult> {
   return {}
 }
 
+export async function resendConfirmation(email: string): Promise<AuthResult> {
+  const supabase = await createClient()
+
+  const { error } = await supabase.auth.resend({
+    type: 'signup',
+    email,
+  })
+
+  if (error) {
+    if (error.message.includes('rate') || error.message.includes('limit')) {
+      return { error: 'error_resend_rate_limit' }
+    }
+    return { error: error.message }
+  }
+
+  return {}
+}
+
 export async function signOut(): Promise<void> {
   const supabase = await createClient()
   await supabase.auth.signOut()
