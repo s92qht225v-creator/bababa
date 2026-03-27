@@ -21,7 +21,10 @@ export function AdminUsersPage({ users: initial }: { users: Profile[] }) {
   const filtered = users.filter((u) => {
     if (tab === 'suspended') return u.is_active === false
     if (tab !== 'all' && u.role !== tab) return false
-    if (search && !u.full_name.toLowerCase().includes(search.toLowerCase())) return false
+    if (search) {
+      const q = search.toLowerCase()
+      if (!u.full_name.toLowerCase().includes(q) && !(u.email?.toLowerCase().includes(q))) return false
+    }
     return true
   })
 
@@ -97,6 +100,7 @@ export function AdminUsersPage({ users: initial }: { users: Profile[] }) {
             <tr>
               <th className="px-4 py-3 text-left font-medium text-gray-500">{t('th_name')}</th>
               <th className="px-4 py-3 text-left font-medium text-gray-500">{t('th_role')}</th>
+              <th className="px-4 py-3 text-left font-medium text-gray-500">{t('th_email')}</th>
               <th className="px-4 py-3 text-left font-medium text-gray-500">{t('th_phone')}</th>
               <th className="px-4 py-3 text-left font-medium text-gray-500">{t('th_status')}</th>
               <th className="px-4 py-3 text-left font-medium text-gray-500">{t('th_joined')}</th>
@@ -110,6 +114,7 @@ export function AdminUsersPage({ users: initial }: { users: Profile[] }) {
                 <td className="px-4 py-3">
                   <RoleBadge role={u.role} label={t(`role_${u.role}`)} />
                 </td>
+                <td className="px-4 py-3 text-gray-500">{u.email}</td>
                 <td className="px-4 py-3 text-gray-500">{u.phone}</td>
                 <td className="px-4 py-3">
                   {u.is_active === false ? (
@@ -159,7 +164,7 @@ export function AdminUsersPage({ users: initial }: { users: Profile[] }) {
             ))}
             {filtered.length === 0 && (
               <tr>
-                <td colSpan={6} className="px-4 py-8 text-center text-gray-400">
+                <td colSpan={7} className="px-4 py-8 text-center text-gray-400">
                   {t('no_data')}
                 </td>
               </tr>

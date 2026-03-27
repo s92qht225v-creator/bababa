@@ -574,6 +574,7 @@
     "error": "Ошибка",
     "th_name": "Имя",
     "th_role": "Роль",
+    "th_email": "Email",
     "th_phone": "Телефон",
     "th_status": "Статус",
     "th_joined": "Дата регистрации",

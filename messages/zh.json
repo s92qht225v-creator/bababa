@@ -574,6 +574,7 @@
     "error": "错误",
     "th_name": "姓名",
     "th_role": "角色",
+    "th_email": "邮箱",
     "th_phone": "电话",
     "th_status": "状态",
     "th_joined": "加入时间",

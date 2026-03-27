@@ -45,6 +45,7 @@ export interface Profile {
   id: string
   full_name: string
   phone: string | null
+  email: string | null
   role: UserRole
   language_preference: Locale
   avatar_url: string | null

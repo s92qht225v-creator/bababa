@@ -15,7 +15,7 @@ export default async function AdminUsers({
   const supabase = await createClient()
   const { data: users } = await supabase
     .from('profiles')
-    .select('id, full_name, role, phone, is_active, created_at')
+    .select('id, full_name, role, phone, email, is_active, created_at')
     .order('created_at', { ascending: false })
     .limit(500)
 
