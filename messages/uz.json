@@ -303,6 +303,8 @@
     "save_profile": "Profilni saqlash",
     "saving": "Saqlanmoqda...",
     "profile_saved": "Profil saqlandi!",
+    "field_required": "Bu maydon talab qilinadi",
+    "fill_required_fields": "Iltimos, barcha majburiy maydonlarni to'ldiring",
     "contact_worker": "Bog'lanish",
     "save_worker": "Saqlash",
     "saved": "Saqlangan",

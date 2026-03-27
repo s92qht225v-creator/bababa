@@ -269,6 +269,17 @@ export function ProfileForm({ locale, profile, workerProfile, categories, region
     setError('')
 
     if (!fullName.trim()) { setError(t('full_name') + ' required'); return }
+    if (!phone.trim()) { setError(t('phone') + ' required'); return }
+    if (!age) { setError(t('age') + ' required'); return }
+    if (!gender) { setError(t('gender') + ' required'); return }
+    if (!locationId) { setError(t('location') + ' required'); return }
+    if (!profession.trim()) { setError(t('profession') + ' required'); return }
+    if (!categoryId) { setError(t('category') + ' required'); return }
+    if (!experienceYears) { setError(t('experience_years') + ' required'); return }
+    if (!hskLevel) { setError(t('chinese_level') + ' required'); return }
+    if (languages.length === 0) { setError(t('other_languages') + ' required'); return }
+    if (salaryMin === '') { setError(t('salary_expectations') + ' min required'); return }
+    if (salaryMax === '') { setError(t('salary_expectations') + ' max required'); return }
 
     setSubmitting(true)
     try {
@@ -437,30 +448,33 @@ export function ProfileForm({ locale, profile, workerProfile, categories, region
             />
           </div>
           <div>
-            <label className="mb-1 block text-sm font-medium">{t('phone')}</label>
+            <label className="mb-1 block text-sm font-medium">{t('phone')} *</label>
             <input
               type="tel"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
+              required
               className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-red-500 focus:outline-none focus:ring-1 focus:ring-red-500"
             />
           </div>
           <div>
-            <label className="mb-1 block text-sm font-medium">{t('age')}</label>
+            <label className="mb-1 block text-sm font-medium">{t('age')} *</label>
             <input
               type="number"
               value={age}
               onChange={(e) => setAge(e.target.value === '' ? '' : Number(e.target.value))}
               min={16}
               max={70}
+              required
               className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-red-500 focus:outline-none focus:ring-1 focus:ring-red-500"
             />
           </div>
           <div>
-            <label className="mb-1 block text-sm font-medium">{t('gender')}</label>
+            <label className="mb-1 block text-sm font-medium">{t('gender')} *</label>
             <select
               value={gender}
               onChange={(e) => setGender(e.target.value)}
+              required
               className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-red-500 focus:outline-none focus:ring-1 focus:ring-red-500"
             >
               <option value="">—</option>
@@ -474,13 +488,14 @@ export function ProfileForm({ locale, profile, workerProfile, categories, region
 
       {/* Section 3: Location */}
       <section className="space-y-4">
-        <h2 className="text-lg font-semibold">{t('location')}</h2>
+        <h2 className="text-lg font-semibold">{t('location')} *</h2>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
           <div>
             <label className="mb-1 block text-sm font-medium">{t('region')}</label>
             <select
               value={selectedRegion}
               onChange={(e) => setSelectedRegion(e.target.value)}
+              required
               className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-red-500 focus:outline-none focus:ring-1 focus:ring-red-500"
             >
               <option value="">{t('region')}</option>
@@ -527,19 +542,21 @@ export function ProfileForm({ locale, profile, workerProfile, categories, region
         <h2 className="text-lg font-semibold">{t('professional_info')}</h2>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <div>
-            <label className="mb-1 block text-sm font-medium">{t('profession')}</label>
+            <label className="mb-1 block text-sm font-medium">{t('profession')} *</label>
             <input
               type="text"
               value={profession}
               onChange={(e) => setProfession(e.target.value)}
+              required
               className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-red-500 focus:outline-none focus:ring-1 focus:ring-red-500"
             />
           </div>
           <div>
-            <label className="mb-1 block text-sm font-medium">{t('category')}</label>
+            <label className="mb-1 block text-sm font-medium">{t('category')} *</label>
             <select
               value={categoryId}
               onChange={(e) => setCategoryId(e.target.value)}
+              required
               className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-red-500 focus:outline-none focus:ring-1 focus:ring-red-500"
             >
               <option value="">—</option>
@@ -551,13 +568,14 @@ export function ProfileForm({ locale, profile, workerProfile, categories, region
         </div>
 
         <div>
-          <label className="mb-1 block text-sm font-medium">{t('experience_years')}</label>
+          <label className="mb-1 block text-sm font-medium">{t('experience_years')} *</label>
           <input
             type="number"
             value={experienceYears}
             onChange={(e) => setExperienceYears(Number(e.target.value))}
-            min={0}
+            min={1}
             max={50}
+            required
             className="w-full max-w-[200px] rounded-lg border border-gray-300 px-3 py-2 focus:border-red-500 focus:outline-none focus:ring-1 focus:ring-red-500"
           />
         </div>
@@ -598,7 +616,7 @@ export function ProfileForm({ locale, profile, workerProfile, categories, region
       <section className="space-y-4">
         <h2 className="text-lg font-semibold">{t('language_skills')}</h2>
         <div>
-          <label className="mb-1 block text-sm font-medium">{t('chinese_level')}</label>
+          <label className="mb-1 block text-sm font-medium">{t('chinese_level')} *</label>
           <div className="flex flex-wrap gap-2">
             {[0, 1, 2, 3, 4, 5, 6].map((level) => (
               <button
@@ -614,7 +632,7 @@ export function ProfileForm({ locale, profile, workerProfile, categories, region
         </div>
 
         <div>
-          <label className="mb-2 block text-sm font-medium">{t('other_languages')}</label>
+          <label className="mb-2 block text-sm font-medium">{t('other_languages')} *</label>
           <div className="flex flex-wrap gap-2">
             {LANGUAGE_OPTIONS.map((lang) => (
               <button
@@ -632,7 +650,7 @@ export function ProfileForm({ locale, profile, workerProfile, categories, region
 
       {/* Section 6: Salary Expectations */}
       <section className="space-y-4">
-        <h2 className="text-lg font-semibold">{t('salary_expectations')}</h2>
+        <h2 className="text-lg font-semibold">{t('salary_expectations')} *</h2>
         <div className="grid grid-cols-2 gap-4">
           <div>
             <label className="mb-1 block text-sm font-medium">Min</label>
@@ -640,6 +658,7 @@ export function ProfileForm({ locale, profile, workerProfile, categories, region
               type="number"
               value={salaryMin}
               onChange={(e) => setSalaryMin(e.target.value === '' ? '' : Number(e.target.value))}
+              required
               className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-red-500 focus:outline-none focus:ring-1 focus:ring-red-500"
             />
           </div>
@@ -649,6 +668,7 @@ export function ProfileForm({ locale, profile, workerProfile, categories, region
               type="number"
               value={salaryMax}
               onChange={(e) => setSalaryMax(e.target.value === '' ? '' : Number(e.target.value))}
+              required
               className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-red-500 focus:outline-none focus:ring-1 focus:ring-red-500"
             />
           </div>
