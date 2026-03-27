@@ -286,7 +286,7 @@ export function ProfileForm({ locale, profile, workerProfile, categories, region
       const result = await saveWorkerProfile({
         fullName: fullName.trim(),
         phone: phone.trim(),
-        age: age === '' ? null : Number(age),
+        age: Number(age),
         gender: gender || null,
         locationId,
         profession: profession.trim(),
