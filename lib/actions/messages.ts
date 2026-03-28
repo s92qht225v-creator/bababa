@@ -99,6 +99,29 @@ export async function sendMessage(
     },
   })
 
+  // Send email notification (fire-and-forget)
+  const { data: receiverProfile } = await supabase
+    .from('profiles')
+    .select('email, full_name, role, language_preference')
+    .eq('id', receiverId)
+    .single()
+
+  if (receiverProfile?.email) {
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+    fetch(`${supabaseUrl}/functions/v1/notify-new-message`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        receiverEmail: receiverProfile.email,
+        receiverName: receiverProfile.full_name ?? '',
+        receiverRole: receiverProfile.role ?? 'worker',
+        senderName: senderProfile?.full_name ?? 'Someone',
+        messagePreview: body.substring(0, 150),
+        locale: receiverProfile.language_preference ?? 'uz',
+      }),
+    }).catch(() => {}) // swallow errors — email is best-effort
+  }
+
   return { success: true, data: { message_id: message.id } }
 }
 
