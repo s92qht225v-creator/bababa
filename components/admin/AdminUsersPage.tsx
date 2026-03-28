@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useTranslations } from 'next-intl'
-import { suspendUser, reactivateUser, makeAdmin } from '@/lib/actions/admin'
+import { suspendUser, reactivateUser, makeAdmin, deleteUser } from '@/lib/actions/admin'
 import { useToast } from '@/components/ui/Toast'
 import type { Profile } from '@/types'
 
@@ -15,7 +15,7 @@ export function AdminUsersPage({ users: initial }: { users: Profile[] }) {
   const [tab, setTab] = useState<string>('all')
   const [search, setSearch] = useState('')
   const [loading, setLoading] = useState<string | null>(null)
-  const [confirmModal, setConfirmModal] = useState<{ type: 'suspend' | 'admin'; userId: string } | null>(null)
+  const [confirmModal, setConfirmModal] = useState<{ type: 'suspend' | 'admin' | 'delete'; userId: string } | null>(null)
   const [confirmText, setConfirmText] = useState('')
 
   const filtered = users.filter((u) => {
@@ -51,6 +51,21 @@ export function AdminUsersPage({ users: initial }: { users: Profile[] }) {
       toast(result.error ?? t('error'), 'error')
     }
     setLoading(null)
+  }
+
+  async function handleDelete() {
+    if (!confirmModal || confirmText !== 'DELETE') return
+    setLoading(confirmModal.userId)
+    const result = await deleteUser(confirmModal.userId)
+    if (result.success) {
+      setUsers((prev) => prev.filter((u) => u.id !== confirmModal.userId))
+      toast(t('delete') + ' ✓', 'success')
+    } else {
+      toast(result.error ?? t('error'), 'error')
+    }
+    setLoading(null)
+    setConfirmModal(null)
+    setConfirmText('')
   }
 
   async function handleMakeAdmin() {
@@ -150,13 +165,22 @@ export function AdminUsersPage({ users: initial }: { users: Profile[] }) {
                       </button>
                     )}
                     {u.role !== 'admin' && (
-                      <button
-                        onClick={() => setConfirmModal({ type: 'admin', userId: u.id })}
-                        disabled={loading === u.id}
-                        className="rounded bg-purple-100 px-2 py-1 text-xs font-medium text-purple-700 hover:bg-purple-200 disabled:opacity-50"
-                      >
-                        {t('make_admin')}
-                      </button>
+                      <>
+                        <button
+                          onClick={() => setConfirmModal({ type: 'admin', userId: u.id })}
+                          disabled={loading === u.id}
+                          className="rounded bg-purple-100 px-2 py-1 text-xs font-medium text-purple-700 hover:bg-purple-200 disabled:opacity-50"
+                        >
+                          {t('make_admin')}
+                        </button>
+                        <button
+                          onClick={() => setConfirmModal({ type: 'delete', userId: u.id })}
+                          disabled={loading === u.id}
+                          className="rounded bg-red-100 px-2 py-1 text-xs font-medium text-red-700 hover:bg-red-200 disabled:opacity-50"
+                        >
+                          {t('delete')}
+                        </button>
+                      </>
                     )}
                   </div>
                 </td>
@@ -178,14 +202,14 @@ export function AdminUsersPage({ users: initial }: { users: Profile[] }) {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
           <div className="w-full max-w-md rounded-lg bg-white p-6">
             <h3 className="mb-4 text-lg font-semibold">
-              {confirmModal.type === 'suspend' ? t('confirm_suspend') : t('confirm_make_admin')}
+              {confirmModal.type === 'suspend' ? t('confirm_suspend') : confirmModal.type === 'delete' ? t('confirm_delete') : t('confirm_make_admin')}
             </h3>
-            {confirmModal.type === 'admin' && (
+            {(confirmModal.type === 'admin' || confirmModal.type === 'delete') && (
               <input
                 type="text"
                 value={confirmText}
                 onChange={(e) => setConfirmText(e.target.value)}
-                placeholder="CONFIRM"
+                placeholder={confirmModal.type === 'delete' ? 'DELETE' : 'CONFIRM'}
                 className="mb-3 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm"
               />
             )}
@@ -199,9 +223,10 @@ export function AdminUsersPage({ users: initial }: { users: Profile[] }) {
               <button
                 onClick={() => {
                   if (confirmModal.type === 'suspend') handleSuspend(confirmModal.userId)
+                  else if (confirmModal.type === 'delete') handleDelete()
                   else handleMakeAdmin()
                 }}
-                disabled={confirmModal.type === 'admin' && confirmText !== 'CONFIRM'}
+                disabled={(confirmModal.type === 'admin' && confirmText !== 'CONFIRM') || (confirmModal.type === 'delete' && confirmText !== 'DELETE')}
                 className="rounded-lg bg-red-600 px-4 py-2 text-sm text-white hover:bg-red-700 disabled:opacity-50"
               >
                 {t('confirm_action')}

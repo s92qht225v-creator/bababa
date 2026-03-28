@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useTranslations } from 'next-intl'
-import { updateJobAdmin, retryTranslation } from '@/lib/actions/admin'
+import { updateJobAdmin, retryTranslation, deleteJob } from '@/lib/actions/admin'
 import { useToast } from '@/components/ui/Toast'
 
 interface Job {
@@ -26,6 +26,7 @@ export function AdminJobsPage({ jobs: initial, locale }: { jobs: Job[]; locale: 
   const [tab, setTab] = useState<string>('all')
   const [search, setSearch] = useState('')
   const [loading, setLoading] = useState<string | null>(null)
+  const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null)
 
   const filtered = jobs.filter((j) => {
     if (tab === 'failed') return j.translation_status === 'failed'
@@ -44,6 +45,19 @@ export function AdminJobsPage({ jobs: initial, locale }: { jobs: Job[]; locale: 
       toast(result.error ?? t('error'), 'error')
     }
     setLoading(null)
+  }
+
+  async function handleDelete(id: string) {
+    setLoading(id)
+    const result = await deleteJob(id)
+    if (result.success) {
+      setJobs((prev) => prev.filter((j) => j.id !== id))
+      toast(t('delete') + ' ✓', 'success')
+    } else {
+      toast(result.error ?? t('error'), 'error')
+    }
+    setLoading(null)
+    setDeleteConfirm(null)
   }
 
   async function handleRetry(id: string) {
@@ -151,6 +165,23 @@ export function AdminJobsPage({ jobs: initial, locale }: { jobs: Job[]; locale: 
                         className="rounded bg-red-100 px-2 py-1 text-xs font-medium text-red-700 hover:bg-red-200 disabled:opacity-50"
                       >
                         {t('retry_translation')}
+                      </button>
+                    )}
+                    {deleteConfirm === j.id ? (
+                      <button
+                        onClick={() => handleDelete(j.id)}
+                        disabled={loading === j.id}
+                        className="rounded bg-red-600 px-2 py-1 text-xs font-medium text-white hover:bg-red-700 disabled:opacity-50"
+                      >
+                        {t('confirm_action')}
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() => setDeleteConfirm(j.id)}
+                        disabled={loading === j.id}
+                        className="rounded bg-red-100 px-2 py-1 text-xs font-medium text-red-700 hover:bg-red-200 disabled:opacity-50"
+                      >
+                        {t('delete')}
                       </button>
                     )}
                   </div>

@@ -247,6 +247,20 @@ export async function makeAdmin(userId: string): Promise<ActionResult> {
   return { success: true }
 }
 
+export async function deleteUser(userId: string): Promise<ActionResult> {
+  const { supabase } = await requireAdmin()
+
+  // Delete profile (cascades to worker_profiles, companies, etc.)
+  const { error } = await supabase
+    .from('profiles')
+    .delete()
+    .eq('id', userId)
+
+  if (error) return { success: false, error: error.message }
+  revalidatePath('/[locale]/admin/users', 'page')
+  return { success: true }
+}
+
 // ── Job Management ──
 
 export async function updateJobAdmin(jobId: string, status: string): Promise<ActionResult> {
@@ -255,6 +269,19 @@ export async function updateJobAdmin(jobId: string, status: string): Promise<Act
   const { error } = await supabase
     .from('jobs')
     .update({ status })
+    .eq('id', jobId)
+
+  if (error) return { success: false, error: error.message }
+  revalidatePath('/[locale]/admin/jobs', 'page')
+  return { success: true }
+}
+
+export async function deleteJob(jobId: string): Promise<ActionResult> {
+  const { supabase } = await requireAdmin()
+
+  const { error } = await supabase
+    .from('jobs')
+    .delete()
     .eq('id', jobId)
 
   if (error) return { success: false, error: error.message }
