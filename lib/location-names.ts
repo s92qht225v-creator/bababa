@@ -103,6 +103,7 @@ const CITY_NAMES: Record<string, LocaleNames> = {
   'Bekobod':        { uz: 'Bekobod',        zh: '别卡巴德',    ru: 'Бекабад' },
   'Ohangaron':      { uz: 'Ohangaron',      zh: '阿汉加兰',    ru: 'Ахангаран' },
   'Nurafshon':      { uz: 'Nurafshon',      zh: '努拉夫尚',    ru: 'Нурафшон' },
+  "Yangiyo'l":      { uz: "Yangiyo'l",      zh: '扬吉尤尔',    ru: 'Янгиюль' },
   // Fallback
   'Other':          { uz: 'Boshqa',         zh: '其他',        ru: 'Другое' },
 }

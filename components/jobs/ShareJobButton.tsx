@@ -6,10 +6,13 @@ import { Share2 } from 'lucide-react'
 interface ShareJobButtonProps {
   jobSlug: string
   jobTitle: string
+  companyName: string
+  location?: string
+  salary: string
   locale: string
 }
 
-export function ShareJobButton({ jobSlug, jobTitle, locale }: ShareJobButtonProps) {
+export function ShareJobButton({ jobSlug, jobTitle, companyName, location, salary, locale }: ShareJobButtonProps) {
   const [open, setOpen] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
 
@@ -26,11 +29,26 @@ export function ShareJobButton({ jobSlug, jobTitle, locale }: ShareJobButtonProp
   }, [open])
 
   const jobUrl = `${typeof window !== 'undefined' ? window.location.origin : ''}/${locale}/jobs/${jobSlug}`
-  const text = jobTitle
+
+  const shareText = [
+    `📋 ${jobTitle}`,
+    `🏢 ${companyName}`,
+    location ? `📍 ${location}` : '',
+    `💰 ${salary}`,
+    '',
+    jobUrl,
+  ].filter(Boolean).join('\n')
 
   const shareToTelegram = () => {
     window.open(
-      `https://t.me/share/url?url=${encodeURIComponent(jobUrl)}&text=${encodeURIComponent(text)}`,
+      `https://t.me/share/url?url=${encodeURIComponent(jobUrl)}&text=${encodeURIComponent(
+        [
+          `📋 ${jobTitle}`,
+          `🏢 ${companyName}`,
+          location ? `📍 ${location}` : '',
+          `💰 ${salary}`,
+        ].filter(Boolean).join('\n')
+      )}`,
       '_blank',
       'noopener,noreferrer'
     )
@@ -38,11 +56,9 @@ export function ShareJobButton({ jobSlug, jobTitle, locale }: ShareJobButtonProp
   }
 
   const shareToInstagram = () => {
-    // Instagram doesn't have a direct share URL API — copy link so user can paste in Stories/DM
-    navigator.clipboard.writeText(jobUrl)
+    navigator.clipboard.writeText(shareText)
     setOpen(false)
-    // Visual feedback handled by brief alert
-    alert(locale === 'zh' ? '链接已复制，请粘贴到Instagram' : locale === 'ru' ? 'Ссылка скопирована для Instagram' : 'Havola nusxalandi, Instagramga joylashtiring')
+    alert(locale === 'zh' ? '已复制职位信息，请粘贴到Instagram' : locale === 'ru' ? 'Информация о вакансии скопирована для Instagram' : 'Ish ma\'lumotlari nusxalandi, Instagramga joylashtiring')
   }
 
   return (

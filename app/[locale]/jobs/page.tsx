@@ -438,7 +438,14 @@ export default async function JobsPage({
                         <span className="text-xs text-gray-400">
                           {daysAgo(job.created_at as string)}
                         </span>
-                        <ShareJobButton jobSlug={job.slug as string} jobTitle={getTitle(job)} locale={locale} />
+                        <ShareJobButton
+                          jobSlug={job.slug as string}
+                          jobTitle={getTitle(job)}
+                          companyName={getCompanyName(job)}
+                          location={job.location ? localizeCity((job.location as Record<string, unknown>).city as string, l) : undefined}
+                          salary={formatSalary(job)}
+                          locale={locale}
+                        />
                         <SaveJobButton jobId={job.id as string} initialSaved={false} />
                       </div>
                     </div>
