@@ -601,7 +601,11 @@
     "dismiss": "Rad etish",
     "reported_by": "Shikoyatchi",
     "reason": "Sabab",
-    "translation_overrides": "Tarjima atamalari"
+    "translation_overrides": "Tarjima atamalari",
+    "all_conversations": "Barcha suhbatlar",
+    "reports": "Shikoyatlar",
+    "no_conversations": "Hech qanday suhbat yo'q",
+    "messages_count": "xabar"
   },
   "footer": {
     "about": "Haqida",

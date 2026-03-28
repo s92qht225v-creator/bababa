@@ -599,7 +599,11 @@
     "dismiss": "驳回",
     "reported_by": "举报人",
     "reason": "原因",
-    "translation_overrides": "翻译术语"
+    "translation_overrides": "翻译术语",
+    "all_conversations": "所有对话",
+    "reports": "举报",
+    "no_conversations": "暂无对话",
+    "messages_count": "条消息"
   },
   "footer": {
     "about": "关于",

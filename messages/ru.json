@@ -599,7 +599,11 @@
     "dismiss": "Отклонить",
     "reported_by": "Жалобщик",
     "reason": "Причина",
-    "translation_overrides": "Термины перевода"
+    "translation_overrides": "Термины перевода",
+    "all_conversations": "Все диалоги",
+    "reports": "Жалобы",
+    "no_conversations": "Диалогов пока нет",
+    "messages_count": "сообщ."
   },
   "footer": {
     "about": "О нас",

@@ -381,6 +381,105 @@ export async function reviewReport(reportId: string, action: 'reviewed' | 'dismi
   return { success: true }
 }
 
+// ── Admin Conversations ──
+
+export async function getAdminConversations() {
+  const { supabase } = await requireAdmin()
+
+  // Get all messages with sender/receiver profiles
+  const { data: messages } = await supabase
+    .from('messages')
+    .select(`
+      id,
+      sender_id,
+      receiver_id,
+      job_id,
+      body_original,
+      body_uz,
+      body_zh,
+      body_ru,
+      source_language,
+      created_at,
+      sender:profiles!messages_sender_id_fkey(id, full_name, role),
+      receiver:profiles!messages_receiver_id_fkey(id, full_name, role)
+    `)
+    .order('created_at', { ascending: false })
+    .limit(2000)
+
+  if (!messages || messages.length === 0) return []
+
+  // Group by conversation pair (sorted sender+receiver + job_id)
+  const convMap = new Map<string, {
+    participant1: { id: string; name: string; role: string }
+    participant2: { id: string; name: string; role: string }
+    jobId: string | null
+    lastMessage: string
+    lastMessageAt: string
+    messageCount: number
+  }>()
+
+  for (const msg of messages) {
+    const ids = [msg.sender_id, msg.receiver_id].sort()
+    const key = `${ids[0]}|${ids[1]}|${msg.job_id ?? 'none'}`
+
+    if (!convMap.has(key)) {
+      const sender = msg.sender as unknown as Record<string, string> | null
+      const receiver = msg.receiver as unknown as Record<string, string> | null
+      const p1Id = ids[0]
+      const p1 = p1Id === msg.sender_id ? sender : receiver
+      const p2 = p1Id === msg.sender_id ? receiver : sender
+
+      convMap.set(key, {
+        participant1: { id: p1Id, name: (p1?.full_name as string) ?? 'Unknown', role: (p1?.role as string) ?? '' },
+        participant2: { id: ids[1], name: (p2?.full_name as string) ?? 'Unknown', role: (p2?.role as string) ?? '' },
+        jobId: msg.job_id,
+        lastMessage: msg.body_original,
+        lastMessageAt: msg.created_at,
+        messageCount: 0,
+      })
+    }
+
+    const conv = convMap.get(key)!
+    conv.messageCount++
+  }
+
+  return Array.from(convMap.values()).sort(
+    (a, b) => new Date(b.lastMessageAt).getTime() - new Date(a.lastMessageAt).getTime()
+  )
+}
+
+export async function getAdminConversationMessages(
+  participantA: string,
+  participantB: string,
+  jobId?: string | null
+) {
+  const { supabase } = await requireAdmin()
+
+  let query = supabase
+    .from('messages')
+    .select(`
+      id,
+      sender_id,
+      receiver_id,
+      body_original,
+      body_uz,
+      body_zh,
+      body_ru,
+      source_language,
+      created_at,
+      sender:profiles!messages_sender_id_fkey(full_name, role)
+    `)
+    .or(`and(sender_id.eq.${participantA},receiver_id.eq.${participantB}),and(sender_id.eq.${participantB},receiver_id.eq.${participantA})`)
+    .order('created_at', { ascending: true })
+
+  if (jobId) {
+    query = query.eq('job_id', jobId)
+  }
+
+  const { data } = await query
+  return data ?? []
+}
+
 export async function reportMessage(messageId: string, reason: string): Promise<ActionResult> {
   const supabase = await createClient()
   const {
