@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { setRequestLocale, getTranslations } from 'next-intl/server'
-import { siteConfig } from '@/lib/seo'
+import { siteConfig, ogImageUrl } from '@/lib/seo'
 import { JsonLd } from '@/components/seo/JsonLd'
 import { BreadcrumbSchema } from '@/components/seo/BreadcrumbSchema'
 import { HowItWorksTabs } from '@/components/home/HowItWorksTabs'
@@ -21,9 +21,11 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params
   const l = locale as Locale
+  const title = `${META_TITLES[l]} | ${siteConfig.name}`
+  const description = siteConfig.description[l]
   return {
-    title: `${META_TITLES[l]} | ${siteConfig.name}`,
-    description: siteConfig.description[l],
+    title,
+    description,
     alternates: {
       canonical: `${siteConfig.url}/${l}/how-it-works`,
       languages: {
@@ -31,6 +33,20 @@ export async function generateMetadata({
         zh: `${siteConfig.url}/zh/how-it-works`,
         ru: `${siteConfig.url}/ru/how-it-works`,
       },
+    },
+    openGraph: {
+      title,
+      description,
+      type: 'website',
+      locale: l,
+      url: `${siteConfig.url}/${l}/how-it-works`,
+      images: [{ url: ogImageUrl(title, description), width: 1200, height: 630, alt: title }],
+    },
+    twitter: {
+      card: 'summary_large_image' as const,
+      title,
+      description,
+      images: [ogImageUrl(title, description)],
     },
   }
 }

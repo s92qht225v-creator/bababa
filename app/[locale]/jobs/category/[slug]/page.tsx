@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { setRequestLocale, getTranslations } from 'next-intl/server'
 import { notFound } from 'next/navigation'
 import { createPublicClient } from '@/lib/supabase/server'
-import { siteConfig } from '@/lib/seo'
+import { siteConfig, ogImageUrl } from '@/lib/seo'
 import { JsonLd } from '@/components/seo/JsonLd'
 import { BreadcrumbSchema } from '@/components/seo/BreadcrumbSchema'
 import Image from 'next/image'
@@ -60,9 +60,11 @@ export async function generateMetadata({
     ru: `${name} — ${count ?? 0} активных вакансий | 百邦`,
   }
 
+  const title = `${name} | ${siteConfig.name}`
+  const description = descriptions[l]
   return {
-    title: `${name} | ${siteConfig.name}`,
-    description: descriptions[l],
+    title,
+    description,
     alternates: {
       canonical: `${siteConfig.url}/${l}/jobs/category/${slug}`,
       languages: {
@@ -70,6 +72,20 @@ export async function generateMetadata({
         zh: `${siteConfig.url}/zh/jobs/category/${slug}`,
         ru: `${siteConfig.url}/ru/jobs/category/${slug}`,
       },
+    },
+    openGraph: {
+      title,
+      description,
+      type: 'website',
+      locale: l,
+      url: `${siteConfig.url}/${l}/jobs/category/${slug}`,
+      images: [{ url: ogImageUrl(title, description), width: 1200, height: 630, alt: title }],
+    },
+    twitter: {
+      card: 'summary_large_image' as const,
+      title,
+      description,
+      images: [ogImageUrl(title, description)],
     },
   }
 }

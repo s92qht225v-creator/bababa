@@ -8,7 +8,7 @@ import type {
 
 export const siteConfig = {
   name: '百邦',
-  url: 'https://baibang.uz',
+  url: 'https://www.baibang.uz',
   defaultLocale: 'uz' as Locale,
   description: {
     uz: "O'zbekistondagi xitoy kompaniyalari uchun ish o'rinlari platformasi",
@@ -16,6 +16,19 @@ export const siteConfig = {
     ru: 'Платформа по трудоустройству для китайских компаний в Узбекистане',
   },
 } as const
+
+const defaultOgImage = {
+  url: `${siteConfig.url}/api/og`,
+  width: 1200,
+  height: 630,
+  alt: '百邦 Baibang',
+}
+
+export function ogImageUrl(title: string, description?: string): string {
+  const params = new URLSearchParams({ title })
+  if (description) params.set('description', description.substring(0, 120))
+  return `${siteConfig.url}/api/og?${params.toString()}`
+}
 
 export type AlternateURLs = {
   canonical: string
@@ -76,11 +89,13 @@ export function buildJobMetadata(
       type: 'website',
       locale,
       url: `${siteConfig.url}/${locale}/jobs/${job.slug}`,
+      images: [{ url: ogImageUrl(fullTitle, description), width: 1200, height: 630, alt: fullTitle }],
     },
     twitter: {
       card: 'summary_large_image',
       title: fullTitle,
       description,
+      images: [ogImageUrl(fullTitle, description)],
     },
   }
 }
@@ -120,11 +135,13 @@ export function buildWorkerMetadata(
       type: 'profile',
       locale,
       url: `${siteConfig.url}/${locale}/workers/${worker.slug}`,
+      images: [{ url: worker.photo_url || ogImageUrl(fullTitle, bio), width: 1200, height: 630, alt: fullTitle }],
     },
     twitter: {
       card: 'summary_large_image',
       title: fullTitle,
       description: bio,
+      images: [worker.photo_url || ogImageUrl(fullTitle, bio)],
     },
   }
 }
@@ -163,11 +180,13 @@ export function buildCompanyMetadata(
       type: 'website',
       locale,
       url: `${siteConfig.url}/${locale}/companies/${company.slug}`,
+      images: [{ url: company.logo_url || ogImageUrl(fullTitle, description), width: 1200, height: 630, alt: fullTitle }],
     },
     twitter: {
       card: 'summary_large_image',
       title: fullTitle,
       description,
+      images: [company.logo_url || ogImageUrl(fullTitle, description)],
     },
   }
 }

@@ -1,7 +1,7 @@
 import { createClient } from '@supabase/supabase-js'
 import type { MetadataRoute } from 'next'
 
-const siteUrl = 'https://baibang.uz'
+const siteUrl = 'https://www.baibang.uz'
 const locales = ['uz', 'zh', 'ru'] as const
 
 function entry(

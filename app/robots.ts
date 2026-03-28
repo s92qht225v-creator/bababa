@@ -7,12 +7,18 @@ export default function robots(): MetadataRoute.Robots {
       allow: '/',
       disallow: [
         '/admin',
-        '/*/employer/',
-        '/*/worker/',
+        '/uz/employer/',
+        '/zh/employer/',
+        '/ru/employer/',
+        '/uz/worker/',
+        '/zh/worker/',
+        '/ru/worker/',
         '/api/',
-        '/*/auth/',
+        '/uz/auth/',
+        '/zh/auth/',
+        '/ru/auth/',
       ],
     },
-    sitemap: 'https://baibang.uz/sitemap.xml',
+    sitemap: 'https://www.baibang.uz/sitemap.xml',
   }
 }

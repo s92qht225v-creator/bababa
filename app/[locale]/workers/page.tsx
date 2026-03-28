@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { setRequestLocale } from 'next-intl/server'
 import { getTranslations } from 'next-intl/server'
 import { createPublicClient } from '@/lib/supabase/server'
-import { siteConfig } from '@/lib/seo'
+import { siteConfig, ogImageUrl } from '@/lib/seo'
 import Image from 'next/image'
 import { localizeCity, localizeRegion, localizeLocation } from '@/lib/location-names'
 import { formatSalary as fmtSalary } from '@/lib/utils'
@@ -23,9 +23,11 @@ export async function generateMetadata({
     zh: '人才列表',
     ru: 'Специалисты',
   }
+  const title = `${titles[l]} | ${siteConfig.name}`
+  const description = siteConfig.description[l]
   return {
-    title: `${titles[l]} | ${siteConfig.name}`,
-    description: siteConfig.description[l],
+    title,
+    description,
     alternates: {
       canonical: `${siteConfig.url}/${l}/workers`,
       languages: {
@@ -33,6 +35,20 @@ export async function generateMetadata({
         zh: `${siteConfig.url}/zh/workers`,
         ru: `${siteConfig.url}/ru/workers`,
       },
+    },
+    openGraph: {
+      title,
+      description,
+      type: 'website',
+      locale: l,
+      url: `${siteConfig.url}/${l}/workers`,
+      images: [{ url: ogImageUrl(title, description), width: 1200, height: 630, alt: title }],
+    },
+    twitter: {
+      card: 'summary_large_image' as const,
+      title,
+      description,
+      images: [ogImageUrl(title, description)],
     },
   }
 }

@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { setRequestLocale, getTranslations } from 'next-intl/server'
 import Image from 'next/image'
 import { createPublicClient } from '@/lib/supabase/server'
-import { siteConfig } from '@/lib/seo'
+import { siteConfig, ogImageUrl } from '@/lib/seo'
 import { JsonLd } from '@/components/seo/JsonLd'
 import { StatsCounter } from '@/components/home/StatsCounter'
 import { HowItWorksTabs } from '@/components/home/HowItWorksTabs'
@@ -63,6 +63,14 @@ export async function generateMetadata({
       type: 'website',
       siteName: '百邦',
       locale: l,
+      url: `${siteConfig.url}/${l}`,
+      images: [{ url: ogImageUrl(META_TITLES[l], META_DESCRIPTIONS[l]), width: 1200, height: 630, alt: META_TITLES[l] }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: META_TITLES[l],
+      description: META_DESCRIPTIONS[l],
+      images: [ogImageUrl(META_TITLES[l], META_DESCRIPTIONS[l])],
     },
   }
 }
@@ -157,12 +165,12 @@ export default async function HomePage({
     '@context': 'https://schema.org',
     '@type': 'WebSite',
     name: '百邦',
-    url: 'https://baibang.uz',
+    url: 'https://www.baibang.uz',
     potentialAction: {
       '@type': 'SearchAction',
       target: {
         '@type': 'EntryPoint',
-        urlTemplate: `https://baibang.uz/${l}/jobs?q={search_term_string}`,
+        urlTemplate: `https://www.baibang.uz/${l}/jobs?q={search_term_string}`,
       },
       'query-input': 'required name=search_term_string',
     },

@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { setRequestLocale } from 'next-intl/server'
 import { getTranslations } from 'next-intl/server'
 import { createPublicClient } from '@/lib/supabase/server'
-import { siteConfig } from '@/lib/seo'
+import { siteConfig, ogImageUrl } from '@/lib/seo'
 import { CompanyDirectoryContent } from '@/components/companies/CompanyDirectoryContent'
 import type { Locale } from '@/types'
 
@@ -20,9 +20,11 @@ export async function generateMetadata({
     zh: '企业目录',
     ru: 'Компании',
   }
+  const title = `${titles[l]} | ${siteConfig.name}`
+  const description = siteConfig.description[l]
   return {
-    title: `${titles[l]} | ${siteConfig.name}`,
-    description: siteConfig.description[l],
+    title,
+    description,
     alternates: {
       canonical: `${siteConfig.url}/${l}/companies`,
       languages: {
@@ -30,6 +32,20 @@ export async function generateMetadata({
         zh: `${siteConfig.url}/zh/companies`,
         ru: `${siteConfig.url}/ru/companies`,
       },
+    },
+    openGraph: {
+      title,
+      description,
+      type: 'website',
+      locale: l,
+      url: `${siteConfig.url}/${l}/companies`,
+      images: [{ url: ogImageUrl(title, description), width: 1200, height: 630, alt: title }],
+    },
+    twitter: {
+      card: 'summary_large_image' as const,
+      title,
+      description,
+      images: [ogImageUrl(title, description)],
     },
   }
 }
