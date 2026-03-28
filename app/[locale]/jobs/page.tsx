@@ -5,6 +5,7 @@ import { createPublicClient } from '@/lib/supabase/server'
 import { siteConfig, ogImageUrl } from '@/lib/seo'
 import Image from 'next/image'
 import { SaveJobButton } from '@/components/jobs/SaveJobButton'
+import { ShareJobButton } from '@/components/jobs/ShareJobButton'
 import { localizeCity, localizeRegion } from '@/lib/location-names'
 import { formatSalary as fmtSalary } from '@/lib/utils'
 import { MapPin, DollarSign, Clock, MessageSquare, Users, ClipboardList } from 'lucide-react'
@@ -437,6 +438,7 @@ export default async function JobsPage({
                         <span className="text-xs text-gray-400">
                           {daysAgo(job.created_at as string)}
                         </span>
+                        <ShareJobButton jobSlug={job.slug as string} jobTitle={getTitle(job)} locale={locale} />
                         <SaveJobButton jobId={job.id as string} initialSaved={false} />
                       </div>
                     </div>
