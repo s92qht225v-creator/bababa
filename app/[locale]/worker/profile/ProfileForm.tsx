@@ -97,20 +97,20 @@ export function ProfileForm({ locale, profile, workerProfile, categories, region
   const [uploadingPhoto, setUploadingPhoto] = useState(false)
   const [uploadingVideo, setUploadingVideo] = useState(false)
 
-  const isInitialMount = useRef(true)
+  const initialRegion = useRef(currentLocation?.region ?? '')
+  const initialCity = useRef(currentLocation?.city ?? '')
 
   // Cascading location: Region → Cities
   useEffect(() => {
     if (!selectedRegion) {
       setCities([])
       setDistricts([])
-      if (!isInitialMount.current) {
-        setSelectedCity('')
-        setSelectedDistrict('')
-        setLocationId('')
-      }
+      setSelectedCity('')
+      setSelectedDistrict('')
+      setLocationId('')
       return
     }
+    const isInitial = selectedRegion === initialRegion.current
     supabase
       .from('locations')
       .select('city')
@@ -119,7 +119,7 @@ export function ProfileForm({ locale, profile, workerProfile, categories, region
       .then(({ data }) => {
         const unique = [...new Set((data ?? []).map((d) => d.city))]
         setCities(unique)
-        if (!isInitialMount.current) {
+        if (!isInitial) {
           setSelectedCity('')
           setSelectedDistrict('')
           setLocationId('')
@@ -131,12 +131,9 @@ export function ProfileForm({ locale, profile, workerProfile, categories, region
   useEffect(() => {
     if (!selectedRegion || !selectedCity) {
       setDistricts([])
-      if (!isInitialMount.current) {
-        setSelectedDistrict('')
-        setLocationId('')
-      }
       return
     }
+    const isInitial = selectedCity === initialCity.current
     supabase
       .from('locations')
       .select('id, district')
@@ -152,7 +149,7 @@ export function ProfileForm({ locale, profile, workerProfile, categories, region
         } else {
           const unique = data.filter((d) => d.district).map((d) => d.district!)
           setDistricts([...new Set(unique)])
-          if (!isInitialMount.current) {
+          if (!isInitial) {
             setSelectedDistrict('')
             setLocationId('')
           }
@@ -175,11 +172,6 @@ export function ProfileForm({ locale, profile, workerProfile, categories, region
         if (data) setLocationId(data.id)
       })
   }, [selectedRegion, selectedCity, selectedDistrict])
-
-  // Mark initial mount done after first render
-  useEffect(() => {
-    isInitialMount.current = false
-  }, [])
 
   // Skills management
   const addSkill = useCallback(() => {
