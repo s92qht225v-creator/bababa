@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { setRequestLocale } from 'next-intl/server'
 import { getTranslations } from 'next-intl/server'
 import { notFound } from 'next/navigation'
-import { createPublicClient } from '@/lib/supabase/server'
+import { createClient, createPublicClient } from '@/lib/supabase/server'
 import { buildJobMetadata } from '@/lib/seo'
 import { JsonLd } from '@/components/seo/JsonLd'
 import { BreadcrumbSchema } from '@/components/seo/BreadcrumbSchema'
@@ -58,10 +58,11 @@ export default async function JobDetailPage({
   // Increment views (fire-and-forget)
   incrementJobViews(job.id)
 
-  // Check if current user is logged in
+  // Check if current user is logged in (needs cookie-aware client)
+  const authClient = await createClient()
   const {
     data: { user },
-  } = await supabase.auth.getUser()
+  } = await authClient.auth.getUser()
 
   // Check if user is the job owner (employer)
   const isOwner = user && job.company?.user_id === user.id
@@ -70,14 +71,14 @@ export default async function JobDetailPage({
   let hasProfile = false
   let alreadyApplied = false
   if (user && !isOwner) {
-    const { data: workerProfile } = await supabase
+    const { data: workerProfile } = await authClient
       .from('worker_profiles')
       .select('id')
       .eq('user_id', user.id)
       .maybeSingle()
     hasProfile = !!workerProfile
     if (workerProfile) {
-      const { data: existingApp } = await supabase
+      const { data: existingApp } = await authClient
         .from('applications')
         .select('id')
         .eq('job_id', job.id)
