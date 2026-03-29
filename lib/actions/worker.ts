@@ -291,7 +291,7 @@ export async function applyToJob(
     .eq('id', user.id)
     .single()
 
-  // Create notification for employer
+  // Create notification for employer + send email
   if (job?.company) {
     const company = job.company as unknown as { user_id: string }
     await supabase.from('notifications').insert({
@@ -305,6 +305,29 @@ export async function applyToJob(
         application_id: application.id,
       },
     })
+
+    // Send email notification (fire-and-forget)
+    const { data: employerProfile } = await supabase
+      .from('profiles')
+      .select('email, language_preference')
+      .eq('id', company.user_id)
+      .single()
+
+    if (employerProfile?.email) {
+      const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+      fetch(`${supabaseUrl}/functions/v1/notify-new-application`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          employerEmail: employerProfile.email,
+          employerName: '',
+          workerName: profile?.full_name ?? 'Someone',
+          jobTitle: job.title_original,
+          coverNote: coverNote || null,
+          locale: employerProfile.language_preference ?? 'uz',
+        }),
+      }).catch(() => {})
+    }
   }
 
   revalidatePath('/[locale]/worker/dashboard', 'page')
