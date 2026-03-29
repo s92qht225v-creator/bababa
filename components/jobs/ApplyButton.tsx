@@ -40,13 +40,13 @@ export function ApplyButton({
     )
   }
 
-  if (!isLoggedIn) {
+  if (!isLoggedIn || !hasProfile) {
     return (
       <a
-        href={`/${locale}/auth/login`}
+        href={`/${locale}/worker/profile`}
         className="block w-full rounded-lg border border-red-600 px-4 py-3 text-center text-sm font-semibold text-red-600 hover:bg-red-50"
       >
-        {t('login_to_contact')}
+        {t('fill_profile_to_contact')}
       </a>
     )
   }

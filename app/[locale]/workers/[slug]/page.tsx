@@ -96,8 +96,9 @@ export default async function WorkerProfilePage({
 
   if (!worker || (!worker.is_public && !isOwner && !isEmployerOfApplicant)) notFound()
 
-  // Get viewer role for messages link
+  // Get viewer role and profile status for messages link
   let viewerRole = 'worker'
+  let viewerHasProfile = false
   if (user) {
     const { data: viewerProfile } = await supabase
       .from('profiles')
@@ -105,6 +106,22 @@ export default async function WorkerProfilePage({
       .eq('id', user.id)
       .single()
     viewerRole = viewerProfile?.role ?? 'worker'
+
+    if (viewerRole === 'employer') {
+      const { data: company } = await supabase
+        .from('companies')
+        .select('id')
+        .eq('user_id', user.id)
+        .maybeSingle()
+      viewerHasProfile = !!company
+    } else {
+      const { data: wp } = await supabase
+        .from('worker_profiles')
+        .select('id')
+        .eq('user_id', user.id)
+        .maybeSingle()
+      viewerHasProfile = !!wp
+    }
   }
 
   const name = (worker.profile?.full_name
@@ -203,12 +220,21 @@ export default async function WorkerProfilePage({
         {/* Action buttons for employers */}
         {user && user.id !== worker.user_id && (
           <div className="mt-6 flex gap-3">
-            <a
-              href={`/${locale}/${viewerRole === 'employer' ? 'employer' : 'worker'}/messages?partner=${worker.user_id}`}
-              className="rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700"
-            >
-              {t('contact_worker')}
-            </a>
+            {viewerHasProfile ? (
+              <a
+                href={`/${locale}/${viewerRole === 'employer' ? 'employer' : 'worker'}/messages?partner=${worker.user_id}`}
+                className="rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700"
+              >
+                {t('contact_worker')}
+              </a>
+            ) : (
+              <a
+                href={`/${locale}/${viewerRole === 'employer' ? 'employer/company' : 'worker/profile'}`}
+                className="rounded-lg border border-red-600 px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-50"
+              >
+                {t('fill_profile_to_contact')}
+              </a>
+            )}
             <SaveWorkerButton workerId={worker.id} initialSaved={isSaved} />
           </div>
         )}
