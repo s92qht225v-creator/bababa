@@ -300,6 +300,7 @@
     "remove": "O'chirish",
     "profile_public": "Profil ochiq — ish beruvchilar ko'rishi mumkin",
     "profile_hidden": "Profil yashirin — faqat siz ko'rasiz",
+    "field_required": "to'ldirilishi shart",
     "save_profile": "Profilni saqlash",
     "saving": "Saqlanmoqda...",
     "profile_saved": "Profil saqlandi!",

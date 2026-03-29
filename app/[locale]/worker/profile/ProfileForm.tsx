@@ -82,7 +82,7 @@ export function ProfileForm({ locale, profile, workerProfile, categories, region
   const [experienceHistory, setExperienceHistory] = useState<ExperienceEntry[]>(workerProfile?.experience_history ?? [])
 
   // Visibility
-  const [isPublic, setIsPublic] = useState(workerProfile?.is_public ?? false)
+  const [isPublic, setIsPublic] = useState(workerProfile?.is_public ?? true)
 
   // Photo & video
   const [photoUrl, setPhotoUrl] = useState(workerProfile?.photo_url ?? '')
@@ -268,18 +268,19 @@ export function ProfileForm({ locale, profile, workerProfile, categories, region
     e.preventDefault()
     setError('')
 
-    if (!fullName.trim()) { setError(t('full_name') + ' required'); return }
-    if (!phone.trim()) { setError(t('phone') + ' required'); return }
-    if (!age) { setError(t('age') + ' required'); return }
-    if (!gender) { setError(t('gender') + ' required'); return }
-    if (!locationId) { setError(t('location') + ' required'); return }
-    if (!profession.trim()) { setError(t('profession') + ' required'); return }
-    if (!categoryId) { setError(t('category') + ' required'); return }
-    if (!experienceYears) { setError(t('experience_years') + ' required'); return }
-    if (!hskLevel) { setError(t('chinese_level') + ' required'); return }
-    if (languages.length === 0) { setError(t('other_languages') + ' required'); return }
-    if (salaryMin === '') { setError(t('salary_expectations') + ' min required'); return }
-    if (salaryMax === '') { setError(t('salary_expectations') + ' max required'); return }
+    const req = t('field_required')
+    if (!fullName.trim()) { setError(t('full_name') + ' — ' + req); return }
+    if (!phone.trim()) { setError(t('phone') + ' — ' + req); return }
+    if (!age) { setError(t('age') + ' — ' + req); return }
+    if (!gender) { setError(t('gender') + ' — ' + req); return }
+    if (!locationId) { setError(t('location') + ' — ' + req); return }
+    if (!profession.trim()) { setError(t('profession') + ' — ' + req); return }
+    if (!categoryId) { setError(t('category') + ' — ' + req); return }
+    if (!experienceYears) { setError(t('experience_years') + ' — ' + req); return }
+    if (!hskLevel) { setError(t('chinese_level') + ' — ' + req); return }
+    if (languages.length === 0) { setError(t('other_languages') + ' — ' + req); return }
+    if (salaryMin === '') { setError(t('salary_expectations') + ' (min) — ' + req); return }
+    if (salaryMax === '') { setError(t('salary_expectations') + ' (max) — ' + req); return }
 
     setSubmitting(true)
     try {

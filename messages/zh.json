@@ -300,6 +300,7 @@
     "remove": "删除",
     "profile_public": "资料公开 — 雇主可以查看",
     "profile_hidden": "资料隐藏 — 仅自己可见",
+    "field_required": "必填",
     "save_profile": "保存资料",
     "saving": "保存中...",
     "profile_saved": "资料已保存！",
